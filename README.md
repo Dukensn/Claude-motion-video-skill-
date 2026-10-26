@@ -48,6 +48,10 @@ Le skill :
 6. fait le rendu MP4 ;
 7. crée la miniature et le texte YouTube.
 
+L'élève peut aussi coller le lien d'une vidéo YouTube qu'il aime : Claude l'étudie (rythme, durée des plans, accroche, sous-titres) pour s'en inspirer sans la copier. Si YouTube n'est pas accessible depuis la session, Claude demande simplement de glisser le fichier vidéo dans la conversation.
+
+L'élève n'installe et ne configure rien lui-même : Claude lance l'installation et règle les problèmes.
+
 Tout sort dans `./films/<nom>/`. Les trois moments marqués en gras sont faits pour le jugement de l'élève.
 
 Voir [GUIDE-ELEVE.md](GUIDE-ELEVE.md) pour le texte à donner aux élèves.

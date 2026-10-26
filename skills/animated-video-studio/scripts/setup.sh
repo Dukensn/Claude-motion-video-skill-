@@ -19,9 +19,9 @@ need node "install Node.js 18+ from nodejs.org"
 need python3 "install Python 3.10+"
 need ffmpeg "apt install ffmpeg | brew install ffmpeg | winget install ffmpeg"
 need fluidsynth "apt install fluidsynth | brew install fluid-synth"
-PY="mido numpy scipy kokoro-onnx soundfile"
-python3 -c "import mido, numpy, scipy, kokoro_onnx, soundfile" 2>/dev/null || python3 -m pip install -q --user $PY 2>/dev/null || python3 -m pip install -q --break-system-packages $PY
-python3 -c "import mido, numpy, scipy, kokoro_onnx, soundfile" 2>/dev/null && echo "✓ python: $PY" || { echo "✗ python packages: pip install $PY"; ok=0; }
+PY="mido numpy scipy kokoro-onnx soundfile yt-dlp"
+python3 -c "import mido, numpy, scipy, kokoro_onnx, soundfile, yt_dlp" 2>/dev/null || python3 -m pip install -q --user $PY 2>/dev/null || python3 -m pip install -q --break-system-packages $PY
+python3 -c "import mido, numpy, scipy, kokoro_onnx, soundfile, yt_dlp" 2>/dev/null && echo "✓ python: $PY" || { echo "✗ python packages: pip install $PY"; ok=0; }
 SF=""
 for c in /usr/share/sounds/sf2/FluidR3_GM.sf2 /usr/share/soundfonts/FluidR3_GM.sf2 /opt/homebrew/share/soundfonts/FluidR3_GM.sf2 "$HOME/.soundfonts/FluidR3_GM.sf2"; do [ -f "$c" ] && SF="$c" && break; done
 if [ -z "$SF" ]; then

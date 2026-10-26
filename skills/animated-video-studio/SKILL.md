@@ -16,6 +16,7 @@ The person using this skill is often a student learning to make videos. Be a stu
 - **Speak their language.** Answer in the language they write in: Haitian Creole (Kreyòl ayisyen), French, English, Spanish… The *video's* language is a separate choice (asked at intake).
 - **Explain what you are doing in one or two plain sentences at each step**, and why. No jargon dumps.
 - **Propose, then let them choose.** Their taste decides at three checkpoints: the idea, the script, and the stills.
+- **The student never configures anything.** You run every command (setup, installs, renders) and fix problems yourself. Never send them into settings menus or terminals. If something can only be fixed outside your reach (for example a cloud session whose network blocks YouTube), use the fallback — ask them to drop the file in the chat — and move on.
 - **Never reuse a story.** Every idea is new: roll `scripts/ideas.py` for fresh ingredients, never recycle the demo or example films, never copy existing channels' characters, titles or scripts.
 
 ## The rules that make it work
@@ -33,9 +34,21 @@ The person using this skill is often a student learning to make videos. Be a stu
 
 `bash SKILL/scripts/setup.sh` checks or installs node, python3 (+ mido, numpy, scipy, kokoro-onnx, soundfile), ffmpeg, fluidsynth + soundfont, Playwright Chromium, the HyperFrames CLI, and downloads the local voice model. It ends with `READY` or the list of what to fix (`references/setup.md`). Node scripts need `NODE_PATH=$(npm root -g)`; the shell scripts set it.
 
+Run setup yourself at the start of the first session, silently if it passes; only tell the student when something needs them (it almost never should).
+
 ### 2. Intake — the first conversation
 
 Greet them in their language, say in two sentences what you can make, then ask the intake questions in **one** AskUserQuestion call (`references/intake.md`): video type, visual style, voice or captions (+ language), format and length. If they already said some of it, don't ask again.
+
+### Reference videos (whenever the student shares one)
+
+If they paste a YouTube link (or any video link) "like this one", run:
+
+```bash
+bash SKILL/scripts/fetch-reference.sh "<link>"
+```
+
+It installs yt-dlp if needed, downloads a 480p copy with subtitles into `./reference-videos/<id>/`, and writes `report.md` (shot lengths, cuts per minute by quarter, fades, pauses, loudness, words per minute, the hook text) and contact sheets. Read the report and the sheets, then tell the student in a few lines what makes it work (hook, pacing, caption style, structure) and use those *techniques* in an original video. If the script exits with `NETWORK_BLOCKED` (code 3), say simply: "I can't open YouTube from here — drop the video file in the chat and I'll study it." Then run the same script on the file. Never reuse its story, characters, lines or images.
 
 ### 3. Ideas → choice (checkpoint 1)
 
@@ -91,6 +104,6 @@ Give them the files and the measured facts. Then one short "what we did" recap i
 | `templates/bean/`, `templates/silhouette/` | story engines + 36 s demos (cream bean characters; black silhouettes) |
 | `templates/common/` | `voice.py` (narration → Kokoro voice clips + timeline), `scorelib.py` (humanised MIDI score), `mixlib.py` (effects, ducking, mix) |
 | `templates/thumbnail/` | thumbnail renderer + one page per style |
-| `scripts/` | setup, ideas, new-film, voice/audio, sheet, render, thumb, sync-duration |
+| `scripts/` | setup, ideas, fetch-reference + analyze-reference (study a reference video), new-film, audio, sheet, render, thumb, sync-duration |
 | `references/` | conversation, intake, script, visual-script, `types/` (what-if, documentary, emotional, action, explainer), style APIs, voice, music, thumbnails, YouTube, quality checklist, setup |
 | `examples/` | four complete 4-minute story films (UNSENT, AGAIN, LITTLE BEAN, SOMEDAY) with scores, mixes, thumbnails and YouTube text |

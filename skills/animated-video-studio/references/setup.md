@@ -1,6 +1,6 @@
 # Setup
 
-`bash SKILL/scripts/setup.sh` checks everything and prints `READY`. What it needs:
+`bash SKILL/scripts/setup.sh` checks everything and prints `READY`. Claude runs it, not the student; the student should never have to install or configure anything by hand. What it needs:
 
 | Tool | Why | Install |
 | --- | --- | --- |
@@ -11,6 +11,7 @@
 | `kokoro-onnx`, `soundfile` + the Kokoro-82M model | local voice-over | `pip install kokoro-onnx soundfile`; the model (~330 MB) downloads on first `npx hyperframes@0.8.193 tts` |
 | FluidSynth | plays the MIDI with real samples | `apt install fluidsynth` · `brew install fluid-synth` · Windows: fluidsynth releases on GitHub |
 | FluidR3_GM.sf2 | the sampled instruments | `apt install fluid-soundfont-gm`, or setup.sh downloads it to `~/.soundfonts/`; or set `SF2=/path/to/file.sf2` |
+| yt-dlp | study reference videos from a link (`fetch-reference.sh`) | `pip install yt-dlp` (setup.sh does it) |
 | ffmpeg | loudness, encoding, contact sheets | `apt install ffmpeg` · `brew install ffmpeg` · `winget install ffmpeg` |
 
 Windows: run the scripts in Git Bash or WSL (WSL recommended).
