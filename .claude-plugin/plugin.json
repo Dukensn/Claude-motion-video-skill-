@@ -1,0 +1,8 @@
+{
+  "name": "animated-short-film",
+  "version": "1.0.0",
+  "description": "Make ~4-minute wordless, emotional animated short films for YouTube (bean line-art or silhouette style) with a generated score, a close-up thumbnail and the YouTube text.",
+  "author": { "name": "Dukensn" },
+  "repository": "https://github.com/Dukensn/claude-motion-video-skill-",
+  "keywords": ["video", "animation", "youtube", "hyperframes", "short film"]
+}

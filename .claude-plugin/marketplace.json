@@ -1,0 +1,11 @@
+{
+  "name": "motion-video",
+  "owner": { "name": "Dukensn" },
+  "plugins": [
+    {
+      "name": "animated-short-film",
+      "source": "./",
+      "description": "Wordless, emotional animated short films for YouTube, made with HyperFrames."
+    }
+  ]
+}
