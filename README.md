@@ -13,6 +13,8 @@ Un skill pour **Claude Code** qui fabrique des vidéos d'animation complètes po
 
 ## Installer
 
+**Sur téléphone (application Claude)** : chaque élève crée sa copie du dépôt (*Use this template* ou *Fork*), puis ouvre une session **Code** dessus dans l'application. Un script de démarrage installe tout automatiquement, et la vidéo arrive directement dans la conversation. Voir [GUIDE-ELEVE.md](GUIDE-ELEVE.md). Le dépôt doit être **public** (ou un dépôt modèle) pour que les élèves puissent le copier.
+
 **Le plus simple** : dans Claude Code, coller :
 
 > Installe le skill https://github.com/Dukensn/claude-motion-video-skill- : clone le dépôt, copie le dossier `skills/animated-video-studio` dans `~/.claude/skills/`, puis lance `bash ~/.claude/skills/animated-video-studio/scripts/setup.sh` et règle tout ce qui manque.

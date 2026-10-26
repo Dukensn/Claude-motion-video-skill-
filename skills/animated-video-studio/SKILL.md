@@ -19,6 +19,15 @@ The person using this skill is often a student learning to make videos. Be a stu
 - **The student never configures anything.** You run every command (setup, installs, renders) and fix problems yourself. Never send them into settings menus or terminals. If something can only be fixed outside your reach (for example a cloud session whose network blocks YouTube), use the fallback — ask them to drop the file in the chat — and move on.
 - **Never reuse a story.** Every idea is new: roll `scripts/ideas.py` for fresh ingredients, never recycle the demo or example films, never copy existing channels' characters, titles or scripts.
 
+## On a phone (Claude app → cloud session)
+
+Many students work from the Claude app on their phone. Then the session runs in the cloud on their copy of this repository: a start hook installs everything (`.claude/hooks/session-start.sh`), so nothing to set up. Adapt:
+- **Deliver with the file-sending tool** (SendUserFile or equivalent): the MP4, the thumbnail, contact sheets you want them to judge. They can't open container paths.
+- **Short messages**, one question at a time; use AskUserQuestion buttons rather than asking them to type long answers.
+- **Reference videos**: YouTube is usually blocked from cloud sessions; ask them to attach the video file from their phone (share → Claude) and analyse that.
+- **Suggest Shorts (9:16)** when they publish from the phone; long videos take longer to render (keep the session open).
+- Renders live only as long as the session's container: send the files as soon as they're done.
+
 ## The rules that make it work
 
 - **Everything drawn is a pure function of time `t`.** No `Math.random()`, `Date.now()` or state carried between frames: use `F.hash`, `F.noise1`, `F.mulberry(seed)`. HyperFrames renders frames out of order.

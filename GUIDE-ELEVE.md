@@ -2,6 +2,19 @@
 
 ## Français
 
+## Sur téléphone (application Claude)
+
+Une seule fois :
+1. Créez un compte GitHub gratuit sur github.com.
+2. Ouvrez https://github.com/Dukensn/claude-motion-video-skill- et touchez **Use this template → Create a new repository** (ou **Fork**). Vous avez maintenant votre propre copie du studio.
+3. Dans l'application Claude, ouvrez **Code**, connectez GitHub quand c'est demandé, et choisissez votre copie.
+
+Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **« Je veux faire une vidéo animée pour YouTube. »** Tout s'installe tout seul au démarrage (la première fois, ça peut prendre quelques minutes). Claude vous envoie la vidéo et la miniature directement dans la conversation : enregistrez-les sur votre téléphone.
+
+Pour montrer une vidéo qui vous inspire, joignez le fichier vidéo à votre message (les liens YouTube ne s'ouvrent pas toujours depuis le téléphone).
+
+## Sur ordinateur (Claude Code)
+
 1. Ouvrez Claude Code dans un dossier vide, par exemple `mes-videos`.
 2. La première fois seulement, collez ceci :
 
@@ -15,6 +28,19 @@
 Astuce : le rendu prend du temps, environ 2 à 3 fois la durée de la vidéo. Laissez l'ordinateur allumé.
 
 ## Kreyòl ayisyen
+
+## Sou telefòn (aplikasyon Claude)
+
+Yon sèl fwa :
+1. Kreye yon kont GitHub gratis sou github.com.
+2. Louvri https://github.com/Dukensn/claude-motion-video-skill- epi touche **Use this template → Create a new repository** (oswa **Fork**). Kounye a ou gen pwòp kopi studio a.
+3. Nan aplikasyon Claude, louvri **Code**, konekte GitHub lè yo mande w, epi chwazi kopi pa w la.
+
+Pou chak videyo : louvri yon nouvo sesyon sou kopi w la epi ekri **« Mwen vle fè yon videyo anime pou YouTube. »** Tout bagay enstale poukont yo lè sesyon an kòmanse (premye fwa a ka pran kèk minit). Claude ap voye videyo a ak miniati a dirèkteman nan konvèsasyon an : anrejistre yo sou telefòn ou.
+
+Pou montre yon videyo ki enspire w, mete fichye videyo a ak mesaj ou (lyen YouTube pa toujou louvri depi telefòn).
+
+## Sou òdinatè (Claude Code)
 
 1. Louvri Claude Code nan yon dosye vid, pa egzanp `videyo-mwen`.
 2. Premye fwa sèlman, kole sa a :
