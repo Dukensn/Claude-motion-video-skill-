@@ -1,11 +1,13 @@
 {
   "name": "motion-video",
-  "owner": { "name": "Dukensn" },
+  "owner": {
+    "name": "Dukensn"
+  },
   "plugins": [
     {
-      "name": "animated-short-film",
+      "name": "animated-video-studio",
       "source": "./",
-      "description": "Wordless, emotional animated short films for YouTube, made with HyperFrames."
+      "description": "Stickman and story animation studio for YouTube, made with HyperFrames."
     }
   ]
 }

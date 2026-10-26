@@ -1,66 +1,67 @@
-# Claude Motion Video Skill — films d'animation émouvants pour YouTube
+# Claude Motion Video Skill — studio d'animation pour YouTube
 
-Un skill pour **Claude Code** qui fabrique un court-métrage d'animation complet, sans voix, d'environ 4 minutes, dans le style des chaînes d'histoires émouvantes : une histoire originale, des personnages dessinés, des sous-titres, une musique générée (piano, cordes, guitare : de vrais instruments échantillonnés, pas un son robotique), des bruitages, la vidéo MP4 en 1920×1080, la miniature et le texte YouTube.
+Un skill pour **Claude Code** qui fabrique des vidéos d'animation complètes pour YouTube, de l'idée au MP4. Il invente une histoire originale, écrit le script et anime les personnages en code. Il ajoute ensuite une voix off (ou des sous-titres), compose la musique, fait le rendu vidéo, la miniature, le titre et la description. Tout tourne sur l'ordinateur de l'élève avec [HyperFrames](https://github.com/heygen-com/hyperframes) : pas d'IA d'image ou de vidéo, pas d'abonnement.
 
-Deux styles :
+| Stickman « What if » (voix off) | Histoire émouvante (bean) | Histoire émouvante (silhouettes) |
+| --- | --- | --- |
+| ![](skills/animated-video-studio/examples/thumbnails/stickman_demo_thumbnail.png) | ![](skills/animated-video-studio/examples/thumbnails/unsent_thumbnail.png) | ![](skills/animated-video-studio/examples/thumbnails/someday_thumbnail.png) |
 
-| Bean (trait dessiné) | Silhouettes |
-| --- | --- |
-| ![](skills/animated-short-film/examples/thumbnails/unsent_thumbnail.png) | ![](skills/animated-short-film/examples/thumbnails/someday_thumbnail.png) |
+**Types de vidéos** : *What if…* · documentaire narré · histoire émouvante · action / combat · explicatif.
+**Styles** : stickman (tous les types), bean et silhouettes (histoires émouvantes).
+**Formats** : YouTube 16:9 (de 1 à 20 min) ou Short 9:16.
+**Langues** : Claude parle avec l'élève en kreyòl, en français, en anglais… La voix off existe en anglais, français, espagnol, portugais, italien, japonais, chinois et hindi. Le kreyòl peut s'afficher en sous-titres.
 
 ## Installer
 
-**Option 1 — le plus simple.** Dans Claude Code, collez :
+**Le plus simple** : dans Claude Code, coller :
 
-> Installe le skill https://github.com/Dukensn/claude-motion-video-skill- : clone le dépôt et copie le dossier `skills/animated-short-film` dans `~/.claude/skills/`, puis lance son `scripts/setup.sh`.
+> Installe le skill https://github.com/Dukensn/claude-motion-video-skill- : clone le dépôt, copie le dossier `skills/animated-video-studio` dans `~/.claude/skills/`, puis lance `bash ~/.claude/skills/animated-video-studio/scripts/setup.sh` et règle tout ce qui manque.
 
-**Option 2 — comme plugin.**
+**Comme plugin** :
 
 ```
 /plugin marketplace add Dukensn/claude-motion-video-skill-
-/plugin install animated-short-film@motion-video
+/plugin install animated-video-studio@motion-video
 ```
 
-**Option 3 — à la main.**
+**À la main** :
 
 ```bash
 git clone https://github.com/Dukensn/claude-motion-video-skill-.git
-mkdir -p ~/.claude/skills && cp -R claude-motion-video-skill-/skills/animated-short-film ~/.claude/skills/
-bash ~/.claude/skills/animated-short-film/scripts/setup.sh
+mkdir -p ~/.claude/skills && cp -R claude-motion-video-skill-/skills/animated-video-studio ~/.claude/skills/
+bash ~/.claude/skills/animated-video-studio/scripts/setup.sh
 ```
 
-Il faut : Node.js 18+, Python 3 (`mido`, `numpy`), ffmpeg, FluidSynth. `setup.sh` vérifie tout et installe ce qu'il peut. Sous Windows, utilisez WSL.
+Il faut Node.js 18+, Python 3, ffmpeg et FluidSynth. `setup.sh` vérifie tout, installe ce qu'il peut et télécharge la voix locale (environ 330 Mo, une seule fois). Sous Windows, utilisez WSL.
 
 ## Utiliser
 
-Dans un dossier vide, dites à Claude Code :
+Dans un dossier vide, dire à Claude Code, par exemple : « Fè yon videyo stickman pou YouTube » ou « Fais-moi une vidéo What if ».
 
-> Fais-moi un court-métrage d'animation émouvant pour YouTube.
+Le skill :
 
-Le skill pose 4 questions (style, histoire ou « tu choisis », langue, durée), puis :
+1. pose 4 questions (type, style, voix ou sous-titres, format) ;
+2. propose **10 idées originales** et l'élève en choisit une ;
+3. écrit le **script** et le montre à l'élève ;
+4. anime la vidéo et montre des **planches d'images** ;
+5. génère la voix, la musique et le mixage ;
+6. fait le rendu MP4 ;
+7. crée la miniature et le texte YouTube.
 
-1. écrit l'histoire et vous montre le synopsis pour validation ;
-2. construit le film et vous montre des planches d'images ;
-3. compose la musique et le mixage ;
-4. fait le rendu vidéo (10 à 20 minutes pour 4 minutes de film) ;
-5. crée la miniature et le titre, la description et les chapitres YouTube.
+Tout sort dans `./films/<nom>/`. Les trois moments marqués en gras sont faits pour le jugement de l'élève.
 
-Tout sort dans `./films/<nom-du-film>/` : `renders/<nom>.mp4`, `renders/thumbnail.png`, `youtube.md`.
+Voir [GUIDE-ELEVE.md](GUIDE-ELEVE.md) pour le texte à donner aux élèves.
 
-Deux moments sont faits pour **votre** jugement : le synopsis et les planches d'images. C'est là que votre goût fait la différence.
-
-## Ce qu'il y a dedans
+## Contenu
 
 ```
-skills/animated-short-film/
-  SKILL.md              le déroulé que Claude suit
-  references/           questions, structure des histoires, API des deux styles, musique, miniatures, YouTube, checklist qualité
-  templates/            les deux moteurs de dessin (+ un film démo de 36 s chacun), la bibliothèque musique et mixage, les miniatures
-  scripts/              setup, new-film, sheet (planches), audio, render, thumb
-  examples/             quatre films complets (UNSENT, AGAIN, LITTLE BEAN, SOMEDAY) : code, musique, miniatures, textes YouTube
-  licenses/             licences des polices et de GSAP
+skills/animated-video-studio/
+  SKILL.md        le déroulé que Claude suit
+  references/     conversation, questions, écriture, du script aux plans, 5 types de vidéos, API des 3 styles, voix, musique, miniatures, YouTube, checklist qualité, installation
+  templates/      moteur stickman (+ démo « What if »), moteurs bean et silhouettes (+ démos), voix/musique/mixage, miniatures
+  scripts/        setup, ideas (idées aléatoires), new-film, audio, sheet, render, thumb
+  examples/       quatre courts-métrages complets (UNSENT, AGAIN, LITTLE BEAN, SOMEDAY)
+  licenses/       licences des polices et de GSAP
 ```
 
-Les histoires doivent rester originales : même genre de personnages et de rythme que les chaînes de référence, jamais leurs personnages, intrigues ou titres.
-
-Le rendu utilise [HyperFrames](https://github.com/heygen-com/hyperframes) en local ; aucune vidéo ni aucun fichier n'est envoyé en ligne.
+Chaque histoire est neuve : `ideas.py` tire des ingrédients au hasard à chaque fois, et le skill interdit de recopier les démos, les exemples ou les chaînes existantes.
