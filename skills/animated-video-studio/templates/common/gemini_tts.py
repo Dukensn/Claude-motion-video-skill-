@@ -58,13 +58,14 @@ def _wait_turn():
 
 
 def prompt(lines, style):
-    """Gemini's director format: notes the model performs but never reads, then the transcript.
-    Each line keeps its acting direction as an inline [tag]; lines are separated by blank lines (pauses)."""
-    notes = (f"# AUDIO PROFILE\nA YouTube narrator: {style or 'a natural, captivating human storyteller'}.\n\n"
-             "### DIRECTOR'S NOTES\nPerform like a real person who feels every line: vary pace, pitch and energy, breathe naturally. "
-             "Take a clear one-second pause at every blank line. Bracketed tags are acting directions, not words.\n\n"
-             "#### TRANSCRIPT\n")
-    return notes + "\n\n".join((f"[{L['direct']}] " if L.get("direct") else "") + L["text"] for L in lines)
+    """Gemini's director format. The acting notes live in the DIRECTOR'S NOTES, numbered by line; the
+    TRANSCRIPT holds only the words to speak (notes placed inside the transcript get read aloud)."""
+    notes = "\n".join(f"{i + 1}. {L['direct']}" for i, L in enumerate(lines) if L.get("direct"))
+    return (f"# AUDIO PROFILE\nA YouTube narrator: {style or 'a natural, captivating human storyteller'}.\n\n"
+            "### DIRECTOR'S NOTES\nPerform like a real person who feels every line: vary pace, pitch and energy, breathe naturally. "
+            "Leave a short breath between lines. Speak ONLY the transcript, never these notes.\n"
+            + (f"How to act each transcript line (by number):\n{notes}\n" if notes else "")
+            + "\n#### TRANSCRIPT\n" + "\n\n".join(L["text"] for L in lines))
 
 
 def synth(lines, voice, style, out_wav):
@@ -112,9 +113,9 @@ def synth(lines, voice, style, out_wav):
             os.remove(pcm)
         # guard: a take far longer than the words need means the model read notes aloud or repeated itself
         words = sum(len(L["text"].split()) for L in lines)
-        expect = words / 2.3 + 1.2 * len(lines) + 2
+        expect = words / 2.3 + 1.0 * len(lines) + 2
         got = _dur(out_wav)
-        if got > 1.6 * expect:
+        if got > 2.2 * expect:
             os.rename(out_wav, out_wav + ".rejected.wav")
             raise RuntimeError(f"take is {got:.0f}s for {words} words — the voice read extra text")
         print(f"  gemini voice: {voice} via {model}")
@@ -146,12 +147,12 @@ def _best_cuts(sil, exp, total):
     D = [[INF] * m for _ in range(n - 1)]
     back = [[-1] * m for _ in range(n - 1)]
     for j in range(m):
-        D[0][j] = cost(0, 0, mid[j]) - 1.5 * (sil[j][1] - sil[j][0])
+        D[0][j] = cost(0, 0, mid[j]) - 4 * (sil[j][1] - sil[j][0])
     for k in range(1, n - 1):
         for j in range(k, m):
             for i in range(k - 1, j):
                 if D[k - 1][i] == INF: continue
-                c = D[k - 1][i] + cost(k, mid[i], mid[j]) - 1.5 * (sil[j][1] - sil[j][0])
+                c = D[k - 1][i] + cost(k, mid[i], mid[j]) - 4 * (sil[j][1] - sil[j][0])
                 if c < D[k][j]: D[k][j], back[k][j] = c, i
     best, j = INF, -1
     for jj in range(n - 2, m):
@@ -164,9 +165,111 @@ def _best_cuts(sil, exp, total):
     return out[::-1]
 
 
+ASR_DIR = os.path.expanduser("~/.cache/video-studio/asr")
+ASR_NAME = "sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8"   # 25 languages incl. English, French, Spanish, Portuguese
+ASR_URL = f"https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/{ASR_NAME}.tar.bz2"
+
+
+def _ensure_asr():
+    """Parakeet (sherpa-onnx) from GitHub releases, ~490 MB, downloaded once on first expressive voicing."""
+    import sys
+    try:
+        import sherpa_onnx  # noqa: F401
+    except ImportError:
+        for extra in ([], ["--break-system-packages"]):
+            subprocess.run([sys.executable, "-m", "pip", "install", "-q", *extra, "sherpa-onnx", "soundfile"], check=False)
+        import sherpa_onnx  # noqa: F401
+    d = os.path.join(ASR_DIR, ASR_NAME)
+    if not os.path.exists(os.path.join(d, "tokens.txt")):
+        os.makedirs(ASR_DIR, exist_ok=True)
+        print("  (downloading the speech aligner, once — ~490 MB)")
+        tb = os.path.join(ASR_DIR, "asr.tar.bz2")
+        subprocess.run(["curl", "-sSL", "--fail", "-o", tb, ASR_URL], check=True)
+        subprocess.run(["tar", "xjf", tb, "-C", ASR_DIR], check=True)
+        os.remove(tb)
+    return d
+
+
+def _norm(w):
+    import unicodedata
+    w = unicodedata.normalize("NFKD", w.lower())
+    return "".join(c for c in w if c.isalnum())
+
+
+def asr_words(take):
+    """[(word, start, end)] heard in the take, or None if the aligner can't run."""
+    try:
+        d = _ensure_asr()
+        import sherpa_onnx, soundfile as sf
+        rec = sherpa_onnx.OfflineRecognizer.from_transducer(
+            encoder=f"{d}/encoder.int8.onnx", decoder=f"{d}/decoder.int8.onnx", joiner=f"{d}/joiner.int8.onnx",
+            tokens=f"{d}/tokens.txt", model_type="nemo_transducer", num_threads=os.cpu_count() or 2)
+        tmp = take + ".16k.wav"
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", take, "-ar", "16000", "-ac", "1", tmp], check=True)
+        x, sr = sf.read(tmp, dtype="float32"); os.remove(tmp)
+        st = rec.create_stream(); st.accept_waveform(sr, x); rec.decode_stream(st)
+        toks, ts = st.result.tokens, st.result.timestamps
+    except Exception as e:  # no network for the model, no wheel for this platform…
+        print(f"  (aligner unavailable: {e}; splitting at pauses)")
+        return None
+    words = []
+    for tok, t in zip(toks, ts):
+        if tok.startswith(" ") or not words:
+            words.append([tok.strip(), t, t + 0.3])
+        else:
+            words[-1][0] += tok
+            words[-1][2] = t + 0.3
+    return [(w, a, b) for w, a, b in words if _norm(w)]
+
+
+def align(lines, heard):
+    """Find each line's [start, end] in the take by matching script words to heard words.
+    Words the voice added (notes read aloud, repeats) are simply left out of every clip."""
+    import difflib
+    script, owner = [], []
+    for i, L in enumerate(lines):
+        for w in L["text"].split():
+            if _norm(w):
+                script.append(_norm(w)); owner.append(i)
+    sm = difflib.SequenceMatcher(None, script, [_norm(w) for w, _, _ in heard], autojunk=False)
+    first, last, hit = {}, {}, [0] * len(lines)
+    for blk in sm.get_matching_blocks():
+        for k in range(blk.size):
+            i, h = owner[blk.a + k], heard[blk.b + k]
+            first.setdefault(i, h[1]); last[i] = h[2]; hit[i] += 1
+    if sum(hit) < 0.6 * len(script) or len(first) < len(lines) * 0.75:
+        return None
+    ranges = []
+    for i in range(len(lines)):
+        if i in first:
+            ranges.append([first[i] - 0.12, last[i] + 0.15])
+        else:
+            ranges.append(None)
+    # lines the aligner missed: fill the gap between neighbours
+    for i, r in enumerate(ranges):
+        if r is None:
+            a = ranges[i - 1][1] + 0.05 if i and ranges[i - 1] else 0.0
+            b = next((x[0] for x in ranges[i + 1:] if x), a + 3.0)
+            ranges[i] = [a, b - 0.05]
+    for i in range(len(ranges) - 1):                 # never overlap the next line
+        ranges[i][1] = min(ranges[i][1], ranges[i + 1][0] - 0.02)
+    extra = len(heard) - sum(hit)
+    if extra > 0.25 * len(script):
+        print(f"  (gemini spoke {extra} words that are not in the script — they were cut out)")
+    return [(max(0.0, a), b) for a, b in ranges]
+
+
 def split(take, lines, outs):
-    """Cut the take into len(lines) clips at the longest pauses (in order); 48 kHz mono, silence trimmed."""
+    """Cut the take into len(lines) clips, 48 kHz mono: word-aligned with the speech recogniser when it can run,
+    else at the pauses that best fit the text."""
     n, total = len(lines), _dur(take)
+    heard = asr_words(take)
+    ranges = align(lines, heard) if heard else None
+    if ranges:
+        for (a, b), f in zip(ranges, outs):
+            subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-ss", f"{a:.3f}", "-to", f"{b:.3f}", "-i", take,
+                            "-af", "afade=t=in:d=0.02,areverse,afade=t=in:d=0.06,areverse", "-ar", "48000", "-ac", "1", f], check=True)
+        return
     sil = [(a, b) for a, b in _silences(take) if a > 0.05 and b < total - 0.05]
     # expected share of the take for each line (characters + a pause allowance)
     w = [len(L["text"]) + 12 for L in lines]

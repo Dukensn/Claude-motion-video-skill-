@@ -26,9 +26,9 @@ Two engines, chosen at intake. Say honestly how each sounds.
 }
 ```
 
-You are the voice director: write `style` (who is talking, the energy of the whole video) and a short `direct` for every line (emotion + pace). Vary them — the contrast is what makes it feel human. Inline tags inside `text` such as `[laughs]`, `[sighs]`, `[whispers]` also work; use them rarely.
+You are the voice director: write `style` (who is talking, the energy of the whole video) and a short `direct` for every line (emotion + pace). **Write `style` and `direct` in English, whatever the video's language** (say the accent in `style`: "native French accent"). Vary them — the contrast is what makes it feel human. Never put notes or `[tags]` inside `text`: the voice reads them aloud.
 
-How it works (`tools/gemini_tts.py`): the whole script goes in **one** request; Gemini performs it with a pause between lines; the take is cut back into lines (pause matching), so `at("id")` sync still works. If the take is far too long (the model read the notes aloud) it is rejected.
+How it works (`tools/gemini_tts.py`): the notes go in the prompt's DIRECTOR'S NOTES (numbered by line), the transcript holds only the words, and the whole script goes in **one** request. Then a local speech recogniser (Parakeet via sherpa-onnx, 25 languages, downloaded once from GitHub, ~490 MB) finds each line word by word in the take and cuts it out exactly — anything the voice added (a note read aloud, a repeat) is left out. If the recogniser can't run, the take is cut at the pauses that best fit the text (less exact: check the sync).
 
 | Voice | Character |
 | --- | --- |
