@@ -43,6 +43,8 @@ Languages: English, French, Spanish and many more. Haitian Creole is not guarant
 
 ### Getting the key (the student does this once, from the phone)
 
+Always ask the student for **their own** key when a voiced video is chosen and no key is saved — give them the link https://aistudio.google.com/apikey and mention the course's tutorial video.
+
 1. Open **aistudio.google.com/apikey**, sign in with a Google account, tap **Create API key**, copy it.
 2. Paste it in the chat.
 

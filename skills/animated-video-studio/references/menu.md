@@ -19,6 +19,12 @@
 4. **Test first** — *Yes, a 30-second test first (Recommended)* · *No, make the full video*.
 
 Save: `profile.py set voice=gemini|kokoro|none format=16:9|9:16 count=<n> test=yes|no language=<code>`.
+
+**Voice chosen → ask for the student's own Gemini key, every time it is missing.** Each student brings their own key
+(never the teacher's, never a shared one). Say it simply, in their language, with the link:
+"For the expressive voice I need your own free Gemini key: open https://aistudio.google.com/apikey, tap *Create API key*,
+copy it and paste it here. (Your teacher's video shows how.)" Save it as `voice.md` says, never repeat it back, never commit it.
+No key yet → offer to start with the natural voice (Kokoro, clear but not emotional) or captions, and re-voice later.
 Then — before anything technical — write the script (`references/creative.md`).
 
 ## The test
