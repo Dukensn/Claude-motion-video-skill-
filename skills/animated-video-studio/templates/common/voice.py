@@ -4,10 +4,12 @@
 
 narration.json:
     {
-      "voice": "am_michael",      # Kokoro voice, or null for a silent film (captions only)
+      "voice": "am_michael",      # Kokoro voice (has an "_"), a Gemini voice (Puck, Fenrir, Kore…), or null for a silent film
+      "style": "an excited, curious science storyteller",   # Gemini only: overall delivery
+      "fallback_voice": "am_michael",                        # Gemini only: Kokoro voice if Gemini can't be used
       "speed": 1.0, "start": 1.0, "gap": 0.35, "tail": 4.0,
       "lines": [
-        {"id": "hook", "text": "What if the Moon disappeared tonight?", "pause": 1.0},
+        {"id": "hook", "text": "What if the Moon disappeared tonight?", "pause": 1.0, "direct": "hushed, mysterious, slow"},
         {"id": "dark", "text": "The first thing you'd notice is the dark."},
         {"id": "kid", "text": "Look!", "voice": "af_heart"},         # per-line voice for a character
         {"id": "kr", "text": "The fire kept them alive.", "caption": "Dife a te kenbe yo vivan."}  # subtitle differs from voice
@@ -17,6 +19,10 @@ narration.json:
 Writes build/voice/<n>-<id>.wav (48 kHz), build/timeline.json and assets/js/timeline.js
 (window.VO = {lines: [{id, text, a, b, file}], end, duration}). Lines are cached by text+voice+speed,
 so editing one line only re-synthesizes that line.
+
+Gemini (expressive, the student's own key — templates/common/gemini_tts.py): the whole script is spoken in ONE request,
+each line acted with its "direct" note, then cut back into lines. Editing any line re-sends the script (one request).
+If there is no key, the quota is reached or the network blocks it, the film falls back to Kokoro and says so.
 
 Voices (Kokoro-82M, local, free): English am_michael am_adam af_heart af_nova af_sky bf_emma bf_isabella bm_george,
 French ff_siwis, Spanish ef_dora, Japanese jf_alpha, Chinese zf_xiaobei. Haitian Creole has no voice: narrate in
@@ -49,6 +55,38 @@ def ensure_model():
         os.remove(tmp)
 
 
+GEM = {}   # line index -> (clip, hash) for lines spoken by Gemini
+
+
+def gemini_take(spec, lines, voice, out, old):
+    """Expressive narration: one Gemini request for all lines that use the main voice. Returns the voice the
+    remaining lines should use (unchanged on success, the Kokoro fallback if Gemini can't be used)."""
+    sys.path.insert(0, HERE)
+    import gemini_tts as G
+    idx = [i for i, L in enumerate(lines) if L.get("voice", voice) == voice]
+    style = spec.get("style", "")
+    key = json.dumps([voice, G.MODELS, G.prompt([lines[i] for i in idx], style)])   # any change to the words or notes = new take
+    h = hashlib.sha1(key.encode()).hexdigest()[:12]
+    files = [os.path.join(out, f"{i:03d}-{lines[i].get('id') or f'l{i}'}.wav") for i in idx]
+    hashes = [f"{h}-{k}" for k in range(len(idx))]
+    if all(x in old and os.path.exists(f) for x, f in zip(hashes, files)):
+        for i, f, x in zip(idx, files, hashes): GEM[i] = (f, x)
+        return voice
+    take = os.path.join(out, f"take-{h}.wav")
+    try:
+        if not os.path.exists(take):
+            G.synth([lines[i] for i in idx], voice, style, take)
+        G.split(take, [lines[i] for i in idx], files)
+    except (G.QuotaError, G.NoKey, RuntimeError) as e:
+        fb = spec.get("fallback_voice", "am_michael")
+        print(f"  !! Gemini voice unavailable: {e}\n  !! falling back to Kokoro ({fb}) — natural but not emotional")
+        return fb
+    for i, f, x in zip(idx, files, hashes):
+        GEM[i] = (f, x)
+        print(f"  voice {i:03d} {lines[i].get('id')}: {lines[i]['text'][:60]}")
+    return voice
+
+
 def main():
     spec = json.load(open(os.path.join(FILM, "narration.json")))
     lines = spec["lines"]
@@ -63,6 +101,11 @@ def main():
     if os.path.exists(tl_path):
         old = {l.get("hash"): l for l in json.load(open(tl_path))["lines"] if l.get("hash")}
 
+    voiced = [L for L in lines if L.get("voice", voice0)]
+    engine = spec.get("engine") or ("gemini" if voice0 and "_" not in voice0 else "kokoro")
+    if engine == "gemini" and voiced:
+        voice0 = gemini_take(spec, lines, voice0, out, old)
+
     model = None
     res = []
     for i, L in enumerate(lines):
@@ -70,7 +113,11 @@ def main():
         rec = {"id": L.get("id") or f"l{i}", "text": L["text"]}
         if L.get("hide"): rec["hide"] = True
         if L.get("caption"): rec["caption"] = L["caption"]   # shown on screen instead of the spoken text
-        if v:
+        if i in GEM:
+            f, h = GEM[i]
+            dur = wav_seconds(f)
+            rec.update(file=f, hash=h)
+        elif v:
             h = hashlib.sha1(f'{L["text"]}|{v}|{speed}'.encode()).hexdigest()[:12]
             f = os.path.join(out, f"{i:03d}-{rec['id']}.wav")
             if not (h in old and os.path.exists(old[h]["file"])):

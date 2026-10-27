@@ -5,7 +5,7 @@ description: Make complete animated YouTube videos drawn in code and rendered lo
 
 # Animated Video Studio
 
-You run a small animation studio with the user. Together you go from an empty folder to a finished YouTube video: an **original** idea, a script, characters, animation drawn in code, voice-over or captions, music, a 1920×1080 (or 1080×1920 Short) MP4, a thumbnail and the YouTube text. Everything is drawn on a canvas and rendered locally with HyperFrames: no image or video AI, no paid service, the same result every render.
+You run a small animation studio with the user. Together you go from an empty folder to a finished YouTube video: an **original** idea, a script, characters, animation drawn in code, voice-over or captions, music, a 1920×1080 (or 1080×1920 Short) MP4, a thumbnail and the YouTube text. Everything is drawn on a canvas and rendered locally with HyperFrames: no image or video AI, no paid service, the same result every render. The only online piece is optional: an expressive narrator voice through the student's own Gemini key.
 
 `SKILL` means this skill's folder (the one holding this file). Videos go in `./films/<slug>/` in the user's current directory.
 
@@ -77,7 +77,7 @@ bash SKILL/scripts/new-film.sh <stickman|bean|silhouette> <slug> "TITLE"
 ```
 
 copies a working template (a short demo) into `films/<slug>/`. Then:
-- replace `narration.json` with yours and run `python3 films/<slug>/tools/voice.py` → the voice clips and `assets/js/timeline.js` (exact timings per line);
+- replace `narration.json` with yours and run `python3 films/<slug>/tools/voice.py` → the voice clips and `assets/js/timeline.js` (exact timings per line). Expressive voice: get the script approved **before** voicing — each voicing is one request of the student's Gemini quota (`references/voice.md`);
 - rewrite `assets/js/film.js` — the shot list. Anchor shots to narration lines with `at("id")` / `end("id")` (stickman), so picture and voice stay in sync. Turn the script into shots with `references/visual-script.md`. APIs: `references/style-stickman.md`, `style-bean.md`, `style-silhouette.md`; full examples in `SKILL/examples/`.
 - New sets or props go in a new `assets/js/sets.js` (included in `index.html` before film.js), not in the engine.
 
@@ -111,7 +111,7 @@ Give them the files and the measured facts. Then one short "what we did" recap i
 | --- | --- |
 | `templates/stickman/` | stickman engine (`stick.js` figure/poses/faces/looks/props, `world.js` sets/effects/infographics, `text.js` subtitles/titles) + a narrated "What if" demo |
 | `templates/bean/`, `templates/silhouette/` | story engines + 36 s demos (cream bean characters; black silhouettes) |
-| `templates/common/` | `voice.py` (narration → Kokoro voice clips + timeline), `scorelib.py` (humanised MIDI score), `mixlib.py` (effects, ducking, mix) |
+| `templates/common/` | `voice.py` (narration → voice clips + timeline; Gemini expressive voice via `gemini_tts.py`, Kokoro fallback), `scorelib.py` (humanised MIDI score), `mixlib.py` (effects, ducking, mix) |
 | `templates/thumbnail/` | thumbnail renderer + one page per style |
 | `scripts/` | setup, ideas, fetch-reference + analyze-reference (study a reference video), new-film, audio, sheet, render, thumb, sync-duration |
 | `references/` | conversation, intake, script, visual-script, `types/` (what-if, documentary, emotional, action, explainer), style APIs, voice, music, thumbnails, YouTube, quality checklist, setup |

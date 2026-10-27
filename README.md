@@ -11,6 +11,10 @@ Un skill pour **Claude Code** qui fabrique des vidéos d'animation complètes po
 **Formats** : YouTube 16:9 (de 1 à 20 min) ou Short 9:16.
 **Langues** : Claude parle avec l'élève en kreyòl, en français, en anglais… La voix off existe en anglais, français, espagnol, portugais, italien, japonais, chinois et hindi. Le kreyòl peut s'afficher en sous-titres.
 
+**Deux voix au choix** :
+- **Voix expressive (Gemini)** : elle joue chaque phrase (surprise, suspense, humour). L'élève apporte sa propre clé API Gemini, gratuite sur [aistudio.google.com/apikey](https://aistudio.google.com/apikey), et la colle dans le chat. Une vidéo = une seule requête, pour ménager le quota.
+- **Voix naturelle (Kokoro)** : gratuite, sans clé, claire et naturelle, mais pas émotionnelle. C'est aussi la voix de secours si la clé manque ou si le quota est épuisé.
+
 ## Installer
 
 **Sur téléphone (application Claude)** : chaque élève crée sa copie du dépôt (*Use this template* ou *Fork*), puis ouvre une session **Code** dessus dans l'application. Un script de démarrage installe tout automatiquement, et la vidéo arrive directement dans la conversation. Voir [GUIDE-ELEVE.md](GUIDE-ELEVE.md). Le dépôt doit être **public** (ou un dépôt modèle) pour que les élèves puissent le copier.

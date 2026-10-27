@@ -13,6 +13,8 @@ Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **�
 
 Pour montrer une vidéo qui vous inspire, joignez le fichier vidéo à votre message (les liens YouTube ne s'ouvrent pas toujours depuis le téléphone).
 
+**Voix expressive (facultatif)** : pour une voix qui joue les émotions, créez une clé gratuite sur **aistudio.google.com/apikey** (compte Google → *Create API key*) et collez-la dans le chat quand Claude la demande. Sans clé, Claude utilise une voix naturelle mais sans émotion. Votre clé est personnelle : ne la partagez avec personne d'autre.
+
 ## Sur ordinateur (Claude Code)
 
 1. Ouvrez Claude Code dans un dossier vide, par exemple `mes-videos`.
@@ -39,6 +41,8 @@ Yon sèl fwa :
 Pou chak videyo : louvri yon nouvo sesyon sou kopi w la epi ekri **« Mwen vle fè yon videyo anime pou YouTube. »** Tout bagay enstale poukont yo lè sesyon an kòmanse (premye fwa a ka pran kèk minit). Claude ap voye videyo a ak miniati a dirèkteman nan konvèsasyon an : anrejistre yo sou telefòn ou.
 
 Pou montre yon videyo ki enspire w, mete fichye videyo a ak mesaj ou (lyen YouTube pa toujou louvri depi telefòn).
+
+**Vwa ki gen emosyon (si w vle)** : pou yon vwa ki jwe emosyon yo, kreye yon kle gratis sou **aistudio.google.com/apikey** (kont Google → *Create API key*) epi kole l nan chat la lè Claude mande l. San kle, Claude ap itilize yon vwa natirèl men ki pa gen emosyon. Kle a se pou ou sèlman : pa pataje l ak pèsonn.
 
 ## Sou òdinatè (Claude Code)
 

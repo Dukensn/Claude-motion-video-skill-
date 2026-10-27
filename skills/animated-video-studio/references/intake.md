@@ -11,9 +11,11 @@ Ask in **one** AskUserQuestion call (max 4 questions, 2–4 options each, recomm
    - *Stickman (Recommended)* — clean black stick figures, flat colour sets, infographics. Works for every type.
    - *Bean line-art* — cream round characters, dark sketchy rooms, a glowing emotion-character. Emotional stories.
    - *Silhouettes* — black figures with white eyes on soft flat sets. Emotional stories.
-3. **Voice** (header "Voice")
-   - *Narrator voice (Recommended for What if / documentary / explainer)* — local AI voice; then ask the language (English, French, Spanish…).
+3. **Voice** (header "Voice") — say plainly what each one sounds like:
+   - *Expressive voice (Recommended for What if / documentary / explainer)* — Gemini acts every line (surprise, suspense, warmth). Needs the student's own free Gemini API key (`voice.md` → "Getting the key").
+   - *Natural voice, no key* — Kokoro, free and local: clear and natural, **but not emotional** (flat delivery). Tell them exactly that.
    - *No voice, captions + music (Recommended for emotional / action)*.
+   For a narrated choice, ask the language next (English, French, Spanish…).
 4. **Format & length** (header "Format")
    - *YouTube 16:9, ~3–4 min* · *YouTube 16:9, 8–12 min* · *Short 9:16, < 60 s*. Documentary also offers 20 min.
 
