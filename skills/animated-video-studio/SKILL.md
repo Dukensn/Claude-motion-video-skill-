@@ -77,7 +77,10 @@ and the 12 cards `SKILL/catalog/01.jpg … 12.jpg`, and ask for a number. `SKILL
 Voice (**natural Kokoro by default** · more emotional Gemini with their own key, stored once in their cloud environment — never in the chat or the repo · captions only) · format
 (**YouTube 16:9 first**, or Short 9:16) · how many videos · a 30-second test first (recommended). Save with `profile.py set`.
 
-### 4. The script — first, and free (`references/creative.md`)
+### 4. The story, then the script — first, and free (`references/story.md`, `references/creative.md`)
+
+Three radically different concepts, each scored on clarity, desire, surprise, emotion and freshness; keep the best
+(above 18/25) and offer it (or the top two). Beats joined by BUT / THEREFORE, never "and then". Table read before showing.
 
 Before opening any engine reference, write `films/<slug>/SCRIPT.md` like a director with no limits: logline, tone
 (+ a counter-tone), cast with invented looks, places, numbered beats (hook < 3 s, a change every 2–4 s), words, sound,
@@ -115,7 +118,7 @@ wrong (`references/quality-checklist.md`), then show the student one or two shee
 
 ### 8. Music, voice and mix
 
-`tools/score.py` (cues from the narration timeline or the film's beat times) and `tools/mix.py` (voice first, music ducked,
+`tools/score.py` (music only where it helps — ambience or silence are valid choices; cues from the narration timeline or the film's beat times) and `tools/mix.py` (voice first, music ducked,
 effects on visible actions — `FILM.events()` exports their times) — `references/music.md`. Run `bash SKILL/scripts/audio.sh films/<slug>`.
 You cannot hear: report the loudness (target −16…−13 LUFS, peak ≤ −1 dB) and ask them to listen.
 

@@ -12,6 +12,12 @@ the tool's limits produces the same video every student gets. A script written f
 - Mix tones on purpose. A comedy can turn tender in the last 10 seconds; a documentary can have one absurd joke;
   a moral story can open like a thriller. Pick one main tone and one counter-tone.
 
+## 1b. Story first, for real (`story.md`)
+
+Follow `references/story.md`: three radically different concepts, scored honestly; keep only one above 18/25;
+build it with BUT / THEREFORE; one want, one flaw, one detail per character; a structure; a table read. A video that
+only shows the engine is not acceptable.
+
 ## 2. Write `films/<slug>/SCRIPT.md` — the director's script
 
 ```
@@ -26,7 +32,7 @@ Promise: what the viewer gets if they stay (the question the hook opens).
 1. [0:00] HOOK — what we see, what we hear, the text on screen
 2. ...
 ## Words (narration lines, captions or speech bubbles, in the video's language)
-## Sound (music mood per section; every hit, whoosh and silence that matters)
+## Sound (per scene: music, ambience only, or silence — music is optional; every hit, whoosh and silence that matters)
 ## Ending (the payoff + a last "button" image or line)
 ## Thumbnail idea (one frame, one emotion, 2–3 words)
 ```
