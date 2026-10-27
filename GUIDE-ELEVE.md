@@ -9,7 +9,7 @@ Une seule fois :
 2. Ouvrez https://github.com/Dukensn/claude-motion-video-skill- et touchez **Use this template → Create a new repository** (ou **Fork**). Vous avez maintenant votre propre copie du studio.
 3. Dans l'application Claude, ouvrez **Code**, connectez GitHub quand c'est demandé, et choisissez votre copie.
 
-Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **« Je veux faire une vidéo animée pour YouTube. »** Tout s'installe tout seul au démarrage (la première fois, ça peut prendre quelques minutes). Claude vous envoie la vidéo et la miniature directement dans la conversation : enregistrez-les sur votre téléphone.
+Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **« Je veux faire une vidéo animée pour YouTube. »** Claude vous envoie un menu d'images numérotées : répondez avec le numéro de votre choix. Il s'en souviendra la prochaine fois. Tout s'installe tout seul au démarrage (la première fois, ça peut prendre quelques minutes). Claude vous envoie la vidéo et la miniature directement dans la conversation : enregistrez-les sur votre téléphone.
 
 Pour montrer une vidéo qui vous inspire, joignez le fichier vidéo à votre message (les liens YouTube ne s'ouvrent pas toujours depuis le téléphone).
 
@@ -38,7 +38,7 @@ Yon sèl fwa :
 2. Louvri https://github.com/Dukensn/claude-motion-video-skill- epi touche **Use this template → Create a new repository** (oswa **Fork**). Kounye a ou gen pwòp kopi studio a.
 3. Nan aplikasyon Claude, louvri **Code**, konekte GitHub lè yo mande w, epi chwazi kopi pa w la.
 
-Pou chak videyo : louvri yon nouvo sesyon sou kopi w la epi ekri **« Mwen vle fè yon videyo anime pou YouTube. »** Tout bagay enstale poukont yo lè sesyon an kòmanse (premye fwa a ka pran kèk minit). Claude ap voye videyo a ak miniati a dirèkteman nan konvèsasyon an : anrejistre yo sou telefòn ou.
+Pou chak videyo : louvri yon nouvo sesyon sou kopi w la epi ekri **« Mwen vle fè yon videyo anime pou YouTube. »** Claude ap voye yon meni imaj ak nimewo ba ou : reponn ak nimewo ou chwazi a. L ap sonje l pwochen fwa. Tout bagay enstale poukont yo lè sesyon an kòmanse (premye fwa a ka pran kèk minit). Claude ap voye videyo a ak miniati a dirèkteman nan konvèsasyon an : anrejistre yo sou telefòn ou.
 
 Pou montre yon videyo ki enspire w, mete fichye videyo a ak mesaj ou (lyen YouTube pa toujou louvri depi telefòn).
 

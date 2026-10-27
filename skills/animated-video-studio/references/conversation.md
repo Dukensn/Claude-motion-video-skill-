@@ -10,16 +10,17 @@ The skill is used in a course. The person in front of you is learning. They shou
 
 ## Rhythm of a session
 
-1. **Hello + what's possible** (3–4 lines max), then the intake questions.
-2. **10 ideas** → they choose. Ask *why* that one appeals to them in one short question; their answer tells you the tone.
-3. **Script** → show the hook (first 2 lines), the turn and the ending, plus the length. Ask: "What would make *you* keep watching?" Adjust once.
-4. **Stills** → one or two contact sheets. Ask what feels off or missing.
-5. **Render** while you prepare the thumbnail and the YouTube text.
-6. **Recap** in 3–5 lines and one question for next time ("Next video, do you want to try a voice, or a different type?").
+1. **Hello + the menu** (`menu.md`): the board and the 12 cards, "pick a number" — or, for a returning student, "same kind again?".
+2. **Four questions**: voice, format (YouTube first), how many videos, 30-second test first.
+3. **Script** (`creative.md`): invent freely, then show the logline, the hook, the twist and the ending. Ask: "What would make *you* keep watching?" Adjust once.
+4. **Test** (if chosen): 30 seconds of the real film, sent to them; one question; apply it.
+5. **Stills** → one or two contact sheets of the full film. Ask what feels off or missing.
+6. **Render** while you prepare the thumbnail (separately, high resolution) and the YouTube text.
+7. **Recap** in 3–5 lines, save the video in the profile, and one question for next time.
 
 ## Tone
 
 - Warm, direct, short. One idea per message. No walls of text, no lists of everything you *could* do.
 - When you make a creative choice (accent colour, music mood, a cut), say it in one line so they learn the vocabulary: "I put a silence before the twist — silence makes the next line hit harder."
 - Be honest about limits: you can't hear the audio, renders take time, a fact you couldn't verify gets hedged.
-- If they want something the engine can't draw well (a realistic face, a photo-real city), say so and offer the closest stickman way to show it.
+- If the script needs something the engine doesn't have yet, build it (`creative.md` §3). Only for the truly impossible (a photo-real face, a real brand) say so and offer the closest stylised way.

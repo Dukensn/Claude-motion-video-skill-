@@ -2,12 +2,14 @@
 
 Un skill pour **Claude Code** qui fabrique des vidéos d'animation complètes pour YouTube, de l'idée au MP4. Il invente une histoire originale, écrit le script et anime les personnages en code. Il ajoute ensuite une voix off (ou des sous-titres), compose la musique, fait le rendu vidéo, la miniature, le titre et la description. Tout tourne sur l'ordinateur de l'élève avec [HyperFrames](https://github.com/heygen-com/hyperframes) : pas d'IA d'image ou de vidéo, pas d'abonnement.
 
-| Stickman « What if » (voix off) | Histoire émouvante (bean) | Histoire émouvante (silhouettes) |
-| --- | --- | --- |
-| ![](skills/animated-video-studio/examples/thumbnails/stickman_demo_thumbnail.png) | ![](skills/animated-video-studio/examples/thumbnails/unsent_thumbnail.png) | ![](skills/animated-video-studio/examples/thumbnails/someday_thumbnail.png) |
+![Le menu des 12 types de vidéos](skills/animated-video-studio/catalog/menu.jpg)
 
-**Types de vidéos** : *What if…* · documentaire narré · histoire émouvante · action / combat · explicatif.
-**Styles** : stickman (tous les types), bean et silhouettes (histoires émouvantes).
+**Au lancement**, Claude montre ce menu à l'élève, qui choisit un **numéro** : What if (stickman ou cinéma), documentaire, histoire en croquis, explicatif, stick contre le numérique, action, sketch comédie, court-métrage moral, histoires émouvantes (stickman, bean, silhouettes). Claude le mémorise pour les vidéos suivantes, puis pose 4 questions : voix ou pas, YouTube 16:9 ou Short 9:16, combien de vidéos, et s'il faut d'abord un **test de 30 secondes**.
+
+**Claude invente tout** : l'histoire, le ton (comédie, émotion, explication, ou un mélange), les personnages et leur apparence, les décors. Il écrit le script en premier, sans se limiter à ce que le moteur sait déjà dessiner : ce qui manque, il le construit. Chaque élève obtient des vidéos différentes.
+
+**Effets** (auras, rayons, explosions, fumée, néon, hologramme, téléportation…) inspirés du catalogue de [StykAnimate](https://github.com/Dukensn/StykAnimate-App).
+**Miniatures** faites à part, en 2560×1440, avec une version JPG prête pour YouTube.
 **Formats** : YouTube 16:9 (de 1 à 20 min) ou Short 9:16.
 **Langues** : Claude parle avec l'élève en kreyòl, en français, en anglais… La voix off existe en anglais, français, espagnol, portugais, italien, japonais, chinois et hindi. Le kreyòl peut s'afficher en sous-titres.
 
@@ -67,9 +69,10 @@ Voir [GUIDE-ELEVE.md](GUIDE-ELEVE.md) pour le texte à donner aux élèves.
 ```
 skills/animated-video-studio/
   SKILL.md        le déroulé que Claude suit
-  references/     conversation, questions, écriture, du script aux plans, 5 types de vidéos, API des 3 styles, voix, musique, miniatures, YouTube, checklist qualité, installation
-  templates/      moteur stickman (+ démo « What if »), moteurs bean et silhouettes (+ démos), voix/musique/mixage, miniatures
-  scripts/        setup, ideas (idées aléatoires), new-film, audio, sheet, render, thumb
+  catalog/        le menu de lancement (12 cartes numérotées) et leur correspondance style + type
+  references/     conversation, menu, création libre, attention, écriture, du script aux plans, 9 types de vidéos, API des 8 styles, effets, voix, musique, miniatures, YouTube, checklist, installation
+  templates/      moteurs stickman, bean et silhouettes ; styles cinéma, numérique, croquis, cartoon et moral (chacun avec sa démo) ; effets, voix, musique, mixage, miniatures
+  scripts/        setup, profile (mémoire de l'élève), ideas (idées aléatoires), new-film, audio, sheet, render, thumb (2560×1440)
   examples/       quatre courts-métrages complets (UNSENT, AGAIN, LITTLE BEAN, SOMEDAY)
   licenses/       licences des polices et de GSAP
 ```

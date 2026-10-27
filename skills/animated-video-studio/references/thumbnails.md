@@ -1,6 +1,6 @@
 # Thumbnails
 
-The thumbnail decides whether anyone watches. The first versions in this project were rejected as dull — wide scenes, small faces, quiet titles. What worked:
+The thumbnail decides whether anyone watches. Make it **separately** from the film (its own page, its own composition — never a frame grab), at **2560×1440** (`thumb.cjs` renders the 1920×1080 page at 1.33×, and writes a `.jpg` under YouTube's 2 MB limit next to the `.png`; a vertical page gives 1440×2560 for Shorts). Upload the `.jpg`. The first versions in this project were rejected as dull — wide scenes, small faces, quiet titles. What worked:
 
 1. **Extreme close-up** of the hero's face filling ~40 % of the frame (`TH.hero` r ≈ 280–320, or `SIL.close`).
 2. **Exaggerated emotion**: teary eyes with running tears, wobbling mouth, sweat drop, blush. Bigger than in the film.
@@ -19,6 +19,7 @@ The thumbnail decides whether anyone watches. The first versions in this project
 - `torso(ctx, x, y, R, colour, {scarf})`, `hand`, `grip(ctx, x, y, scale, rot, side)` (fingers holding an object), `glow(ctx, x, y, r, rgba)`, `blurLayer(ctx, W, H, px, drawFn)`, `title(ctx, lines, x, y, size)`.
 - Any engine drawing works inside the page (`Pr.phone`, `S3.note`, `FLAT.list`, `C.drawPride`, `SIL.close`…).
 
-Edit `T.main()` in `films/<slug>/thumb/thumb.html`; render with `node SKILL/scripts/thumb.cjs films/<slug> out.png`. You may add `T.alt()` variants and render them with a third argument to offer the user two choices.
+Edit `T.main()` in `films/<slug>/thumb/thumb.html`; render with `node SKILL/scripts/thumb.cjs films/<slug> films/<slug>/renders/thumbnail.png` (→ .png + .jpg).
+Every style ships a thumbnail page with its own rules at the top (cinematic: a huge rim-lit face; digital: the hero mid-kick on the villain; sketch: the figure + profile card; cartoon: the freeze-frame before the disaster; moral: the teary face, the tempter, the phone). Use VFX looks (glow, neon) on the hero or object to make it pop. You may add `T.alt()` variants and render them with a third argument to offer the user two choices.
 
 See `SKILL/examples/thumbnails/*.png` for the four approved thumbnails.
