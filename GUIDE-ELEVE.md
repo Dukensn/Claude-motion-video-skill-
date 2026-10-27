@@ -9,7 +9,7 @@ Une seule fois :
 2. Ouvrez https://github.com/Dukensn/claude-motion-video-skill- et touchez **Use this template → Create a new repository** (ou **Fork**). Vous avez maintenant votre propre copie du studio.
 3. Dans l'application Claude, ouvrez **Code**, connectez GitHub quand c'est demandé, et choisissez votre copie.
 
-Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **« Je veux faire une vidéo animée pour YouTube. »** Claude vous envoie un menu d'images numérotées : répondez avec le numéro de votre choix. Il s'en souviendra la prochaine fois. Tout s'installe tout seul au démarrage (la première fois, ça peut prendre quelques minutes). Claude vous envoie la vidéo et la miniature directement dans la conversation : enregistrez-les sur votre téléphone.
+Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **« Je veux faire une vidéo animée pour YouTube. »** Claude invente des idées de vidéos, dessine une image pour chacune et vous envoie une planche numérotée (elle est différente à chaque fois) : répondez avec le numéro de votre choix. Il s'en souviendra la prochaine fois. Tout s'installe tout seul au démarrage (la première fois, ça peut prendre quelques minutes). Claude vous envoie la vidéo et la miniature directement dans la conversation : enregistrez-les sur votre téléphone.
 
 Pour montrer une vidéo qui vous inspire, joignez le fichier vidéo à votre message (les liens YouTube ne s'ouvrent pas toujours depuis le téléphone).
 

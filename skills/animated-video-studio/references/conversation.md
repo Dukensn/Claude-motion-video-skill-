@@ -10,7 +10,7 @@ The skill is used in a course. The person in front of you is learning. They shou
 
 ## Rhythm of a session
 
-1. **Hello + the menu** (`menu.md`): the board and the 12 cards, "pick a number" — or, for a returning student, "same kind again?".
+1. **Hello + the menu** (`menu.md`): 6 invented proposals with freshly drawn previews (board + cards), "pick a number" — or, for a returning student, "same kind again?".
 2. **Four questions**: voice, format (YouTube first), how many videos, 30-second test first.
 3. **Script** (`creative.md`): invent freely, then show the logline, the hook, the twist and the ending. Ask: "What would make *you* keep watching?" Adjust once.
 4. **Test** (if chosen): 30 seconds of the real film, sent to them; one question; apply it.

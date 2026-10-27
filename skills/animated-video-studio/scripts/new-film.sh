@@ -13,7 +13,7 @@ SRC="$SKILL/templates/$BASE"; DST="$ROOT/$SLUG"
 [ -e "$DST" ] && { echo "$DST already exists — pick another slug or delete it first" >&2; exit 1; }
 mkdir -p "$ROOT"
 cp -R "$SRC" "$DST"
-cp "$SKILL/templates/common/vfx.js" "$DST/assets/js/"
+cp "$SKILL/templates/common/vfx.js" "$SKILL/templates/common/scenery.js" "$DST/assets/js/"
 cp "$SKILL/templates/common/scorelib.py" "$SKILL/templates/common/mixlib.py" "$SKILL/templates/common/voice.py" "$SKILL/templates/common/gemini_tts.py" "$DST/tools/"
 mkdir -p "$DST/thumb" "$DST/build" "$DST/assets/audio" "$DST/renders"
 cp "$SKILL/templates/thumbnail/thumbs.js" "$SKILL/templates/thumbnail/LilitaOne.ttf" "$DST/thumb/"

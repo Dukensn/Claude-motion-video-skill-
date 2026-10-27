@@ -2,11 +2,13 @@
 
 Un skill pour **Claude Code** qui fabrique des vidéos d'animation complètes pour YouTube, de l'idée au MP4. Il invente une histoire originale, écrit le script et anime les personnages en code. Il ajoute ensuite une voix off (ou des sous-titres), compose la musique, fait le rendu vidéo, la miniature, le titre et la description. Tout tourne sur l'ordinateur de l'élève avec [HyperFrames](https://github.com/heygen-com/hyperframes) : pas d'IA d'image ou de vidéo, pas d'abonnement.
 
-![Le menu des 12 types de vidéos](skills/animated-video-studio/catalog/menu.jpg)
-
-**Au lancement**, Claude montre ce menu à l'élève, qui choisit un **numéro** : What if (stickman ou cinéma), documentaire, histoire en croquis, explicatif, stick contre le numérique, action, sketch comédie, court-métrage moral, histoires émouvantes (stickman, bean, silhouettes). Claude le mémorise pour les vidéos suivantes, puis pose 4 questions : voix ou pas, YouTube 16:9 ou Short 9:16, combien de vidéos, et s'il faut d'abord un **test de 30 secondes**.
+**Au lancement, le menu est neuf à chaque fois.** Claude invente 6 propositions (une comédie, un What if cinéma, une histoire en croquis, un court-métrage moral…), **dessine une image d'aperçu pour chacune**, puis envoie une planche numérotée. Aucune image enregistrée d'avance : deux élèves ne voient jamais le même menu. L'élève choisit un **numéro**, Claude s'en souvient, puis pose 4 questions : voix ou pas, YouTube 16:9 ou Short 9:16, combien de vidéos, et s'il faut d'abord un **test de 30 secondes**. (Le bonhomme bâton classique reste dans le skill mais n'est pas proposé pour l'instant.)
 
 **Claude invente tout** : l'histoire, le ton (comédie, émotion, explication, ou un mélange), les personnages et leur apparence, les décors. Il écrit le script en premier, sans se limiter à ce que le moteur sait déjà dessiner : ce qui manque, il le construit. Chaque élève obtient des vidéos différentes.
+
+**Direction artistique libre** : Claude décide lui-même du niveau de détail des décors (de minimaliste à très riche : ciel, montagnes, villes, rues, marchés, intérieurs, brume, rayons de lumière), de la taille des personnages, des mouvements de caméra et des transitions.
+
+**Contrôle qualité** : avant de montrer quoi que ce soit, Claude regarde ses propres images et la vidéo rendue et se pose les questions : est-ce ennuyeux ? confus ? créatif ? beau ? vrai ? Chaque note sous 4/5 est corrigée.
 
 **Effets** (auras, rayons, explosions, fumée, néon, hologramme, téléportation…) inspirés du catalogue de [StykAnimate](https://github.com/Dukensn/StykAnimate-App).
 **Miniatures** faites à part, en 2560×1440, avec une version JPG prête pour YouTube.
@@ -69,10 +71,10 @@ Voir [GUIDE-ELEVE.md](GUIDE-ELEVE.md) pour le texte à donner aux élèves.
 ```
 skills/animated-video-studio/
   SKILL.md        le déroulé que Claude suit
-  catalog/        le menu de lancement (12 cartes numérotées) et leur correspondance style + type
-  references/     conversation, menu, création libre, attention, écriture, du script aux plans, 9 types de vidéos, API des 8 styles, effets, voix, musique, miniatures, YouTube, checklist, installation
-  templates/      moteurs stickman, bean et silhouettes ; styles cinéma, numérique, croquis, cartoon et moral (chacun avec sa démo) ; effets, voix, musique, mixage, miniatures
-  scripts/        setup, profile (mémoire de l'élève), ideas (idées aléatoires), new-film, audio, sheet, render, thumb (2560×1440)
+  catalog/        looks.json : les styles que les moteurs savent dessiner et ceux proposés au menu
+  references/     conversation, menu généré, histoire, création libre, direction artistique, attention, contrôle qualité, écriture, du script aux plans, 9 types de vidéos, API des 8 styles, décors, effets, voix, musique, miniatures, YouTube, checklist, installation
+  templates/      moteurs stickman, bean et silhouettes ; styles cinéma, numérique, croquis, cartoon et moral (chacun avec sa démo) , décors détaillés + caméra + transitions (scenery.js), effets, voix, musique, mixage, pages du menu, miniatures
+  scripts/        setup, profile (mémoire de l'élève), menu + board (menu généré), ideas (idées aléatoires), new-film, review (contrôle qualité), audio, sheet, render, thumb (2560×1440)
   examples/       quatre courts-métrages complets (UNSENT, AGAIN, LITTLE BEAN, SOMEDAY)
   licenses/       licences des polices et de GSAP
 ```

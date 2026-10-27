@@ -1,6 +1,6 @@
 ---
 name: animated-video-studio
-description: Make complete animated YouTube videos drawn in code and rendered locally with HyperFrames — 12 kinds of video from a numbered menu (stickman and cinematic "What if", documentaries, history in ink sketches, explainers, stick-vs-software action comedy, fights, cartoon comedy skits, moral short films, emotional stories in stickman, bean or silhouette style). Invents the story, characters, looks and sets from scratch every time, writes the script first, voices it (a local voice by default, an expressive Gemini voice with the student's own key, or captions), composes the music, renders the MP4, makes a separate high-resolution thumbnail and the YouTube text, and remembers the student's choices. Talks with the user in their own language (Haitian Creole, French, English…). Use when someone wants an animated / stickman / "what if" / history / comedy / short-film video for YouTube, or gives this skill's link.
+description: Make complete animated YouTube videos drawn in code and rendered locally with HyperFrames — any kind of video, proposed through a freshly generated, numbered menu of invented ideas with drawn previews (cinematic What ifs and documentaries, history in ink sketches, cartoon comedy, moral short films, emotional stories, and more), with detailed sets, free art direction and a quality gate. Invents the story, characters, looks and sets from scratch every time, writes the script first, voices it (a local voice by default, an expressive Gemini voice with the student's own key, or captions), composes the music, renders the MP4, makes a separate high-resolution thumbnail and the YouTube text, and remembers the student's choices. Talks with the user in their own language (Haitian Creole, French, English…). Use when someone wants an animated / stickman / "what if" / history / comedy / short-film video for YouTube, or gives this skill's link.
 ---
 
 # Animated Video Studio
@@ -53,24 +53,14 @@ a start hook installs everything. Adapt:
 `bash SKILL/scripts/setup.sh` checks or installs everything and ends with `READY` (`references/setup.md`). Run it yourself;
 only tell the student if something needs them (it almost never should).
 
-### 2. The menu and the memory (`references/menu.md`)
+### 2. The menu — generated fresh, and the memory (`references/menu.md`)
 
-`python3 SKILL/scripts/profile.py get`. Returning student → "same kind again?". Otherwise send `SKILL/catalog/menu.jpg`
-and the 12 cards `SKILL/catalog/01.jpg … 12.jpg`, and ask for a number. `SKILL/catalog/catalog.json` maps the number to a
-**style** (engine) and a **type** (guide in `references/types/`). Save it with `profile.py set`.
-
-| # | Kind | style (new-film.sh) | guide |
-| --- | --- | --- | --- |
-| 1 | What if — stickman | stickman | types/what-if.md |
-| 2 | What if — cinematic | cinematic | types/what-if.md |
-| 3 | Documentary | stickman | types/documentary.md |
-| 4 | History in sketch | sketch | types/history.md |
-| 5 | Explainer | stickman | types/explainer.md |
-| 6 | Stick vs. the digital world | digital | types/digital.md |
-| 7 | Action / fight | stickman | types/action.md |
-| 8 | Comedy skit | cartoon | types/comedy.md |
-| 9 | Moral short film | moral | types/moral.md |
-| 10–12 | Emotional — stickman / bean / silhouettes | stickman / bean / silhouette | types/emotional.md |
+`python3 SKILL/scripts/profile.py get`. Returning student → "same kind again?". Otherwise **invent 6 proposals**
+(different kinds of video, each a real idea with a title and a hook, each in a look from `SKILL/catalog/looks.json`
+marked `"offer": true` — the classic stick figure stays in the skill but is not offered for now), **draw a new preview
+for each** (`bash SKILL/scripts/menu.sh`, then `T.p1…p6` in `films/_menu/*/thumb/thumb.html`, rendered with `thumb.cjs`),
+assemble them with `python3 SKILL/scripts/board.py films/_menu/menu.json`, send the board and the cards, and ask for a
+number. No saved pictures: every menu is new. Save the choice with `profile.py set`.
 
 ### 3. Four questions (one AskUserQuestion)
 
@@ -91,9 +81,12 @@ hook, twist and ending; one round of changes; lock it.
 If the student shares a reference video: `bash SKILL/scripts/fetch-reference.sh "<link or file>"` → `report.md` + contact
 sheets; take its **techniques** (pacing, framing, structure), never its story or characters. `NETWORK_BLOCKED` → ask for the file.
 
-### 5. Production plan, then build
+### 5. Art direction, production plan, then build
 
-Now read the style reference (`references/style-<style>.md`, `references/vfx.md`, `references/visual-script.md`) and mark each
+Decide the look freely (`references/art-direction.md`): detail level of the sets (rich, layered sets with `SCENE` when the
+story lives in a real place), depth and light, characters' size and finish, camera grammar (`CAM`), transitions (`TRANS`),
+palette, sound. Write these decisions at the top of SCRIPT.md. Then read the style reference (`references/style-<style>.md`,
+`references/scenery.md`, `references/vfx.md`, `references/visual-script.md`) and mark each
 beat **exists / build / adapt**. Build what's missing in the film's own `assets/js/sets.js` (same pen, palette and outline):
 new sets, creatures, costumes, vehicles, effects. Don't cut the script to fit the engine.
 
@@ -111,10 +104,11 @@ Styles: stickman, cinematic, digital, sketch, cartoon (stickman engine); moral, 
 Render the first ~30 s (hook + first beats, final look, voice, music): set `FILM.DURATION`/narration to that cut, run steps
 8–9 on it, send the MP4, ask one question, apply the answer to the script. Then continue with the full film.
 
-### 7. Stills (checkpoint)
+### 7. Stills + quality gate (checkpoint)
 
-`bash SKILL/scripts/sheet.sh films/<slug> films/<slug>/build/sheet1.png 2 6 10 …` — read every sheet yourself, fix what's
-wrong (`references/quality-checklist.md`), then show the student one or two sheets.
+`bash SKILL/scripts/sheet.sh films/<slug> films/<slug>/build/sheet1.png 2 6 10 …` — read every sheet yourself and run the
+quality gate (`references/review.md`): boring? confusing? creative? beautiful? true? Score each 1–5 in `REVIEW.md`; anything
+under 4 is fixed before the student sees it. Then show one or two sheets.
 
 ### 8. Music, voice and mix
 
@@ -125,6 +119,8 @@ You cannot hear: report the loudness (target −16…−13 LUFS, peak ≤ −1 d
 ### 9. Render
 
 `bash SKILL/scripts/render.sh films/<slug>` → `films/<slug>/renders/<slug>.mp4` (2–3× the video's length; run it in the background).
+Then the gate again on the real video: `bash SKILL/scripts/review.sh films/<slug>` (attention numbers + sheets of your own
+render). Fix and re-render if it's boring, confusing or not creative enough.
 
 ### 10. Thumbnail (separately) and YouTube text
 
@@ -142,12 +138,13 @@ same kind), straight to step 4.
 
 | Path | What |
 | --- | --- |
-| `catalog/` | the launch menu: `menu.jpg`, cards `01–12.jpg`, `catalog.json` (number → style + type) |
+| `catalog/looks.json` | the looks the engines can draw and which are offered (the menu itself is generated each time) |
 | `templates/stickman/` | stickman engine (`stick.js`, `world.js`, `text.js`) + a narrated "What if" demo |
 | `templates/styles/<style>/` | cinematic, digital, sketch, cartoon (on stickman) and moral (on bean): `style.js` engine, demo film, score, mix, thumbnail page |
 | `templates/bean/`, `templates/silhouette/` | story engines + demos |
-| `templates/common/` | `voice.py` + `gemini_tts.py` (voices, word-aligned), `scorelib.py`, `mixlib.py`, `vfx.js` (effects) |
+| `templates/common/` | `voice.py` + `gemini_tts.py` (voices, word-aligned), `scorelib.py`, `mixlib.py`, `vfx.js` (effects), `scenery.js` (detailed sets, camera, transitions) |
+| `templates/menu/` | the two drawing pages for the generated menu |
 | `templates/thumbnail/` | thumbnail renderer + pages for the base styles |
-| `scripts/` | setup, profile (memory), ideas, fetch/analyze-reference, new-film, audio, sheet, render, thumb, sync-duration |
-| `references/` | conversation, menu, creative, attention, script, visual-script, `types/`, style APIs, vfx, voice, music, thumbnails, YouTube, checklist, setup |
+| `scripts/` | setup, profile (memory), menu + board (generated menu), ideas, fetch/analyze-reference, new-film, audio, sheet, render, review (quality gate), thumb, sync-duration |
+| `references/` | conversation, menu, story, creative, art-direction, attention, review, script, visual-script, `types/`, style APIs, scenery, vfx, voice, music, thumbnails, YouTube, checklist, setup |
 | `examples/` | four complete 4-minute story films with scores, mixes, thumbnails and YouTube text |
