@@ -13,19 +13,26 @@
 
 ## The four questions (one AskUserQuestion, their language)
 
-1. **Voice** — *Expressive voice (needs your free Gemini key)* · *Natural voice, no key (clear but not emotional)* · *No voice: captions + music*. Recommend what the card's `voice` says (narrator → expressive; none/captions → no voice).
+1. **Voice** — *Natural voice (Recommended — Kokoro, ready, nothing to set up)* · *More emotional, expressive voice (Gemini — needs your own free key, set up once)* · *No voice: captions + music*. For narrated cards (What if, documentary, history, explainer) recommend the natural voice; for silent cards (digital, action, comedy, moral, emotional) recommend no voice. Kokoro is the default: it comes with HyperFrames and works with no account.
 2. **Format** — *YouTube 16:9 (Recommended)* · *Short 9:16*. YouTube first; Shorts when they ask or for the comedy card.
 3. **How many videos** — *1* · *3* · *5*. Several = a series: same world, new story each time.
 4. **Test first** — *Yes, a 30-second test first (Recommended)* · *No, make the full video*.
 
 Save: `profile.py set voice=gemini|kokoro|none format=16:9|9:16 count=<n> test=yes|no language=<code>`.
 
-**Voice chosen → ask for the student's own Gemini key, every time it is missing.** Each student brings their own key
-(never the teacher's, never a shared one). Say it simply, in their language, with the link:
-"For the expressive voice I need your own free Gemini key: open https://aistudio.google.com/apikey, tap *Create API key*,
-copy it and paste it here. (Your teacher's video shows how.)" Save it as `voice.md` says, never repeat it back, never commit it.
-No key yet → offer to start with the natural voice (Kokoro, clear but not emotional) or captions, and re-voice later.
-Then — before anything technical — write the script (`references/creative.md`).
+**Expressive voice chosen → the student's own Gemini key, stored once in their cloud environment.**
+Check first: `python3 -c "import os; print(bool(os.environ.get('GEMINI_API_KEY')))"`. If it prints `True`, go on.
+Otherwise explain, in their language, in a few short lines — and **never ask them to paste the key in the chat**, and
+never write it into the repository (their fork is public; a published key gets stolen and Google disables it):
+1. Create your free key: https://aistudio.google.com/apikey (your teacher's video shows how).
+2. In the Claude app, open the environment menu in the session's title bar → **Edit** → add an environment variable
+   (or a secret) named `GEMINI_API_KEY` with your key → save.
+3. Start a new session: from then on every session has it, nothing to redo.
+On a computer (Claude Code), they put `export GEMINI_API_KEY=...` in their shell profile, or the key alone in
+`~/.config/video-studio/gemini_key` — themselves, outside the repository.
+Until it's set, continue with the natural voice (Kokoro) — the film can be re-voiced later in one step.
+If a key is set but the voice still falls back with "cannot reach Gemini", the environment's network access blocks
+`generativelanguage.googleapis.com`: tell them to add that domain in the same Edit screen (Network access → allowed domains).
 
 ## The test
 

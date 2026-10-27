@@ -13,7 +13,11 @@ Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **�
 
 Pour montrer une vidéo qui vous inspire, joignez le fichier vidéo à votre message (les liens YouTube ne s'ouvrent pas toujours depuis le téléphone).
 
-**Voix expressive (facultatif)** : pour une voix qui joue les émotions, créez une clé gratuite sur **aistudio.google.com/apikey** (compte Google → *Create API key*) et collez-la dans le chat quand Claude la demande. Sans clé, Claude utilise une voix naturelle mais sans émotion. Votre clé est personnelle : ne la partagez avec personne d'autre.
+**Voix** : par défaut, Claude utilise une voix naturelle (rien à faire). **Pour une voix plus émotionnelle (facultatif)**, une seule fois :
+1. Créez votre clé gratuite sur **aistudio.google.com/apikey** (compte Google → *Create API key*). La vidéo du cours montre comment.
+2. Dans l'application Claude, ouvrez le menu de l'environnement dans le titre de la session → **Edit** → ajoutez une variable `GEMINI_API_KEY` avec votre clé → enregistrez.
+3. Ouvrez une nouvelle session : c'est réglé pour toujours.
+Ne collez jamais votre clé dans le chat ni dans le dépôt. Elle est personnelle : ne la partagez avec personne.
 
 ## Sur ordinateur (Claude Code)
 
@@ -42,7 +46,11 @@ Pou chak videyo : louvri yon nouvo sesyon sou kopi w la epi ekri **« Mwen vle f
 
 Pou montre yon videyo ki enspire w, mete fichye videyo a ak mesaj ou (lyen YouTube pa toujou louvri depi telefòn).
 
-**Vwa ki gen emosyon (si w vle)** : pou yon vwa ki jwe emosyon yo, kreye yon kle gratis sou **aistudio.google.com/apikey** (kont Google → *Create API key*) epi kole l nan chat la lè Claude mande l. San kle, Claude ap itilize yon vwa natirèl men ki pa gen emosyon. Kle a se pou ou sèlman : pa pataje l ak pèsonn.
+**Vwa** : pa defo, Claude itilize yon vwa natirèl (ou pa gen anyen pou fè). **Pou yon vwa ki gen plis emosyon (si w vle)**, yon sèl fwa :
+1. Kreye kle gratis ou sou **aistudio.google.com/apikey** (kont Google → *Create API key*). Videyo kou a montre kijan.
+2. Nan aplikasyon Claude, louvri meni anviwònman an nan tit sesyon an → **Edit** → ajoute yon varyab `GEMINI_API_KEY` ak kle ou → anrejistre.
+3. Louvri yon nouvo sesyon : li regle pou toujou.
+Pa janm kole kle ou nan chat la ni nan depo a. Se pou ou sèlman : pa pataje l ak pèsonn.
 
 ## Sou òdinatè (Claude Code)
 

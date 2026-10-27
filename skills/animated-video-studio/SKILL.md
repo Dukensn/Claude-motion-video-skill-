@@ -1,6 +1,6 @@
 ---
 name: animated-video-studio
-description: Make complete animated YouTube videos drawn in code and rendered locally with HyperFrames — 12 kinds of video from a numbered menu (stickman and cinematic "What if", documentaries, history in ink sketches, explainers, stick-vs-software action comedy, fights, cartoon comedy skits, moral short films, emotional stories in stickman, bean or silhouette style). Invents the story, characters, looks and sets from scratch every time, writes the script first, voices it (expressive Gemini voice with the student's key, or a local voice, or captions), composes the music, renders the MP4, makes a separate high-resolution thumbnail and the YouTube text, and remembers the student's choices. Talks with the user in their own language (Haitian Creole, French, English…). Use when someone wants an animated / stickman / "what if" / history / comedy / short-film video for YouTube, or gives this skill's link.
+description: Make complete animated YouTube videos drawn in code and rendered locally with HyperFrames — 12 kinds of video from a numbered menu (stickman and cinematic "What if", documentaries, history in ink sketches, explainers, stick-vs-software action comedy, fights, cartoon comedy skits, moral short films, emotional stories in stickman, bean or silhouette style). Invents the story, characters, looks and sets from scratch every time, writes the script first, voices it (a local voice by default, an expressive Gemini voice with the student's own key, or captions), composes the music, renders the MP4, makes a separate high-resolution thumbnail and the YouTube text, and remembers the student's choices. Talks with the user in their own language (Haitian Creole, French, English…). Use when someone wants an animated / stickman / "what if" / history / comedy / short-film video for YouTube, or gives this skill's link.
 ---
 
 # Animated Video Studio
@@ -74,7 +74,7 @@ and the 12 cards `SKILL/catalog/01.jpg … 12.jpg`, and ask for a number. `SKILL
 
 ### 3. Four questions (one AskUserQuestion)
 
-Voice (expressive Gemini with their key · natural Kokoro "clear but not emotional" · captions only) · format
+Voice (**natural Kokoro by default** · more emotional Gemini with their own key, stored once in their cloud environment — never in the chat or the repo · captions only) · format
 (**YouTube 16:9 first**, or Short 9:16) · how many videos · a 30-second test first (recommended). Save with `profile.py set`.
 
 ### 4. The script — first, and free (`references/creative.md`)

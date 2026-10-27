@@ -1,6 +1,6 @@
 # Voice-over
 
-Two engines, chosen at intake. Say honestly how each sounds.
+Two engines. **Kokoro is the default** (preconfigured with HyperFrames, nothing to set up); Gemini is the optional, more emotional voice. Say honestly how each sounds.
 
 | | Expressive — Gemini TTS | Natural — Kokoro |
 | --- | --- | --- |
@@ -41,18 +41,12 @@ How it works (`tools/gemini_tts.py`): the notes go in the prompt's DIRECTOR'S NO
 
 Languages: English, French, Spanish and many more. Haitian Creole is not guaranteed — test one line and let the student judge; otherwise French/English voice with Creole `caption`s.
 
-### Getting the key (the student does this once, from the phone)
+### Getting and storing the key (once per student)
 
-Always ask the student for **their own** key when a voiced video is chosen and no key is saved — give them the link https://aistudio.google.com/apikey and mention the course's tutorial video.
-
-1. Open **aistudio.google.com/apikey**, sign in with a Google account, tap **Create API key**, copy it.
-2. Paste it in the chat.
-
-You then save it — never in the repository, never repeated back in chat:
-```bash
-mkdir -p ~/.config/video-studio && umask 077 && printf '%s' '<KEY>' > ~/.config/video-studio/gemini_key
-```
-Cloud sessions are wiped when they end, so in a new session the student pastes it again — or, to keep it, they add `GEMINI_API_KEY` once in the cloud environment's settings (environment variables). `voice.py` reads `GEMINI_API_KEY` first, then that file.
+Kokoro is the default voice. Gemini is the option for a more emotional, expressive narrator, with the student's **own**
+key. The key lives in the student's **Claude cloud environment**, never in the repository (their fork is public) and
+never pasted in the chat: see `menu.md` → "Expressive voice chosen". `voice.py` reads `GEMINI_API_KEY` from the
+environment (or `~/.config/video-studio/gemini_key` on a computer). Every new session of that environment has it.
 
 ### Protect the quota (free tier is small)
 
