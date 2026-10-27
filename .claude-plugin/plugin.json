@@ -1,0 +1,19 @@
+{
+  "name": "animated-video-studio",
+  "version": "2.0.0",
+  "description": "Animated YouTube videos drawn in code and rendered locally with HyperFrames: stickman What-if, documentaries, emotional short films, action and explainers (plus bean and silhouette story styles), with original stories, local voice-over, generated music, thumbnails and YouTube text.",
+  "author": {
+    "name": "Dukensn"
+  },
+  "repository": "https://github.com/Dukensn/claude-motion-video-skill-",
+  "keywords": [
+    "video",
+    "animation",
+    "stickman",
+    "youtube",
+    "hyperframes",
+    "what if",
+    "documentary",
+    "short film"
+  ]
+}

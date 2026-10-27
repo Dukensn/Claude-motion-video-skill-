@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- Thumbnail for a silhouette-style film. Copied to <film>/thumb/thumb.html by new-film.sh; rendered by scripts/thumb.cjs.
+     Same rules as the bean thumbnails: close-up, big emotion, one story object, strong light, 2–3 word Lilita One title. -->
+<html><head><meta charset="utf-8"><style>
+@font-face { font-family: "Lilita One"; src: url("LilitaOne.ttf"); }
+@font-face { font-family: "Comic Neue"; font-weight: 700; src: url("../assets/fonts/ComicNeue-Bold.ttf"); }
+@font-face { font-family: "Caveat"; font-weight: 400 700; src: url("../assets/fonts/Caveat.ttf"); }
+@font-face { font-family: "Inter"; font-weight: 100 900; src: url("../assets/fonts/Inter.ttf"); }
+html,body{margin:0;background:#000} canvas{display:block}
+</style></head><body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/fx.js"></script>
+<script src="../assets/js/sil.js"></script>
+<script src="../assets/js/flat.js"></script>
+<script src="thumbs.js"></script>
+<script>
+const W = 1920, H = 1080;
+const FONTS = ['400 40px "Lilita One"', '700 40px "Comic Neue"', '600 40px "Caveat"', '600 40px "Inter"'];
+function setup() { const ctx = document.getElementById('c').getContext('2d'); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H); F.G.t = 1.3; F.G.boil = 2; F.G.frame = 7; return ctx; }
+function vignette(ctx, a = 0.6) { const g = ctx.createRadialGradient(W/2, H/2, 380, W/2, H/2, 1150); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${a})`); ctx.fillStyle = g; ctx.fillRect(0,0,W,H); }
+
+window.T = {
+  // the demo: a teary close-up in warm back light, the "someday" list pinned beside him
+  main() {
+    const ctx = setup();
+    TH.blurLayer(ctx, W, H, 8, (b) => { b.save(); b.translate(960,540); b.scale(1.3,1.3); b.translate(-1200,-560); FLAT.apartment(b, { dust: 0.5 }); b.restore(); });
+    ctx.fillStyle = 'rgba(10,10,18,0.55)'; ctx.fillRect(0,0,W,H);
+    TH.glow(ctx, 1450, 520, 760, 'rgba(255,190,120,0.45)');
+    // the story object: the "someday" list, cropped to the paper and tilted toward the camera
+    ctx.save(); ctx.translate(520, 640); ctx.rotate(-0.1); ctx.scale(0.62, 0.62); ctx.translate(-960, -540);
+    ctx.beginPath(); ctx.rect(560, 90, 800, 910); ctx.clip();
+    FLAT.list(ctx, { items: ['learn guitar', 'write a book', 'call dad more'], reveal: 1 }); ctx.restore();
+    SIL.close(ctx, 1400, 600, 280, { eyes: 'teary', look: [-0.8, -0.2], brow: 0.9, browUp: 0.9, tear: 1 }, { seed: 3, noBlink: true });
+    ctx.save(); ctx.shadowColor = '#ffb46a'; ctx.shadowBlur = 40; ctx.strokeStyle = 'rgba(255,190,120,0.9)'; ctx.lineWidth = 10;
+    ctx.beginPath(); ctx.arc(1400, 600, 282, -1.3, 0.7); ctx.stroke(); ctx.restore();
+    TH.title(ctx, [[{ t: 'SOME' }, { t: 'DAY.', c: '#ffd34d' }]], 60, 230, 240);
+    vignette(ctx, 0.45);
+  },
+};
+</script></body></html>

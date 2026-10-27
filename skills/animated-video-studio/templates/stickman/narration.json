@@ -1,0 +1,17 @@
+{
+  "voice": "am_michael",
+  "speed": 1.0,
+  "start": 0.6,
+  "gap": 0.35,
+  "tail": 3.5,
+  "lines": [
+    {"id": "hook", "text": "What if the Moon disappeared tonight?", "pause": 0.8},
+    {"id": "dark", "text": "At first, you would only notice the dark."},
+    {"id": "tides", "text": "But by morning, the oceans would start to change.", "pause": 0.5},
+    {"id": "pull", "text": "The Moon's pull makes most of our tides."},
+    {"id": "third", "text": "Without it, they would shrink to about a third.", "pause": 0.7},
+    {"id": "tilt", "text": "Over millions of years, scientists think Earth's tilt could start to wobble."},
+    {"id": "seasons", "text": "Seasons could swing from mild to extreme.", "pause": 0.8},
+    {"id": "thanks", "text": "So tonight, look up. And say thanks."}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "motion-video",
+  "owner": {
+    "name": "Dukensn"
+  },
+  "plugins": [
+    {
+      "name": "animated-video-studio",
+      "source": "./",
+      "description": "Stickman and story animation studio for YouTube, made with HyperFrames."
+    }
+  ]
+}
