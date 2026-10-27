@@ -11,7 +11,7 @@ palettes, depth of field (blurred layers), slow camera pushes, extreme close-ups
 - Sets: `sky(ctx, {top, mid, bottom, horizon, sun:{x,y,r}, clouds, t})` (dusk gradient + sun rays), `city(ctx, y, {blur, col, seed, h, lights})`,
   `street(ctx, y, {lamps:[x…], lampOn, tree, ground, rail})`, `lamp(ctx, x, y, on)`, `room(ctx, {window:[x,y,w,h], desk:[x,y], wall, floor, floorY})`,
   `pitch(ctx, y, {goal, lights:[x…]})` (sports field + floodlights).
-- Light & lens: `bokeh(ctx, n, seed)`, `dof(ctx, px, () => {...})` (draw anything blurred), `cone(ctx, x, y, w, h, col)`,
+- Light & lens: `bokeh(ctx, n, seed)`, `dof(ctx, px, (c) => {...draw with c})` (draw anything blurred — drawn at 1/4 resolution, fast; always draw with the `c` it gives you), `cone(ctx, x, y, w, h, col)`,
   `grade(ctx, {vignette, grain, tint, dark, frame})` — call after the shot, before subtitles.
 - Data: `stat(ctx, text, x, y, t, a, b, {size, col})`, `stopwatch(ctx, x, y, r, v)`, `scoreboard(ctx, x, y, a, b, {s})`,
   `compare(ctx, x, y, w, [{label, v 0..1, col, text}], k, {gap})`.

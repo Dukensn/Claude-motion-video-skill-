@@ -128,7 +128,8 @@
   }
   // skyline silhouette with lit windows; blur > 0 pushes it out of focus
   function city(ctx, y, o = {}) {
-    ctx.save(); if (o.blur) ctx.filter = `blur(${o.blur}px)`;
+    if (o.blur) return dof(ctx, o.blur, (c) => city(c, y, Object.assign({}, o, { blur: 0 })));
+    ctx.save();
     const r = mulberry(o.seed || 7); let x = -60;
     while (x < W + 60) {
       const w = 70 + r() * 140, h = (o.h || 260) * (0.5 + r());
@@ -187,7 +188,19 @@
       ctx.fillStyle = rg(ctx, x, y, 0, rr, [[0, `rgba(255,${150 + r() * 90 | 0},${90 + r() * 80 | 0},${0.25 + r() * 0.2})`], [1, "rgba(255,170,90,0)"]]); ctx.fillRect(x - rr, y - rr, rr * 2, rr * 2); }
   }
   // draw fn() blurred (depth of field)
-  function dof(ctx, px, fn) { ctx.save(); ctx.filter = `blur(${px}px)`; fn(); ctx.restore(); }
+  // Blur is expensive at full size: draw the layer at 1/4 resolution, blur it there (px/4), scale it back up.
+  let LOW = null;
+  function dof(ctx, px, fn) {
+    if (!LOW) LOW = document.createElement("canvas");
+    const q = 4, w = Math.ceil(W / q), h = Math.ceil(H / q);
+    if (LOW.width !== w || LOW.height !== h) { LOW.width = w; LOW.height = h; }
+    const lo = LOW.getContext("2d"), m = ctx.getTransform();
+    lo.setTransform(1, 0, 0, 1, 0, 0); lo.clearRect(0, 0, w, h);
+    lo.setTransform(m.a / q, m.b / q, m.c / q, m.d / q, m.e / q, m.f / q);
+    const real = ctx; fn(lo);
+    real.save(); real.setTransform(1, 0, 0, 1, 0, 0); real.imageSmoothingEnabled = true; real.filter = `blur(${Math.max(0.5, px / q)}px)`;
+    real.drawImage(LOW, 0, 0, w, h, 0, 0, W, H); real.restore();
+  }
   // final film look: tint, vignette, grain (call after the shot, before subtitles)
   function grade(ctx, o = {}) {
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);

@@ -24,7 +24,7 @@ window.T = {
     CINE.sky(ctx, { top: '#120e2b', mid: '#3b2a5e', bottom: '#7a4a6a' });
     CINE.city(ctx, 700, { blur: 14, col: '#1d1733', seed: 7 });
     CINE.bokeh(ctx, 24, 11);
-    CINE.dof(ctx, 6, () => CINE.bust(ctx, 520, 690, 120, { look: { top: '#2e9e6a', hat: 'cap', hatCol: '#f4c430' }, rim: { col: '#7fd6ff', side: 1 }, face: { mood: 'surprised' } }));
+    CINE.dof(ctx, 6, (c) => CINE.bust(c, 520, 690, 120, { look: { top: '#2e9e6a', hat: 'cap', hatCol: '#f4c430' }, rim: { col: '#7fd6ff', side: 1 }, face: { mood: 'surprised' } }));
     CINE.bust(ctx, 1240, 560, 250, { look: { top: '#e4572e' }, rim: { col: '#ffb35c', side: -1 }, face: { mood: 'smug', glow: true }, dir: -1 });
     CINE.grade(ctx, { vignette: 0.65, grain: 0.035 });
     TH.title(ctx, [[{ t: 'WHAT IF YOU COULD' }], [{ t: 'SEE IN THE ' }, { t: 'DARK?', c: '#ffe35a' }]], 70, 180, 130);

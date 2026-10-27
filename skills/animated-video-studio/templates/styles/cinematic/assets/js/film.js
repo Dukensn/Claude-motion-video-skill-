@@ -26,7 +26,7 @@
     sky(ctx, { top: "#140f30", mid: "#4a2f6e", bottom: "#e88a5a", sun: { x: 1450, y: 640, r: 60 }, t, clouds: 5 });
     city(ctx, 760, { blur: 6, col: "#2a1d3c", seed: 4 });
     street(ctx, GROUND, { lamps: [320, 1600], lampOn: prog(lt, 0.5, 1.5), tree: 1180 });
-    dof(ctx, 5, () => fig(ctx, { x: 1450, y: GROUND - 30, s: 1.05, dir: -1, look: OSI, pose: idle(P.relaxed, t), rim: DUSK, t }));
+    dof(ctx, 5, (c) => fig(c, { x: 1450, y: GROUND - 30, s: 1.05, dir: -1, look: OSI, pose: idle(P.relaxed, t), rim: DUSK, t }));
     const x = lerp(-80, 760, prog(lt, 0, 2.2, E.out2));
     const pose = lt < 2.2 ? walk(lt * 1.7) : posesAt(lt, [[2.2, "stand"], [2.6, "relaxed"]]);
     fig(ctx, { x, y: GROUND, s: 1.75, dir: 1, look: NIA, pose, rim: DUSK, face: { mood: lt < 2.6 ? "neutral" : "smug", glow: lt > 2.7, look: [0.2, 0] }, t });
@@ -65,7 +65,7 @@
 
   // 3 — ONE SIXTH: her room at dusk, out of focus; the comparison grows on top
   shot(at("sixth"), at("night"), (ctx, lt, t) => {
-    dof(ctx, 9, () => { room(ctx, { desk: [1300, 760] }); fig(ctx, { x: 640, y: 930, s: 1.3, dir: 1, look: NIA, pose: idle(P.think, t), rim: DUSK, face: { mood: "surprised" }, t }); });
+    dof(ctx, 9, (c) => { room(c, { desk: [1300, 760] }); fig(c, { x: 640, y: 930, s: 1.3, dir: 1, look: NIA, pose: idle(P.think, t), rim: DUSK, face: { mood: "surprised" }, t }); });
     ctx.fillStyle = "rgba(10,8,20,0.45)"; ctx.fillRect(0, 0, W, H);
     const k = prog(lt, 0.4, 1.8, E.out3);
     compare(ctx, 380, 440, 900, [{ label: "YOU", v: 1, col: "#8fd3ff", text: "100%" }, { label: "CAT", v: 1 / 6, col: "#ffe35a", text: "≈ 17%" }], k, { gap: 140 });
