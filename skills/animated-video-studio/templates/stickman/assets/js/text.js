@@ -15,7 +15,7 @@
   // word timings inside a line: spread by character count (+ a little weight for punctuation pauses)
   function words(l) {
     if (l._w) return l._w;
-    const ws = (l.caption || l.text).split(/\s+/).filter(Boolean);
+    const ws = (l.caption || l.text).split(/[ \t\n]+/).filter(Boolean);  // keeps no-break spaces (French « ? ») glued
     const weight = ws.map((w) => w.length + 2 + (/[,;:]$/.test(w) ? 3 : 0) + (/[.!?…]$/.test(w) ? 5 : 0));
     const tot = weight.reduce((a, b) => a + b, 0);
     let acc = l.a;
@@ -60,7 +60,7 @@
       let x = W / 2 - rw / 2;
       for (const wd of row) {
         const on = t >= wd.a, cur = t >= wd.a && t < wd.b;
-        const pop = cur ? 1 + 0.08 * E.out2(clamp((t - wd.a) / 0.12, 0, 1)) : 1;
+        const pop = cur ? 1 + Math.min(0.08, (sp * 0.9) / wd.width) * E.out2(clamp((t - wd.a) / 0.12, 0, 1)) : 1; // long words grow less, never into the space
         ctx.save(); ctx.translate(x + wd.width / 2, y0 + ri * lh); ctx.scale(pop, pop);
         ctx.lineWidth = size * 0.12; ctx.strokeStyle = INK; ctx.strokeText(wd.w, -wd.width / 2, 0);
         ctx.fillStyle = cur ? (o.accent || "#ffd166") : on ? "#ffffff" : "rgba(255,255,255,0.75)";

@@ -8,6 +8,7 @@
 | HyperFrames CLI 0.8.193 | renders the HTML film to MP4 | used through `npx --yes hyperframes@0.8.193` (no install) |
 | Playwright + Chromium | stills, thumbnails, events export | `npm i -g playwright && npx playwright install chromium`; scripts set `NODE_PATH=$(npm root -g)` |
 | Python 3.10+ with `mido`, `numpy`, `scipy` | score and mix | `pip install mido numpy scipy` |
+| `sherpa-onnx` + Parakeet model (~490 MB, GitHub release) | expressive Gemini voice: word-exact line cutting. Installed automatically the first time a film uses a Gemini voice; the voice itself needs only the student's API key (`voice.md`) |
 | `kokoro-onnx`, `soundfile` + the Kokoro-82M model | local voice-over | `pip install kokoro-onnx soundfile`; the model (~330 MB) downloads on first `npx hyperframes@0.8.193 tts` |
 | FluidSynth | plays the MIDI with real samples | `apt install fluidsynth` · `brew install fluid-synth` · Windows: fluidsynth releases on GitHub |
 | FluidR3_GM.sf2 | the sampled instruments | `apt install fluid-soundfont-gm`, or setup.sh downloads it to `~/.soundfonts/`; or set `SF2=/path/to/file.sf2` |

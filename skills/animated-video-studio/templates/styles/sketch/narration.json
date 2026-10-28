@@ -1,0 +1,18 @@
+{
+ "voice": "am_michael",
+ "style": "a punchy history storyteller with dry humour, respectful, building to a powerful ending",
+ "fallback_voice": "am_michael",
+ "speed": 1.0,
+ "start": 0.5,
+ "gap": 0.3,
+ "tail": 3.0,
+ "lines": [
+  {"id": "hook", "text": "He was born enslaved. He ended up running an entire island.", "pause": 0.5, "direct": "bold, intriguing hook"},
+  {"id": "born", "text": "Toussaint Louverture, born around 1743, in the French colony of Saint-Domingue.", "direct": "storyteller, steady"},
+  {"id": "revolt", "text": "In 1791, the enslaved rose up. He joined them, and became their sharpest general.", "direct": "rising energy, proud"},
+  {"id": "rule", "text": "By 1801, he governed the whole island, with his own constitution.", "pause": 0.4, "direct": "impressed, a touch of humour"},
+  {"id": "trap", "text": "Then France invited him to a meeting. It was a trap.", "pause": 0.5, "direct": "darker, slow down on 'trap'"},
+  {"id": "tree", "text": "On the ship, he reportedly said: you have only cut down the trunk of the tree of liberty.", "direct": "solemn, quoting with weight"},
+  {"id": "end", "text": "He died in a French prison in 1803. A few months later, Haiti was free.", "direct": "quiet, then proud and warm on the last words"}
+ ]
+}

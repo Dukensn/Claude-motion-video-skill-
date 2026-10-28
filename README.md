@@ -2,14 +2,22 @@
 
 Un skill pour **Claude Code** qui fabrique des vidéos d'animation complètes pour YouTube, de l'idée au MP4. Il invente une histoire originale, écrit le script et anime les personnages en code. Il ajoute ensuite une voix off (ou des sous-titres), compose la musique, fait le rendu vidéo, la miniature, le titre et la description. Tout tourne sur l'ordinateur de l'élève avec [HyperFrames](https://github.com/heygen-com/hyperframes) : pas d'IA d'image ou de vidéo, pas d'abonnement.
 
-| Stickman « What if » (voix off) | Histoire émouvante (bean) | Histoire émouvante (silhouettes) |
-| --- | --- | --- |
-| ![](skills/animated-video-studio/examples/thumbnails/stickman_demo_thumbnail.png) | ![](skills/animated-video-studio/examples/thumbnails/unsent_thumbnail.png) | ![](skills/animated-video-studio/examples/thumbnails/someday_thumbnail.png) |
+**Au lancement, le menu est neuf à chaque fois.** Claude invente 6 propositions (une comédie, un What if cinéma, une histoire en croquis, un court-métrage moral…), **dessine une image d'aperçu pour chacune**, puis envoie une planche numérotée. Aucune image enregistrée d'avance : deux élèves ne voient jamais le même menu. L'élève choisit un **numéro**, Claude s'en souvient, puis pose 4 questions : voix ou pas, YouTube 16:9 ou Short 9:16, combien de vidéos, et s'il faut d'abord un **test de 30 secondes**. (Le bonhomme bâton classique reste dans le skill mais n'est pas proposé pour l'instant.)
 
-**Types de vidéos** : *What if…* · documentaire narré · histoire émouvante · action / combat · explicatif.
-**Styles** : stickman (tous les types), bean et silhouettes (histoires émouvantes).
+**Claude invente tout** : l'histoire, le ton (comédie, émotion, explication, ou un mélange), les personnages et leur apparence, les décors. Il écrit le script en premier, sans se limiter à ce que le moteur sait déjà dessiner : ce qui manque, il le construit. Chaque élève obtient des vidéos différentes.
+
+**Direction artistique libre** : Claude décide lui-même du niveau de détail des décors (de minimaliste à très riche : ciel, montagnes, villes, rues, marchés, intérieurs, brume, rayons de lumière), de la taille des personnages, des mouvements de caméra et des transitions.
+
+**Contrôle qualité** : avant de montrer quoi que ce soit, Claude regarde ses propres images et la vidéo rendue et se pose les questions : est-ce ennuyeux ? confus ? créatif ? beau ? vrai ? Chaque note sous 4/5 est corrigée.
+
+**Effets** (auras, rayons, explosions, fumée, néon, hologramme, téléportation…) inspirés du catalogue de [StykAnimate](https://github.com/Dukensn/StykAnimate-App).
+**Miniatures** faites à part, en 2560×1440, avec une version JPG prête pour YouTube.
 **Formats** : YouTube 16:9 (de 1 à 20 min) ou Short 9:16.
 **Langues** : Claude parle avec l'élève en kreyòl, en français, en anglais… La voix off existe en anglais, français, espagnol, portugais, italien, japonais, chinois et hindi. Le kreyòl peut s'afficher en sous-titres.
+
+**Voix** :
+- **Par défaut : voix naturelle (Kokoro)**, préconfigurée avec HyperFrames, gratuite, sans compte. Claire et naturelle, mais peu émotionnelle.
+- **En option : voix expressive (Gemini)**, qui joue chaque phrase (surprise, suspense, humour). L'élève crée sa propre clé gratuite sur [aistudio.google.com/apikey](https://aistudio.google.com/apikey) et l'enregistre **une seule fois** dans les réglages de son environnement cloud Claude (variable `GEMINI_API_KEY`). Jamais dans le chat, jamais dans le dépôt : un fork est public. Une vidéo = une seule requête, pour ménager le quota. Sans clé ou quota épuisé, Claude repasse sur Kokoro.
 
 ## Installer
 
@@ -63,9 +71,10 @@ Voir [GUIDE-ELEVE.md](GUIDE-ELEVE.md) pour le texte à donner aux élèves.
 ```
 skills/animated-video-studio/
   SKILL.md        le déroulé que Claude suit
-  references/     conversation, questions, écriture, du script aux plans, 5 types de vidéos, API des 3 styles, voix, musique, miniatures, YouTube, checklist qualité, installation
-  templates/      moteur stickman (+ démo « What if »), moteurs bean et silhouettes (+ démos), voix/musique/mixage, miniatures
-  scripts/        setup, ideas (idées aléatoires), new-film, audio, sheet, render, thumb
+  catalog/        looks.json : les styles que les moteurs savent dessiner et ceux proposés au menu
+  references/     conversation, menu généré, histoire, création libre, direction artistique, attention, contrôle qualité, écriture, du script aux plans, 9 types de vidéos, API des 8 styles, décors, effets, voix, musique, miniatures, YouTube, checklist, installation
+  templates/      moteurs stickman, bean et silhouettes ; styles cinéma, numérique, croquis, cartoon et moral (chacun avec sa démo) , décors détaillés + caméra + transitions (scenery.js), effets, voix, musique, mixage, pages du menu, miniatures
+  scripts/        setup, profile (mémoire de l'élève), menu + board (menu généré), ideas (idées aléatoires), new-film, review (contrôle qualité), audio, sheet, render, thumb (2560×1440)
   examples/       quatre courts-métrages complets (UNSENT, AGAIN, LITTLE BEAN, SOMEDAY)
   licenses/       licences des polices et de GSAP
 ```

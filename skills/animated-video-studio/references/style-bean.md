@@ -25,7 +25,7 @@ sketch drawing: `skLine(ctx, pts, {w,color,seed,amp})`, `skShape(ctx, pts, fill,
   fields: `body pants` colours, `seed` (unique), `hr` head radius, `tH` torso height (kids ~66), `shW hipW`, `detail: hoodie|buttons|jacket|sweater`, `hair: messy|sides|long|pigtails|ponytail`, `hairC`, `bun, fringe, ribbon, glasses, mustache, wrinkles, stubble`.
 
 **Pr (props.js)** — `theoRoom({clock, lamp 0..1, dark, rain, noodles, photoGlow, pillow})` bedroom with seven-segment clock; `kitchen({mode:'night'|'past'|'day', lamp, steam, table})`, `table`, `bowl`, `steam`, `photoFrame`, `moonWindow(x,y,w,h,{moon,rain,day,sky})`, `sevenSeg`, `lamp`, `noodleCup`;
-`phone(ctx, cx, cy, scale, rot, st)` — chat app: `st = {msgs:[{who:'me'|'mom'|…, text, ts}], header, status, input, caret, typing, kb (keyboard), pressed, sendHot, receipt, clock, placeholder}`; lock screen `{screenOn, lockTime, lockDate, notif, notifTitle, notifText}`; call screen `{call:0..1, callLabel}`; `phoneHand(...)`.
+`phone(ctx, cx, cy, scale, rot, st)` — chat app: `st = {msgs:[{who:'me'|'mom'|…, text, ts}], header, status, input, caret, typing, kb (keyboard), pressed, sendHot, receipt, clock, placeholder}`; lock screen `{lock: true, screenOn, lockTime, lockDate, notif (0..1), notifTitle, notifText}`; call screen `{call:0..1, callLabel}`; `phoneHand(...)`.
 
 **X (fx.js)**
 - `narr(ctx, lines, t, a, b, o)` — narration caption, words reveal with blur, visible over [a,b]. `lines = [{text, size (≥58), weight, color, delay}]`, `o = {y (default 935), x, center, cy, gap, align}`.

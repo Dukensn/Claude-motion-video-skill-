@@ -1,7 +1,7 @@
 """ideas.py — random story ingredients, so no two students get the same ideas.
 
     python3 SKILL/scripts/ideas.py <type> [n=12]
-    types: whatif | documentary | emotional | action | explainer | any
+    types: whatif | documentary | emotional | action | explainer | comedy | moral | digital | history | any
 
 It prints a fresh random mix every run (seeded from the OS). Claude uses these as dice, never as finished
 ideas: combine, twist and sharpen them into 10 original topics that fit the student's niche.
@@ -56,7 +56,45 @@ EXPLAIN = {
     "device": ["a stickman shrinks to see it up close", "a race between two stickmen", "a kitchen analogy", "a city as a body",
                "a countdown timer", "before / after split screen", "a stickman tries and fails three times"],
 }
-SETS = {"whatif": WHATIF, "documentary": DOC, "emotional": EMO, "action": ACTION, "explainer": EXPLAIN}
+COMEDY = {
+    "who": ["a baker", "a nervous robber", "a tiny boss", "a grandma with a leaf blower", "a security guard on day one", "a wedding DJ",
+            "a delivery rider", "a magician whose tricks work too well", "a mime", "a lifeguard who can't swim", "a chef and a food critic"],
+    "wants": ["the last croissant", "one quiet nap", "the perfect selfie", "to win the parking spot", "a cold drink on the hottest day",
+              "to hide a broken vase", "to look cool in front of a crush", "the TV remote", "to catch the bus", "a free sample"],
+    "obstacle": ["a pigeon", "a vending machine", "a sneeze", "an automatic door", "a GPS voice", "a toddler", "a goat", "a wet floor sign",
+                 "a seagull gang", "a self-checkout", "a balloon", "the wind"],
+    "button": ["the obstacle gets the prize", "it happens again to someone else", "the hero gives up and it works", "a tiny tender moment",
+               "the camera reveals who was watching", "the prize was fake"],
+}
+MORAL = {
+    "temptation": ["the phone at 3 AM", "pride", "envy", "comparison", "lust vs love", "procrastination", "anger", "fear of failing",
+                   "shortcuts", "gossip", "money first", "people-pleasing", "laziness", "lying to look good"],
+    "counter": ["SCROLLED / CALLED MOM", "SEEN / KNOWN", "DRAFTS / SENT", "PLANS / STARTED", "LIKES / FRIENDS", "EXCUSES / STEPS",
+                "SAVED / SPENT", "SAID SORRY / MEANT IT"],
+    "real_life": ["a mother waiting", "a friend at the café", "the bus stop girl with the yellow umbrella", "a little brother's drawing",
+                  "a grandfather's last call", "a coach who believed", "a neighbour who needs help"],
+    "ending": ["the shadow loses", "the shadow wins (bitter)", "too late, then a second chance", "open: the phone rings", "roles reverse"],
+}
+DIGITAL = {
+    "world": ["a spreadsheet", "a code editor", "a phone home screen", "a settings menu", "a calculator", "a maps app", "a photo editor",
+              "an email inbox", "a printer queue", "a music app", "a password form", "a loading bar", "a chat app", "a platform-game level"],
+    "villain": ["an error message", "a pop-up ad", "a virus", "the spinning wheel", "autocorrect", "a captcha", "a low-battery warning",
+                "a 404 page", "a cookie banner", "a stuck update"],
+    "power": ["copy-paste clones", "Ctrl+Z rewinds time", "the delete key", "drag and drop", "zoom", "dark mode", "the undo history",
+              "the fill handle", "the volume slider", "screenshot freeze"],
+    "twist": ["the cursor is on the villain's side", "the user closes the app", "he escapes to the desktop", "the battery dies",
+              "he becomes the new error", "it was all a tutorial"],
+}
+HISTORY = {
+    "figure": ["Toussaint Louverture", "Jean-Jacques Dessalines", "Henri Christophe and the Citadelle", "Queen Nzinga", "Mansa Musa",
+               "Hannibal crossing the Alps", "Cleopatra", "Genghis Khan", "Joan of Arc", "the Taíno before 1492", "Shaka Zulu",
+               "the Great Wall builders", "Harriet Tubman", "Simón Bolívar", "the samurai's last battle", "the Library of Alexandria"],
+    "angle": ["the profile card (✓ ✓ ✓)", "one decision that changed everything", "the betrayal", "the underdog", "what a normal day looked like",
+              "the myth vs the fact", "the map that grows", "the object that survived"],
+    "hook": ["start with the ending", "start with a number", "start with a quote", "start with 'imagine you are…'", "start with the map"],
+}
+SETS = {"whatif": WHATIF, "documentary": DOC, "emotional": EMO, "action": ACTION, "explainer": EXPLAIN,
+        "comedy": COMEDY, "moral": MORAL, "digital": DIGITAL, "history": HISTORY}
 
 
 def roll(kind, n):

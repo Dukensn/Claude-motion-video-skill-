@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Thumbnail for a digital film. Copied to <film>/thumb/thumb.html by new-film.sh; rendered by scripts/thumb.cjs (2560x1440 + jpg).
+     Rules: the software world filling the frame, the stick figure mid-action (kick, punch, jump) on the villain, an impact,
+     a 3–4 word "STICK vs. THE ___" title, the hero's colour in the title. -->
+<html><head><meta charset="utf-8"><style>
+@font-face { font-family: "Lilita One"; src: url("LilitaOne.ttf"); }
+@font-face { font-family: "Inter"; font-weight: 100 900; src: url("../assets/fonts/Inter.ttf"); }
+html,body{margin:0;background:#000} canvas{display:block}
+</style></head><body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>window.FRAME = { W: 1920, H: 1080 }; window.VO = { lines: [], end: 0, duration: 1 };</script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/stick.js"></script>
+<script src="../assets/js/world.js"></script>
+<script src="../assets/js/text.js"></script>
+<script src="../assets/js/style.js"></script>
+<script src="thumbs.js"></script>
+<script>
+const W = 1920, H = 1080;
+const FONTS = ['400 40px "Lilita One"', '800 40px "Inter"'];
+function setup() { const ctx = document.getElementById('c').getContext('2d'); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H); F.G.t = 1.3; return ctx; }
+window.T = {
+  main() {
+    const ctx = setup();
+    ctx.save(); WORLD.cam(ctx, 1100, 560, 1.25);
+    DIGI.sheet(ctx, { file: 'Budget_FINAL_v7.xlsx', formula: '=SUM(B2:B9) * CHAOS', data: { B2: 931, B3: 399, B4: 299, B5: 173, B6: 310, B7: 557 }, sel: [1, 1, 1, 6] });
+    for (const [x, y, v, a] of [[1500, 300, 27, 0.3], [1650, 420, '#REF!', -0.4], [1450, 700, 72, 0.6], [1750, 640, 1, -0.2]]) DIGI.cell(ctx, x, y, v, a);
+    WORLD.FX.speedLines(ctx, 900, 640, 1, 1.3, 1);
+    DIGI.stick(ctx, { x: 980, y: 900, s: 1.9, dir: 1, col: '#00b4d8', pose: 'kick', t: 1.3 });
+    DIGI.errorBox(ctx, 1300, 640, '#DIV/0!', 0.35, { eyes: true, look: -1 });
+    WORLD.FX.impact(ctx, 1190, 650, 0.06, 0, 190, '#ffd166');
+    ctx.restore();
+    TH.title(ctx, [[{ t: 'STICK ', c: '#00b4d8' }, { t: 'vs. THE' }], [{ t: 'SPREADSHEET', c: '#34c27a' }]], 70, 880, 140);
+  },
+};
+</script></body></html>

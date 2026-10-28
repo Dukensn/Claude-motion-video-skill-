@@ -43,4 +43,6 @@ npx --yes hyperframes@0.8.193 --version >/dev/null 2>&1 && echo "✓ hyperframes
 if [ -f "$HOME/.cache/hyperframes/tts/models/kokoro-v1.0.onnx" ]; then echo "✓ voice model"; else
   T="$(mktemp -d)"; (cd "$T" && npx --yes hyperframes@0.8.193 tts "Ready." -o ready.wav >/dev/null 2>&1) && echo "✓ voice model downloaded" || echo "! voice model not downloaded yet (only needed for narrated videos)"; rm -rf "$T"
 fi
+# optional expressive voice: only report whether the student set their own key (never print it)
+if [ -n "${GEMINI_API_KEY:-}" ] || [ -s "$HOME/.config/video-studio/gemini_key" ]; then echo "✓ gemini key (expressive voice available)"; else echo "· gemini key not set — natural voice (Kokoro) by default; see references/menu.md"; fi
 [ $ok = 1 ] && echo "READY" || { echo "NOT READY — fix the ✗ lines above"; exit 1; }

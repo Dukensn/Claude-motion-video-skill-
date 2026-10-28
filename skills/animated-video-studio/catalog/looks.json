@@ -1,0 +1,14 @@
+{
+ "about": "The looks the engines can draw. The launch menu is NOT made from saved images: Claude invents proposals and draws a fresh preview for each (references/menu.md). 'offer': false = kept in the skill but not proposed for now.",
+ "looks": [
+  {"style": "cinematic", "offer": true, "engine": "stickman + CINE", "good_for": "What if, documentary, science, sport, suspense — rim light, depth of field, data on screen"},
+  {"style": "sketch", "offer": true, "engine": "stickman + SKETCH", "good_for": "history, biographies, maps, myths — ink on parchment, period costumes, humour"},
+  {"style": "cartoon", "offer": true, "engine": "stickman skeleton + TOON", "good_for": "comedy skits, gags, Shorts — thick outlines, big expressions"},
+  {"style": "moral", "offer": true, "engine": "bean + MORAL", "good_for": "moral short films — a personified temptation, counters, rain, split screens"},
+  {"style": "bean", "offer": true, "engine": "bean", "good_for": "emotional stories — cream round characters, dark sketchy rooms"},
+  {"style": "silhouette", "offer": true, "engine": "silhouette", "good_for": "emotional stories — black figures, soft light"},
+  {"style": "digital", "offer": false, "engine": "stickman + DIGI", "good_for": "stick figure vs. software (a stick figure: not offered for now)"},
+  {"style": "stickman", "offer": false, "engine": "stickman", "good_for": "classic white stick figures (not offered for now)"}
+ ],
+ "everywhere": "SCENE (detailed sets: skies, mountains, cities, streets, forests, water, interiors, market, tap-tap, fog, rays), CAM / TRANS (camera moves, transitions), VFX (effects, looks). A video may mix looks or invent a new one in its own sets.js."
+}

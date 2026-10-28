@@ -1,0 +1,18 @@
+{
+ "voice": "am_michael",
+ "style": "a calm, curious science storyteller with a hint of wonder, like a late-night documentary",
+ "fallback_voice": "am_michael",
+ "speed": 1.0,
+ "start": 0.6,
+ "gap": 0.35,
+ "tail": 3.0,
+ "lines": [
+  {"id": "hook", "text": "What if you could see in the dark, like a cat?", "pause": 0.6, "direct": "intriguing, slow, a smile in the voice"},
+  {"id": "mirror", "text": "Cats have a mirror at the back of their eyes.", "direct": "curious, revealing a secret"},
+  {"id": "bounce", "text": "It bounces light back through the eye, for a second chance to see.", "direct": "explaining, light and clear"},
+  {"id": "sixth", "text": "Scientists estimate they need about one sixth of the light we do.", "pause": 0.5, "direct": "impressed, stress 'one sixth'"},
+  {"id": "night", "text": "A dark street would look like early evening to you.", "direct": "excited, almost whispering"},
+  {"id": "price", "text": "The price? Fewer colors, and blurrier details.", "pause": 0.6, "direct": "a beat of disappointment, then matter-of-fact"},
+  {"id": "end", "text": "So… would you trade your colors for the night?", "direct": "warm, thoughtful, ending on a question"}
+ ]
+}

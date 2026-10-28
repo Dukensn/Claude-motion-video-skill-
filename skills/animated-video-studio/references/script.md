@@ -15,7 +15,7 @@ Write `SCRIPT.md` as clean paragraph narration first (no timestamps), then split
 
 ### narration.json lines
 
-One line = one subtitle = one voice clip, 4–16 words, cut at natural pauses. Give every line a short `id` you will use in film.js (`"hook"`, `"winter"`, `"fire-1"`). Add `"pause": 0.8` after a line that needs to land, `"hide": true` for a line that should be heard but not subtitled. Character dialogue: add `"voice": "af_heart"` on that line.
+One line = one subtitle = one voice clip, 4–16 words, cut at natural pauses. Give every line a short `id` you will use in film.js (`"hook"`, `"winter"`, `"fire-1"`). Add `"pause": 0.8` after a line that needs to land, `"hide": true` for a line that should be heard but not subtitled. Character dialogue: add `"voice": "af_heart"` on that line. With the expressive (Gemini) voice, give every line a short acting note in `"direct"` (`"hushed, building suspense"`, `"shocked, punchy"`, `"deadpan, comic timing on 'beige'"`) and the film a global `"style"` — `voice.md`.
 
 ## Silent (emotional, action)
 

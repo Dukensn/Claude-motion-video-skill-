@@ -9,9 +9,15 @@ Une seule fois :
 2. Ouvrez https://github.com/Dukensn/claude-motion-video-skill- et touchez **Use this template → Create a new repository** (ou **Fork**). Vous avez maintenant votre propre copie du studio.
 3. Dans l'application Claude, ouvrez **Code**, connectez GitHub quand c'est demandé, et choisissez votre copie.
 
-Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **« Je veux faire une vidéo animée pour YouTube. »** Tout s'installe tout seul au démarrage (la première fois, ça peut prendre quelques minutes). Claude vous envoie la vidéo et la miniature directement dans la conversation : enregistrez-les sur votre téléphone.
+Pour chaque vidéo : ouvrez une nouvelle session sur votre copie et écrivez **« Je veux faire une vidéo animée pour YouTube. »** Claude invente des idées de vidéos, dessine une image pour chacune et vous envoie une planche numérotée (elle est différente à chaque fois) : répondez avec le numéro de votre choix. Il s'en souviendra la prochaine fois. Tout s'installe tout seul au démarrage (la première fois, ça peut prendre quelques minutes). Claude vous envoie la vidéo et la miniature directement dans la conversation : enregistrez-les sur votre téléphone.
 
 Pour montrer une vidéo qui vous inspire, joignez le fichier vidéo à votre message (les liens YouTube ne s'ouvrent pas toujours depuis le téléphone).
+
+**Voix** : par défaut, Claude utilise une voix naturelle (rien à faire). **Pour une voix plus émotionnelle (facultatif)**, une seule fois :
+1. Créez votre clé gratuite sur **aistudio.google.com/apikey** (compte Google → *Create API key*). La vidéo du cours montre comment.
+2. Dans l'application Claude, ouvrez le menu de l'environnement dans le titre de la session → **Edit** → ajoutez une variable `GEMINI_API_KEY` avec votre clé → enregistrez.
+3. Ouvrez une nouvelle session : c'est réglé pour toujours.
+Ne collez jamais votre clé dans le chat ni dans le dépôt. Elle est personnelle : ne la partagez avec personne.
 
 ## Sur ordinateur (Claude Code)
 
@@ -36,9 +42,15 @@ Yon sèl fwa :
 2. Louvri https://github.com/Dukensn/claude-motion-video-skill- epi touche **Use this template → Create a new repository** (oswa **Fork**). Kounye a ou gen pwòp kopi studio a.
 3. Nan aplikasyon Claude, louvri **Code**, konekte GitHub lè yo mande w, epi chwazi kopi pa w la.
 
-Pou chak videyo : louvri yon nouvo sesyon sou kopi w la epi ekri **« Mwen vle fè yon videyo anime pou YouTube. »** Tout bagay enstale poukont yo lè sesyon an kòmanse (premye fwa a ka pran kèk minit). Claude ap voye videyo a ak miniati a dirèkteman nan konvèsasyon an : anrejistre yo sou telefòn ou.
+Pou chak videyo : louvri yon nouvo sesyon sou kopi w la epi ekri **« Mwen vle fè yon videyo anime pou YouTube. »** Claude ap voye yon meni imaj ak nimewo ba ou : reponn ak nimewo ou chwazi a. L ap sonje l pwochen fwa. Tout bagay enstale poukont yo lè sesyon an kòmanse (premye fwa a ka pran kèk minit). Claude ap voye videyo a ak miniati a dirèkteman nan konvèsasyon an : anrejistre yo sou telefòn ou.
 
 Pou montre yon videyo ki enspire w, mete fichye videyo a ak mesaj ou (lyen YouTube pa toujou louvri depi telefòn).
+
+**Vwa** : pa defo, Claude itilize yon vwa natirèl (ou pa gen anyen pou fè). **Pou yon vwa ki gen plis emosyon (si w vle)**, yon sèl fwa :
+1. Kreye kle gratis ou sou **aistudio.google.com/apikey** (kont Google → *Create API key*). Videyo kou a montre kijan.
+2. Nan aplikasyon Claude, louvri meni anviwònman an nan tit sesyon an → **Edit** → ajoute yon varyab `GEMINI_API_KEY` ak kle ou → anrejistre.
+3. Louvri yon nouvo sesyon : li regle pou toujou.
+Pa janm kole kle ou nan chat la ni nan depo a. Se pou ou sèlman : pa pataje l ak pèsonn.
 
 ## Sou òdinatè (Claude Code)
 
