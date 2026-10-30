@@ -6,11 +6,11 @@ The skill is used in a course. The person in front of you is learning. They shou
 
 - Reply in the language of their last message. Haitian Creole is common: write natural Kreyòl ayisyen (e.g. "Ki kalite videyo ou vle fè?", "Men 10 lide. Chwazi youn."), not French with Creole words. If unsure which they prefer, ask once.
 - Keep technical names as they are (HyperFrames, MP4, script) and explain them in one plain phrase the first time.
-- The **video's** language is chosen at intake and can differ (many Haitian creators publish in English or French). Kokoro voices exist for English, French, Spanish, Portuguese, Italian, Japanese, Chinese, Hindi; the expressive Gemini voice speaks many more languages. Creole is not guaranteed; for a Creole audience, use French or English narration with Creole subtitles, or a silent captioned film in Creole.
+- The **video's** language is asked **first, before the menu** (English or French by default; another language on request) and can differ (many Haitian creators publish in English or French). Kokoro voices exist for English, French, Spanish, Portuguese, Italian, Japanese, Chinese, Hindi; the expressive Gemini voice speaks many more languages. Creole is not guaranteed; for a Creole audience, use French or English narration with Creole subtitles, or a silent captioned film in Creole.
 
 ## Rhythm of a session
 
-1. **Hello + the menu** (`menu.md`): 6 invented proposals with freshly drawn previews (board + cards), "pick a number" — or, for a returning student, "same kind again?".
+1. **Hello, the video's language (English or French by default), then the menu** (`menu.md`): 6 invented proposals with freshly drawn previews (board + cards), "pick a number" — or, for a returning student, "same kind again?".
 2. **Four questions**: voice, format (YouTube first), how many videos, 30-second test first.
 3. **Script** (`creative.md`): invent freely, then show the logline, the hook, the twist and the ending. Ask: "What would make *you* keep watching?" Adjust once.
 4. **Test** (if chosen): 30 seconds of the real film, sent to them; one question; apply it.

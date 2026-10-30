@@ -8,14 +8,19 @@ so every student — and every session — sees a different menu.
 1. `python3 SKILL/scripts/profile.py get` (restores the student's memory, even in a fresh cloud session).
 2. Returning student with a `kind` saved → greet them by what they made last and offer, in one AskUserQuestion:
    *Same kind again (Recommended)* · *Show me new ideas*. "Same kind" goes straight to the questions/story.
-3. Otherwise (or "new ideas"): **generate the menu.**
+3. **Ask the video's language before anything is drawn** (one AskUserQuestion, unless `profile.py get` already has
+   `language`): *English (Recommended)* · *Français* · *Another language*. Videos are made in **English or French by
+   default** — the student still talks with you in their own language (Kreyòl…); only the video changes. Save it at once:
+   `profile.py set language=en|fr|…`.
+4. Otherwise (or "new ideas"): **generate the menu — in the video's language.**
 
 ## Generating the menu
 
 1. **Invent 6 proposals** across different kinds of video — comedy, What if, history, moral, documentary, emotional,
    action, explainer, or a kind nobody asked for — each with its own look from `SKILL/catalog/looks.json` (only
    `"offer": true` looks; the classic stick figure is kept in the skill but not offered for now). Each proposal is
-   a real idea (story.md: a title, a one-line hook), not a category name. Never reuse `profile.py used` ideas.
+   a real idea (story.md: a title, a one-line hook), not a category name, written for the audience of the video's
+   language (an English or French viewer must understand it without local knowledge). Never reuse `profile.py used` ideas.
 2. `bash SKILL/scripts/menu.sh` → `films/_menu/` with two drawing pages:
    `films/_menu/stick/thumb/thumb.html` (CINE, SKETCH, TOON, DIGI, SCENE, VFX, STICK) and
    `films/_menu/bean/thumb/thumb.html` (bean characters, MORAL, SCENE, VFX).
@@ -25,7 +30,7 @@ so every student — and every session — sees a different menu.
    `node SKILL/scripts/thumb.cjs films/_menu/stick films/_menu/out/p1.png p1` (bean page for bean/moral looks).
    Look at every preview yourself and redraw the weak ones.
 4. Write `films/_menu/menu.json` — `{"title": "Choisis ton numéro", "items": [{"image": "films/_menu/out/p1.png", "name": "« 1 % » — sketch comédie", "line": "one-line hook"}, …]}`
-   (titles and lines in the student's language) — then `python3 SKILL/scripts/board.py films/_menu/menu.json`.
+   (poster titles, card names and hook lines in **the video's language**, so the student sees the real titles) — then `python3 SKILL/scripts/board.py films/_menu/menu.json`.
 5. Send `films/_menu/out/board.jpg`, then the cards `01.jpg … 06.jpg`, and ask for a number. A free answer is fine
    ("le 3", "the bus one", "mix 1 and 4", "something else about football" → invent again).
 6. Save: `profile.py set kind=<kind> style=<look> pick="<title>"` — the chosen proposal becomes the story's starting
@@ -40,7 +45,7 @@ so every student — and every session — sees a different menu.
 3. **How many videos** — *1* · *3* · *5*.
 4. **Test first** — *Yes, a 30-second test first (Recommended)* · *No, make the full video*.
 
-Save: `profile.py set voice=kokoro|gemini|none format=16:9|9:16 count=<n> test=yes|no language=<code>`.
+Save: `profile.py set voice=kokoro|gemini|none format=16:9|9:16 count=<n> test=yes|no` (the language was saved before the menu).
 
 **Expressive voice chosen → the student's own Gemini key, stored once in their cloud environment.**
 Check: `python3 -c "import os; print(bool(os.environ.get('GEMINI_API_KEY')))"`. If `True`, go on. Otherwise explain in a

@@ -18,7 +18,8 @@ expressive narrator voice through the student's own Gemini key.
 The person using this skill is often a student learning to make videos. Be a studio partner, not a vending machine.
 Read `references/conversation.md` first. In short:
 
-- **Speak their language** (Kreyòl ayisyen, French, English, Spanish…). The *video's* language is a separate choice.
+- **Speak their language** (Kreyòl ayisyen, French, English, Spanish…). The *video's* language is a separate choice,
+  asked first, before the menu: **English or French by default**.
 - **Explain what you are doing in one or two plain sentences at each step**, and why. No jargon dumps.
 - **They choose at checkpoints**: the menu number, the script, the test, the stills.
 - **The student never configures anything.** You run every command and fix problems yourself. If something can only
@@ -55,7 +56,9 @@ only tell the student if something needs them (it almost never should).
 
 ### 2. The menu — generated fresh, and the memory (`references/menu.md`)
 
-`python3 SKILL/scripts/profile.py get`. Returning student → "same kind again?". Otherwise **invent 6 proposals**
+`python3 SKILL/scripts/profile.py get`. **First ask the video's language** (English · Français · another; English or French
+by default) and save it with `profile.py set language=…`: the menu is drawn in that language. Returning student → "same
+kind again?". Otherwise **invent 6 proposals**
 (different kinds of video, each a real idea with a title and a hook, each in a look from `SKILL/catalog/looks.json`
 marked `"offer": true` — the classic stick figure stays in the skill but is not offered for now), **draw a new preview
 for each** (`bash SKILL/scripts/menu.sh`, then `T.p1…p6` in `films/_menu/*/thumb/thumb.html`, rendered with `thumb.cjs`),
