@@ -36,9 +36,31 @@
   }
 
   // ---------- karaoke subtitle of the current narration line (o: {size, y, accent, maxW, upper})
+  // short captions: groups of up to o.chunk words (cut at punctuation), small, outlined, low in the frame
+  function chunked(ctx, t, l, o) {
+    const ws = words(l), n = o.chunk;
+    if (!l._c) { l._c = []; let cur = [];
+      ws.forEach((x, i) => { cur.push(x); if (cur.length >= n || /[,;:.!?…]$/.test(x.w) || i === ws.length - 1) { l._c.push(cur); cur = []; } }); }
+    const g = l._c.find((c) => t >= c[0].a && t < c[c.length - 1].b + 0.05) || (t < l._c[0][0].a ? null : l._c[l._c.length - 1]);
+    if (!g) return;
+    const size = o.size || Math.round(Math.min(W, H) * 0.05);
+    ctx.save(); ctx.font = `900 ${size}px ${FONTS.ui}`; ctx.textBaseline = "middle"; ctx.textAlign = "left"; ctx.lineJoin = "round";
+    const sp = size * 0.3, tw = g.reduce((s2, x) => s2 + ctx.measureText(x.w).width, 0) + sp * (g.length - 1);
+    let x = W / 2 - tw / 2; const y = o.y ?? H * 0.9;
+    const pop = 1 + 0.06 * clamp(1 - (t - g[0].a) / 0.12, 0, 1);
+    ctx.translate(W / 2, y); ctx.scale(pop, pop); ctx.translate(-W / 2, -y);
+    for (const w of g) {
+      ctx.lineWidth = size * 0.2; ctx.strokeStyle = "#0b0b0f"; ctx.strokeText(w.w, x, y);
+      ctx.fillStyle = t >= w.a && t < w.b ? (o.accent || "#ffd166") : "#ffffff"; ctx.fillText(w.w, x, y);
+      x += ctx.measureText(w.w).width + sp;
+    }
+    ctx.restore();
+  }
+
   function subtitles(ctx, t, o = {}) {
     const l = lineAt(t);
     if (!l || l.hide) return;
+    if (o.chunk) return chunked(ctx, t, l, o);
     const size = o.size || Math.round(Math.min(W, H) * 0.062);
     ctx.save();
     ctx.font = `800 ${size}px ${FONTS.ui}`;
