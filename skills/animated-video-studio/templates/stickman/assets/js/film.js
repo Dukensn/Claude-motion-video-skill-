@@ -111,7 +111,7 @@
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
     ctx.save(); s.f(ctx, t - s.a, t); ctx.restore();
-    subtitles(ctx, t, { accent: ACCENT });
+    subtitles(ctx, t, { accent: ACCENT, chunk: 3 });
     FX.vignette(ctx, 0.25);
     // fade in at the start, out at the end; a quick dip into the explainer
     FX.fade(ctx, 1 - prog(t, 0, 0.6) + prog(t, DURATION - 0.8, DURATION));
