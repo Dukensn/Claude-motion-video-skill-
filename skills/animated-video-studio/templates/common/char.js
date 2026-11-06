@@ -202,6 +202,7 @@
     const headFill = d.family === "stick" ? (d.headFill === "skin" ? pal.skin : d.headFill === "main" ? pal.main : d.headFill || "#fbfbf7") : pal.species || pal.skin;
     const headShape = () => {
       ctx.beginPath();
+      if (d.headShape === "round") { ctx.ellipse(0, 0, R * sx, R * sy, 0, 0, TAU); return; }
       const top = -R * sy * (1 + d.headTop), bot = R * sy * (1 + d.jaw * 0.5), wr = R * sx;
       ctx.moveTo(0, top); ctx.bezierCurveTo(wr * 1.05, top, wr * 1.08, bot * 0.55, wr * (0.75 + d.jaw * 0.4), bot * 0.85);
       ctx.quadraticCurveTo(0, bot * 1.15, -wr * (0.75 + d.jaw * 0.4), bot * 0.85); ctx.bezierCurveTo(-wr * 1.08, bot * 0.55, -wr * 1.05, top, 0, top); ctx.closePath();
@@ -358,6 +359,13 @@
         case "helmet": ctx.beginPath(); ctx.ellipse(0, R * 0.2, R * sx * 1.12, R * 0.9, 0, Math.PI, TAU); ctx.closePath(); outlineFill(ctx, d, pal.accent, hl); ctx.fillStyle = "rgba(255,255,255,0.35)"; ctx.beginPath(); ctx.ellipse(-R * 0.4, -R * 0.35, R * 0.25, R * 0.12, -0.5, 0, TAU); ctx.fill(); break;
         case "flower": ctx.translate(-R * 0.6, R * 0.1); for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.ellipse(Math.cos(i * 1.256) * R * 0.15, Math.sin(i * 1.256) * R * 0.15, R * 0.12, R * 0.12, 0, 0, TAU); outlineFill(ctx, d, pal.accent, hl * 0.7); } ctx.beginPath(); ctx.arc(0, 0, R * 0.09, 0, TAU); outlineFill(ctx, d, "#f4d35e", hl * 0.7); break;
         case "beret": ctx.rotate(-0.2 * dir); ctx.beginPath(); ctx.ellipse(0, -R * 0.05, R * 0.95, R * 0.35, 0, 0, TAU); outlineFill(ctx, d, hcol, hl); ctx.beginPath(); ctx.moveTo(0, -R * 0.4); ctx.lineTo(0, -R * 0.55); ctx.lineWidth = hl; ctx.strokeStyle = pal.line; ctx.stroke(); break;
+        case "fedora": { const hc2 = d.hatCol || "#1d2433", band = d.bandCol || "#f2f2ee";
+          ctx.rotate(-0.06 * dir);
+          ctx.beginPath(); ctx.ellipse(0, R * 0.08, R * 1.32, R * 0.2, 0, 0, TAU); outlineFill(ctx, d, hc2, hl);
+          ctx.beginPath(); ctx.moveTo(-R * 0.72, R * 0.05); ctx.bezierCurveTo(-R * 0.8, -R * 0.55, -R * 0.55, -R * 0.78, -R * 0.15, -R * 0.62); ctx.quadraticCurveTo(0, -R * 0.5, R * 0.15, -R * 0.62);
+          ctx.bezierCurveTo(R * 0.55, -R * 0.78, R * 0.8, -R * 0.55, R * 0.72, R * 0.05); ctx.closePath(); outlineFill(ctx, d, hc2, hl);
+          ctx.fillStyle = band; ctx.beginPath(); ctx.moveTo(-R * 0.74, -R * 0.05); ctx.lineTo(R * 0.74, -R * 0.05); ctx.lineTo(R * 0.73, -R * 0.2); ctx.lineTo(-R * 0.75, -R * 0.2); ctx.closePath(); ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,0.12)"; ctx.beginPath(); ctx.ellipse(-R * 0.35, -R * 0.45, R * 0.18, R * 0.08, -0.5, 0, TAU); ctx.fill(); break; }
         case "headband": ctx.beginPath(); ctx.roundRect(-R * sx * 1.02, R * 0.12, R * sx * 2.04, R * 0.2, 6); outlineFill(ctx, d, pal.accent, hl); break;
         case "chef": ctx.beginPath(); ctx.roundRect(-R * 0.7, -R * 0.2, R * 1.4, R * 0.35, 6); outlineFill(ctx, d, "#fff", hl); ctx.beginPath(); ctx.arc(-R * 0.4, -R * 0.45, R * 0.35, 0, TAU); ctx.arc(0, -R * 0.6, R * 0.4, 0, TAU); ctx.arc(R * 0.4, -R * 0.45, R * 0.35, 0, TAU); outlineFill(ctx, d, "#fff", hl); break;
       }
@@ -468,7 +476,9 @@
     if (raised) handF = armDraw(1, p.armF);
     // neck + head
     const R = d.headR;
-    const headY = shoulderY - R * (stick ? 1.12 : 0.82);
+    const neck = d.neck || 0;
+    const headY = shoulderY - R * (stick ? 1.12 : 0.82) - neck;
+    if (neck > 0) tube(ctx, d, [[0, shoulderY + 4], [0, shoulderY - neck * 0.5], [0, headY + R * 0.7]], d.limbW * 1.05, armCol);
     ctx.save(); ctx.translate(0, headY); ctx.rotate((p.head || 0) * dir);
     if (d.detail === "scarf" && !stick) { ctx.beginPath(); ctx.roundRect(-R * 0.75, R * 0.7, R * 1.5, R * 0.32, 10); outlineFill(ctx, d, pal.accent); ctx.beginPath(); ctx.roundRect(-R * 0.6 * dir - 12, R * 0.85, 26, R * 0.9, 8); outlineFill(ctx, d, pal.accent); }
     if ((d.detail === "tie" || d.detail === "bowtie") && !stick) { ctx.beginPath(); if (d.detail === "tie") { ctx.moveTo(-10, R * 0.85); ctx.lineTo(10, R * 0.85); ctx.lineTo(14, R * 1.8); ctx.lineTo(0, R * 2.05); ctx.lineTo(-14, R * 1.8); } else { ctx.moveTo(0, R * 0.95); ctx.lineTo(-24, R * 0.8); ctx.lineTo(-24, R * 1.1); ctx.lineTo(0, R * 0.95); ctx.lineTo(24, R * 0.8); ctx.lineTo(24, R * 1.1); } ctx.closePath(); outlineFill(ctx, d, pal.accent); }
