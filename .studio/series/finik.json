@@ -1,0 +1,10 @@
+{
+ "name": "Finik",
+ "language": "fr",
+ "role": "gentleman sage qui explique le développement personnel ; il a été lui-même le « trop gentil »",
+ "look": "corps blanc lisse et volumineux, contour bleu nuit, tête ronde, cou, sourcils épais très expressifs, pas de nez, fedora noir à bande blanche",
+ "design": "films/finik-trop-gentil/assets/js/sets.js (SET.FINIK, SET.FINIK_BEFORE, SLOUCH, UPRIGHT)",
+ "before_after": "avant : sans chapeau, dos courbé ; après : droit, chapeau",
+ "rules": ["titres accrocheurs mais la vidéo tient la promesse", "posture = état intérieur", "finir sur une question au spectateur"],
+ "episodes": [{"n": 1, "title": "Pourquoi les gens trop gentils perdent tout", "lesson": "la règle des 3 secondes ; dire non à la demande, pas à la personne"}]
+}
