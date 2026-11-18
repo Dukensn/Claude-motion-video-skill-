@@ -4,12 +4,13 @@ This repo is a finished, re-renderable ad for the **Atelye AI** workshop (Saturd
 
 ## How it is built
 - `src/index.src.html` — the HyperFrames composition (1080×1920, 30 fps, 114.5 s, one GSAP timeline registered as `window.__timelines["main"]`). It has placeholders (`__CAPS__`, `__HL__`, `__ROW1__`, `__ROW2__`, `__NET__`, `__CROWD__`, `__BURST__`, `__BELL__`, `__CLASS__`) that `tools/build.py` fills to produce `index.html`. Always edit `src/index.src.html`, then run `python3 tools/build.py`.
-- Scenes (times in seconds on the cleaned voice): A hook 0–5.2 (three AI videos: stickman, feyton, motion), B YouTube 5.1, C channel proof 7.55, D one-video proof 11.65, E "Poutan" 17.05, F animated workshop 23.4, G date/place 28.15, H video wall 34.25, I three kinds 38.8, J1 Facebook Ads 43.45, J2 his face as a Facebook ad + reach to 1 million 48.1, K1 digital product 57.9, K2 made once/sold many 66.35, L skills & resources 75.25, M debit card 82.55, N 7 days Claude Pro 87.3, O WhatsApp group 95.45, P his face + CTA 102.25, Q end card 112.55.
+- Scenes (times in seconds on the cleaned voice): A hook 0–5.2 (two big AI videos: the bees stickman `myel-1` and the feyton), B YouTube 5.1, C channel proof 7.55, D one-video proof 11.65, E "Poutan" 17.05, F animated workshop 23.4, G date/place 28.15, H video wall 34.25, I three kinds 38.8, J1 Facebook Ads 43.45, J2 a Facebook post that drops into a phone held by a person silhouette, then the camera pulls back on a crowd + reach counter to 1 million 48.1, K1 digital product 57.9, K2 made once/sold many 66.35, L skills & resources 75.25, M debit card 82.55, N 7 days Claude Pro 87.3, O WhatsApp group 95.45, P his face + CTA 102.25, Q end card 112.55.
 - Voice: `in/voix.m4a` → `tools/cut.py` (drops a repeated Facebook-Ads take, cleans) → `tools/voice.sh` (brighter, livelier EQ/compression) → `assets/audio/voice.wav`.
 - Captions: `tools/caps.py` → `build/caps.json` (Haitian Creole text written by hand on the cleaned timeline; `build/tr.json` is the raw Whisper transcript).
 - Music: `in/music-funk.mp3` (his choice) looped by `tools/music.sh`, kept ~16–21 dB under the voice with ducking.
-- Sound effects: synthesized in `tools/mix.py` (`effects()`), each tied to an on-screen action: whoosh = scene change, pop = card lands, click = UI action, ticks = counters, ding = messages/notifications, soft felt thud = stamps (GRATIS, 1 MILYON, PLAS LIMITE). No impacts/booms/buzzers/glitches.
+- Sound effects: synthesized in `tools/mix.py` (`effects()`), each tied to an on-screen action: whoosh = scene change, pop = card lands, click = UI action, ticks + ka-ching = counters, ding = messages/notifications, impact = a title or stamp landing, key taps = laptops, tick-tock = the clock, riser = build-up into a reveal. Modelled on his stickman ad (films/atelier-pub2 in the studio repo), which he liked.
 - Short version (~65 s, starts at the invitation "n òganize yon gwo atelye"): `tools/short.py <long.mp4>` cuts the long render at voice pauses, rebuilds voice+effects on the cuts, runs the music continuously. Needs `build/sfx.npy` from `tools/stems.py`.
+- Two looks: `python3 tools/build.py` (black background) or `python3 tools/build.py white` (white background; the workshop scene stays a dark room).
 - Everything at once: `sh tools/render-all.sh` (needs ffmpeg, Python with numpy/scipy, Node + `npx hyperframes`, Chromium).
 
 ## Media
@@ -19,7 +20,8 @@ This repo is a finished, re-renderable ad for the **Atelye AI** workshop (Saturd
 - Real proof only: channel 8 216 087 views (since 27 Sept), video "DISCIPLINE" 4.8 M views in under 4 weeks (`assets/img/proof-dayone.jpg`, `discipline.jpg`).
 
 ## His preferences (follow them)
-- Dark background everywhere. Coral accent `#e2553f`. **No yellow** in text.
+- He wants both a black and a white version of the long film (short version not needed for now).
+- Dark background (black version). Coral accent `#e2553f`. **No yellow** in text.
 - His face only at the end (not in the opening). The opening shows his AI videos (stickman, feyton, motion).
 - When he says "zouti" he means the workshop's **skills, resources, PDFs and the apps made for the students** — not third-party apps.
 - What the voice says must be shown on screen (e.g. "n òganize yon gwo atelye" → an animated workshop).

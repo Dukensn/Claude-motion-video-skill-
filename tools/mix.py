@@ -86,26 +86,80 @@ def softhit():   # a felt, low thud for a stamp landing - not a cinematic boom
     t = T(0.45); f = 70 + 40 * np.exp(-t * 18)
     return f32(np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 11) * 0.8 + M.lp(noise(0.45), 0.08) * np.exp(-t * 40) * 0.3)
 
+def tock(hi=True):
+    t = T(0.06); f = 2400 if hi else 1700
+    return f32(np.sin(2 * np.pi * f * t) * np.exp(-t * 90) * 0.35)
+
 def effects():
-    """Every sound is tied to something on screen. Transitions: a whoosh. A card or chip landing: a soft pop.
-    A UI action (toggle, button, tap): a click. Counters: light ticks. Notifications and messages: a small ding.
-    Stamps (GRATIS, 1 MILYON, PLAS LIMITE): a short felt thud. Two gentle risers lead into the two key moments."""
-    W = [5.1, 7.55, 11.65, 17.05, 23.4, 28.15, 34.25, 38.8, 40.0, 41.5, 43.45, 48.1, 57.9, 66.35, 75.25, 82.55, 87.3, 95.45, 102.25, 112.55]
-    for i, t in enumerate(W): P(whoosh(0.32 if i % 2 else 0.38, 0.07 if i % 2 else 0.1), t - 0.16, 0.38, pan=(0.25 if i % 2 else -0.25))
-    for t in [0.25, 0.85, 1.6]: P(whoosh(0.25, 0.12), t - 0.1, 0.3); P(pop(), t + 0.12, 0.3)
-    pops = [5.2, 6.05, 6.25, 6.45, 6.65, 7.8, 10.4, 11.95, 13.4, 15.3, 15.55, 15.8, 16.05, 18.4, 19.3, 20.6, 25.6, 28.25, 29.4, 30.3, 31.1, 31.4,
-            35.3, 43.6, 50.6, 58.05, 60.5, 58.7, 59.4, 59.8, 60.3, 63.7, 64.7, 65.8, 66.5, 66.9, 78.0, 75.7, 75.98, 76.26, 76.54, 76.82, 77.1, 87.5, 88.0, 88.6, 89.0, 82.95, 106.4, 112.65]
-    for i, t in enumerate(pops): P(pop(), t, 0.26, pan=(0.12 if i % 2 else -0.12))
-    for t in [9.0, 44.4, 56.9, 107.6, 109.4]: P(click(), t, 0.5)
-    for t0, t1 in [(9.35, 11.1), (13.45, 15.6), (45.3, 46.9), (50.7, 55.4), (68.1, 71.1), (96.6, 101.0)]: ticks(t0, t1, 0.055, 0.13)
-    for t in [67.3, 67.8, 68.6, 70.2, 70.6, 71.0]: P(coin(1.2), t, 0.22)
-    for t in [96.6, 97.8, 99.4]: P(ding(), t, 0.3)
-    for t in [3.05, 46.5, 54.5, 73.2, 80.6, 86.0, 90.7, 93.6, 102.9]: P(softhit(), t, 0.42); P(bell(1568, 0.5, 0.18), t + 0.02, 0.18)
-    P(riser(1.3), 54.5 - 1.3, 0.22); P(riser(1.2), 102.25 - 1.2, 0.2)
-    for t in [17.15, 34.6, 44.4, 58.05, 75.4, 82.7]: P(whoosh(0.2, 0.16), t - 0.05, 0.22)   # big title slams: a quick air, nothing heavy
-    P(chime(), 112.65, 0.3)
-    ticks(24.6, 26.2, 0.07, 0.1)   # laptops lighting up in the workshop
-    P(pop(), 26.6, 0.26)
+    """Built like the stickman ad: every visible action has its sound, mixed so the voice stays on top.
+    whoosh = scene change / something flying in; impact = a title or stamp landing; pop = a card or chip;
+    ticks + ka-ching = counters (views, money, reach); ding = notification / message; key taps = laptops;
+    tick-tock = the clock; riser = build-up into a reveal (camera pulling back, 1 MILYON, the call to action)."""
+    W = [5.1, 7.55, 11.65, 17.05, 23.4, 28.15, 34.25, 38.8, 43.45, 48.1, 57.9, 66.35, 75.25, 82.55, 87.3, 95.45, 102.25, 112.55]
+    for i, t in enumerate(W): P(whoosh(0.34 if i % 2 else 0.4, 0.08 if i % 2 else 0.11), t - 0.17, 0.55, pan=(0.3 if i % 2 else -0.3))
+    # A · the two AI videos fly in, "100% IA" lands
+    P(whoosh(0.3, 0.12), 0.12, 0.5, pan=-0.3); P(impact(0.5), 0.27, 0.45); P(shutter(), 0.3, 0.35)
+    P(whoosh(0.3, 0.12), 0.72, 0.5, pan=0.3); P(impact(0.5), 0.87, 0.45); P(shutter(), 0.9, 0.35)
+    P(pop(), 1.6, 0.4); P(impact(0.8), 3.05, 0.7); P(sparkle(8, 0.6), 3.1, 0.4)
+    # B · YouTube
+    P(impact(0.9), 5.2, 0.75); P(sparkle(10, 0.6), 5.35, 0.45); P(impact(0.6), 5.75, 0.55)
+    for i, t in enumerate([6.05, 6.25, 6.45, 6.65]): P(coin(1.0 + 0.15 * i), t, 0.45)
+    # C · channel proof: counter rolls up to 8 216 087
+    P(thud(), 7.8, 0.5); P(pop(), 9.0, 0.45); ticks(9.35, 11.1, 0.035, 0.3); P(chaching(), 11.12, 0.65); P(pop(), 10.4, 0.4)
+    # D · one video: 4,8 M, the weeks fill
+    P(impact(0.6), 11.8, 0.55); P(thud(), 11.95, 0.45); P(pop(), 13.4, 0.45); ticks(13.45, 15.6, 0.04, 0.3); P(chaching(), 15.62, 0.6)
+    for t in [15.3, 15.55, 15.8, 16.05]: P(tick(2) * 1.4, t, 0.5)
+    P(impact(0.7), 16.3, 0.55)
+    # E · "Poutan"
+    P(impact(0.8), 17.15, 0.65); P(whoosh(0.3, 0.1), 18.3, 0.45, pan=-0.3); P(pop(), 19.3, 0.45); P(whoosh(0.3, 0.1), 20.5, 0.45, pan=0.3); P(ding(), 21.65, 0.45)
+    # F · the workshop: lights, projector, laptops, hands
+    P(riser(0.8), 22.6, 0.3); P(shutter(), 23.6, 0.35); P(send(), 23.7, 0.5)
+    for i in range(18): P(tick(i % 3), 24.5 + i * 0.085, 0.32, pan=(-0.4 + 0.8 * (i % 7) / 6))
+    for t in [26.4, 26.65, 26.9]: P(pop(), t, 0.35)
+    P(impact(0.6), 26.6, 0.5); P(chime(), 26.65, 0.4)
+    # G · date, map pin, clock
+    P(thud(), 28.3, 0.6); P(impact(0.5), 28.9, 0.45); P(whoosh(0.3, 0.1), 29.35, 0.4); P(thud(), 29.9, 0.6); P(pop(), 30.3, 0.45)
+    P(pop(), 31.1, 0.4); P(pop(), 31.4, 0.4)
+    for i in range(8): P(tock(i % 2 == 0), 31.5 + i * 0.25, 0.4)
+    P(bell(1568, 0.6, 0.25), 33.5, 0.45)
+    # H, I · videos
+    P(impact(0.7), 34.6, 0.6); P(sparkle(10, 0.8), 34.65, 0.4)
+    for t in [38.9, 40.0, 41.5]: P(whoosh(0.28, 0.13), t - 0.1, 0.5); P(impact(0.45), t + 0.05, 0.4)
+    # J1 · Facebook Ads: logo, bar fills, "konpetans kle"
+    P(impact(0.8), 43.6, 0.65); P(impact(0.6), 44.4, 0.5); ticks(45.3, 46.9, 0.05, 0.28); P(impact(0.8), 46.5, 0.65); P(chime(), 46.55, 0.45)
+    # J2 · post -> phone -> crowd -> 1 MILYON
+    P(thud(), 48.2, 0.55); ticks(48.6, 50.2, 0.05, 0.25)
+    P(whoosh(0.5, 0.06), 49.55, 0.55); P(send(), 50.05, 0.5)
+    P(riser(3.0), 50.2, 0.35)
+    for i in range(24): P(bell(2200 + 90 * (i % 6), 0.18, 0.12), 51.6 + i * 0.1, 0.35, pan=(-0.5 + (i * 7 % 11) / 10))
+    P(pop(), 51.4, 0.45); ticks(51.5, 55.4, 0.035, 0.3)
+    P(riser(1.0), 53.5, 0.35); P(impact(1.3), 54.5, 0.95); P(chaching(), 54.55, 0.7); P(sparkle(14, 1.0), 54.6, 0.5)
+    P(pop(), 56.6, 0.45); P(coin(1.0), 56.65, 0.45)
+    # K1 · digital product: phone, laptop, cloud
+    P(impact(0.7), 58.05, 0.55); P(whoosh(0.3, 0.1), 58.6, 0.45, pan=-0.3); P(whoosh(0.3, 0.1), 59.3, 0.45, pan=0.3); P(pop(), 59.8, 0.4); P(pop(), 60.3, 0.45); P(pop(), 60.5, 0.35)
+    for t in [63.7, 64.7, 65.8]: P(tick(2) * 1.4, t, 0.55); P(bell(1760, 0.3, 0.2), t + 0.03, 0.35)
+    # K2 · once -> tens of thousands of sales
+    P(impact(0.7), 66.5, 0.55); P(pop(), 66.9, 0.5)
+    for t in [67.3, 67.8, 68.6, 70.2, 70.6, 71.0]: P(ding(), t, 0.4); P(coin(1.2), t + 0.05, 0.35)
+    ticks(68.1, 71.1, 0.032, 0.32); P(chaching(), 71.15, 0.7); P(impact(0.8), 71.2, 0.6); P(impact(0.8), 73.2, 0.65)
+    # L · skills and resources
+    P(impact(0.6), 75.4, 0.55)
+    for i in range(6): P(whoosh(0.22, 0.14), 75.62 + i * 0.28, 0.35, pan=(-0.3 if i % 2 else 0.3)); P(pop(), 75.7 + i * 0.28, 0.4)
+    P(impact(1.0), 80.6, 0.8); P(chaching(), 80.65, 0.55)
+    # M · debit card
+    P(impact(0.6), 82.7, 0.55); P(whoosh(0.4, 0.08), 82.9, 0.5); P(impact(1.0), 86.0, 0.8); P(chaching(), 86.05, 0.55)
+    # N · 7 days Claude Pro
+    P(pop(), 87.5, 0.45); P(sparkle(10, 0.8), 88.0, 0.45); P(impact(0.9), 88.6, 0.7); P(pop(), 89.0, 0.4); P(impact(0.6), 90.7, 0.5); P(chime(), 90.75, 0.45)
+    P(impact(0.9), 93.6, 0.7); P(coin(1.0), 93.65, 0.55); P(coin(1.3), 93.8, 0.45)
+    # O · WhatsApp group
+    P(thud(), 96.0, 0.5); ticks(96.6, 101.0, 0.06, 0.18)
+    for t in [96.6, 97.8, 99.4]: P(ding(), t, 0.5); P(send(), t - 0.05, 0.3)
+    # P · call to action
+    P(riser(1.2), 101.05, 0.35); P(impact(1.0), 102.25, 0.75); P(impact(1.1), 102.9, 0.8); P(buzzer(0.25), 103.0, 0.3)
+    P(whoosh(0.35, 0.1), 106.3, 0.5); P(impact(0.6), 106.45, 0.5); P(chime(), 106.5, 0.45); P(pop(), 107.6, 0.45)
+    for k in range(4): P(tick(2) * 1.2, 109.4 + k * 0.7, 0.4)
+    # Q · end card
+    P(impact(1.0), 112.6, 0.75); P(chime(), 112.65, 0.55); P(sparkle(14, 1.2), 112.7, 0.45)
 
 M.init(DUR)
 MUSIC_GAIN = 0.2

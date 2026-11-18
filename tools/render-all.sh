@@ -9,6 +9,9 @@ ffmpeg -v error -y -i build/premix.wav -af loudnorm=I=-14:TP=-1.5:LRA=9 -ar 4800
 python3 tools/stems.py
 python3 tools/build.py
 npx hyperframes check
-npx hyperframes render -o renders/atelye-ai-pub-long.mp4
-python3 tools/short.py renders/atelye-ai-pub-long.mp4
-echo "Done: renders/atelye-ai-pub-long.mp4 and renders/atelye-ai-pub-5desanm-kout.mp4"
+npx hyperframes render -o renders/atelye-ai-pub-nwa.mp4
+python3 tools/build.py white
+npx hyperframes render -o renders/atelye-ai-pub-blan.mp4
+python3 tools/build.py
+python3 tools/short.py renders/atelye-ai-pub-nwa.mp4
+echo "Done: renders/atelye-ai-pub-nwa.mp4, renders/atelye-ai-pub-blan.mp4 and renders/atelye-ai-pub-5desanm-kout.mp4"
