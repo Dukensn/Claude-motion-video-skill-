@@ -1,0 +1,8 @@
+renders/
+index.html
+assets/audio/
+build/*
+!build/caps.json
+!build/tr.json
+node_modules/
+.hyperframes/

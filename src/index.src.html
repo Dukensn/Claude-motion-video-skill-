@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="ht" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/js/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "ClaudeSerif"; src: url("assets/fonts/serif.ttf"); }
+      :root { --ink:#0f0f0f; --soft:#f2f2f2; --line:#e5e5e5; --mute:#606060; --accent:#e2553f; --claude:#d97757; --cbg:#faf9f5; --cbub:#f0eee6; --wa:#25d366; --fb:#1877f2; --red:#ff3b30; --yt:#ff0033; }
+      * { margin:0; padding:0; box-sizing:border-box; }
+      html, body { width:1080px; height:1920px; overflow:hidden; background:#fff; }
+      #root { position:relative; width:100%; height:100%; font-family:Inter, sans-serif; color:var(--ink); overflow:hidden; background:#fff; }
+      .scene { position:absolute; inset:0; overflow:hidden; visibility:hidden; background:#fff; }
+      .cam { position:absolute; inset:0; transform-origin:50% 45%; }
+      .lay { position:absolute; inset:0; }
+      .c { position:absolute; left:0; right:0; text-align:center; }
+      .h { font-weight:900; letter-spacing:-0.045em; line-height:0.98; }
+      .sub { font-weight:700; color:var(--mute); letter-spacing:-0.01em; }
+      .chip { display:inline-flex; align-items:center; gap:14px; padding:16px 32px; border-radius:999px; font-weight:800; font-size:40px; letter-spacing:-0.01em; background:var(--soft); color:var(--ink); }
+      .chip.ink { background:var(--ink); color:#fff; } .chip.y { background:var(--accent); color:#fff; }
+      .mark { position:relative; display:inline-block; isolation:isolate; }
+      .mark::after { content:""; position:absolute; left:-10px; right:-10px; bottom:6%; height:30%; background:rgba(226,85,63,.30); border-radius:10px; z-index:-1; }
+      .vid { position:absolute; border-radius:34px; overflow:hidden; background:#000; border:6px solid #fff; box-shadow:0 30px 80px rgba(0,0,0,.28); }
+      .vid video, .vid img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+      .card { position:absolute; border-radius:40px; overflow:hidden; background:#fff; border:2px solid var(--line); box-shadow:0 30px 80px rgba(0,0,0,.12); }
+      .card > img { display:block; width:100%; }
+      .tile { position:absolute; border-radius:36px; display:grid; place-items:center; background:#fff; border:2px solid var(--line); box-shadow:0 24px 60px rgba(0,0,0,.10); }
+      .ico { stroke:var(--ink); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+      .glow { position:absolute; width:1400px; height:1400px; border-radius:50%; filter:blur(60px); opacity:.55; }
+      .num { font-variant-numeric:tabular-nums; }
+      .stat { position:absolute; padding:20px 28px; border-radius:28px; background:#fff; border:2px solid var(--line); box-shadow:0 20px 50px rgba(0,0,0,.12); font-weight:900; font-size:46px; letter-spacing:-0.02em; }
+      .stat small { display:block; font-size:24px; font-weight:700; color:var(--mute); letter-spacing:0; }
+      .toast { position:absolute; width:560px; display:flex; align-items:center; gap:18px; padding:18px 24px; border-radius:28px; background:#fff; border:2px solid var(--line); box-shadow:0 20px 50px rgba(0,0,0,.14); font-size:28px; color:var(--mute); }
+      .toast b { display:block; font-size:32px; color:var(--ink); }
+      .toast .ib { width:64px; height:64px; border-radius:18px; background:#2f9e44; display:grid; place-items:center; flex:none; }
+      .ring { position:absolute; border:10px solid var(--accent); border-radius:30px; }
+      .burst { position:absolute; width:600px; height:600px; pointer-events:none; }
+      .burst line { stroke:var(--accent); stroke-width:16; stroke-linecap:round; }
+      .flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; }
+      .wa-m { position:absolute; max-width:600px; background:#fff; border-radius:26px; padding:20px 26px; font-size:34px; line-height:1.3; box-shadow:0 2px 2px rgba(0,0,0,.08); }
+      .wa-m b { display:block; font-size:28px; margin-bottom:4px; color:var(--claude); } .wa-m.me { background:#d9fdd3; }
+      .finger { position:absolute; width:110px; height:110px; border-radius:50%; background:rgba(15,15,15,.18); border:6px solid #fff; box-shadow:0 10px 30px rgba(0,0,0,.25); opacity:0; }
+      .person { position:absolute; width:70px; height:110px; }
+      .stamp { position:absolute; padding:16px 44px; border:12px solid var(--red); color:var(--red); border-radius:26px; font-weight:900; font-size:110px; letter-spacing:-.03em; background:rgba(255,255,255,.92); }
+      .lower { position:absolute; left:60px; right:60px; display:flex; align-items:center; gap:24px; padding:24px 30px; border-radius:34px; background:#fff; box-shadow:0 24px 60px rgba(0,0,0,.25); }
+      .win { position:absolute; width:450px; height:300px; border-radius:22px; overflow:hidden; background:#fff; border:2px solid #e5e5e5; box-shadow:0 24px 60px rgba(0,0,0,.14); font-family:Inter, sans-serif; }
+      .win .tb { height:40px; display:flex; align-items:center; gap:8px; padding:0 14px; font-size:18px; font-weight:800; border-bottom:1px solid #eee; }
+      .win .tb i { width:10px; height:10px; border-radius:50%; background:#ddd; display:inline-block; }
+      .win .tb img { width:22px; height:22px; margin-left:6px; }
+      .win .bd { position:absolute; left:0; right:0; top:40px; bottom:0; }
+      /* dark theme */
+      html, body, #root { background:#0b0b0d !important; }
+      #root { color:#f4f4f4; }
+      .scene { background:#0b0b0d !important; }
+      .card, .tile, .stat, .toast, .win, .wa-m, .lower, .chip { color:#111; }
+      .chip.ink { background:#fff; color:#111; } .chip.y { color:#fff; }
+      .sub { color:#a3a3a3; } .card .sub, .stat small, .toast { color:#777; }
+      .grid, .grid.d { background-image:linear-gradient(rgba(255,255,255,.045) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.045) 2px, transparent 2px) !important; }
+      .glow { opacity:.18 !important; }
+      .mark::after { background:rgba(226,85,63,.55) !important; }
+      .vid { border-color:#26262b; }
+      #cap { background:#1d1d22 !important; }
+      #capbox { position:absolute; left:60px; right:60px; top:1430px; display:flex; justify-content:center; z-index:900; pointer-events:none; }
+      #cap { max-width:940px; text-align:center; font-weight:800; font-size:56px; line-height:1.12; letter-spacing:-0.02em; color:#fff; padding:16px 34px 20px; border-radius:30px; background:var(--ink); transform-origin:50% 60%; }
+      #cap .k { color:#ff8a72; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="114.5" data-width="1080" data-height="1920">
+
+      <!-- A · Dukens on camera; three AI videos pop around him on each "videyo sa" (0 – 5.15) -->
+      <div id="a" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:#000">
+        <div id="a-cam" class="cam"></div>
+        <div id="a1" class="vid" style="left:50px;top:200px;width:660px;height:371px"><video id="a1v" class="clip" data-start="0.25" data-duration="5.0" data-track-index="3" muted playsinline src="assets/video/stickman-1.mp4"></video><div class="chip y h" style="position:absolute;left:16px;top:16px;font-size:32px;padding:10px 22px">Stickman</div></div>
+        <div id="a2" class="vid" style="left:370px;top:540px;width:660px;height:371px"><video id="a2v" class="clip" data-start="0.85" data-duration="4.4" data-track-index="4" muted playsinline src="assets/video/c-feyton.mp4"></video><div class="chip y h" style="position:absolute;left:16px;top:16px;font-size:32px;padding:10px 22px">Feyton</div></div>
+        <div id="a3" class="vid" style="left:80px;top:760px;width:300px;height:533px"><video id="a3v" class="clip" data-start="1.6" data-duration="3.6" data-track-index="5" muted playsinline src="assets/video/c-motion.mp4"></video><div class="chip y h" style="position:absolute;left:12px;top:12px;font-size:26px;padding:8px 18px">Motion</div></div>
+        <div id="a-ia" style="position:absolute;left:430px;top:1060px"><span class="chip y h" style="font-size:72px;padding:20px 44px;border-radius:30px"><img src="assets/img/claude-w.svg" style="width:72px" alt="">100% IA</span></div>
+        <div id="a-fl" class="flash"></div>
+      </div>
+
+      <!-- B · "E y ap fè dega sou YouTube" (5.1 – 7.6) -->
+      <div id="b" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div id="b-rays" style="position:absolute;left:-460px;top:-260px;width:2000px;height:2000px;background:repeating-conic-gradient(from 0deg at 50% 50%, #1a1416 0deg 9deg, #0b0b0d 9deg 20deg)"></div>
+        <div id="b-cam" class="cam">
+          <svg id="b-burst" class="burst" viewBox="-300 -300 600 600" style="left:240px;top:300px"><g>__BURST__</g></svg>
+          <div id="b-yt" style="position:absolute;left:310px;top:430px;width:460px;height:330px;border-radius:90px;background:var(--yt);display:grid;place-items:center;box-shadow:0 40px 90px rgba(255,0,51,.35)"><div style="width:0;height:0;border-left:130px solid #fff;border-top:80px solid transparent;border-bottom:80px solid transparent;margin-left:30px"></div></div>
+          <div id="b-t" class="c h" style="top:880px;font-size:120px">Y ap fè <span class="mark">dega</span></div>
+          <div id="b-v1" class="stat" style="left:60px;top:300px">8,2 M vi</div>
+          <div id="b-v2" class="stat" style="left:740px;top:260px">4,8 M vi</div>
+          <div id="b-v3" class="stat" style="left:720px;top:760px">Stickman</div>
+          <div id="b-v4" class="stat" style="left:70px;top:740px">Feyton</div>
+        </div>
+      </div>
+
+      <!-- C · real proof: the channel, 8 216 087 views, under a month (7.55 – 11.7) -->
+      <div id="cc" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:-300px;top:900px;background:#fff1c9"></div>
+        <div id="c-cam" class="cam">
+          <div id="c-t" class="c sub" style="top:200px;font-size:52px">Chèn sa poko gen <span style="color:#fff">yon mwa</span></div>
+          <div id="c-card" class="card" style="left:70px;top:320px;width:940px;height:470px"><img src="assets/img/proof-dayone.jpg" alt="8 216 087 vues" style="width:100%;height:100%;object-fit:cover"></div>
+          <div id="c-ring" class="ring" style="left:120px;top:640px;width:560px;height:130px"></div>
+          <div id="c-n" class="c h num" style="top:890px;font-size:150px">0</div>
+          <div id="c-vi" class="c" style="top:1110px"><span class="chip ink" style="font-size:56px;padding:20px 44px">vi o total</span></div>
+        </div>
+      </div>
+
+      <!-- D · "grenn videyo sa sèlman" 4.8 M in under 4 weeks (11.65 – 17.1) -->
+      <div id="d" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:-300px;top:900px;background:#d8f1ff"></div>
+        <div id="d-cam" class="cam">
+          <div id="d-t" class="c h" style="top:170px;font-size:84px">Yon <span class="mark">sèl videyo</span></div>
+          <div id="d-card" class="card" style="left:70px;top:320px;width:940px;height:788px"><img src="assets/img/discipline.jpg" alt="DISCIPLINE: 4,8 M vi" style="width:100%;height:100%;object-fit:cover"></div>
+          <div id="d-n" class="stat num h" style="left:560px;top:950px;font-size:110px;padding:22px 40px;background:var(--accent);border-color:var(--accent)">0</div>
+          <div id="d-wk" style="position:absolute;left:110px;top:1180px;display:flex;gap:18px">
+            <div id="d-w1" class="chip ink" style="font-size:40px">Semèn 1</div><div id="d-w2" class="chip ink" style="font-size:40px">2</div><div id="d-w3" class="chip ink" style="font-size:40px">3</div><div id="d-w4" class="chip" style="font-size:40px;border:4px dashed #bbb;background:#fff">4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- E · "Poutan": tools are not enough, you need the skill (17.05 – 23.45) -->
+      <div id="e" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:var(--cbg)">
+        <div class="glow" style="left:-160px;top:-300px;background:#f6d5c6"></div>
+        <div id="e-cam" class="cam">
+          <div id="e-t" class="c h" style="top:200px;font-size:140px">Poutan…</div>
+          <div id="e-l" class="card" style="left:70px;top:430px;width:450px;height:560px;padding:40px;text-align:center">
+            <div class="sub" style="font-size:40px">Bon zouti</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px 10px;margin-top:34px;justify-items:center"><div style="text-align:center"><div style="width:96px;height:96px;margin:0 auto;border-radius:22px;background:#f4f4f4;border:2px solid #e5e5e5;display:grid;place-items:center;font-size:46px">🧩</div><div style="font-size:26px;font-weight:800;margin-top:10px">Skill</div></div><div style="text-align:center"><div style="width:96px;height:96px;margin:0 auto;border-radius:22px;background:#f4f4f4;border:2px solid #e5e5e5;display:grid;place-items:center;font-size:46px">📄</div><div style="font-size:26px;font-weight:800;margin-top:10px">Gid PDF</div></div><div style="text-align:center"><div style="width:96px;height:96px;margin:0 auto;border-radius:22px;background:#f4f4f4;border:2px solid #e5e5e5;display:grid;place-items:center;font-size:46px">💬</div><div style="font-size:26px;font-weight:800;margin-top:10px">Pwonmt</div></div><div style="text-align:center"><div style="width:96px;height:96px;margin:0 auto;border-radius:22px;background:#f4f4f4;border:2px solid #e5e5e5;display:grid;place-items:center;font-size:46px">🎬</div><div style="font-size:26px;font-weight:800;margin-top:10px">Modèl</div></div></div>
+          </div>
+          <div id="e-plus" class="c h" style="top:620px;font-size:120px;color:var(--mute)">+</div>
+          <div id="e-r" class="card" style="left:560px;top:430px;width:450px;height:560px;padding:40px;text-align:center;background:var(--ink);border-color:var(--ink);color:#fff">
+            <div style="font-size:40px;font-weight:700;color:#bbb">Konpetans</div>
+            <svg width="230" height="230" viewBox="0 0 24 24" style="margin-top:40px;stroke:#e2553f;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0012 3z"/></svg>
+            <div style="font-size:40px;font-weight:800;margin-top:20px">Konn <span style="color:var(--accent)">kòman</span></div>
+          </div>
+          <div id="e-x" class="c h" style="top:1120px;font-size:96px">Fò w konn <span class="mark">kòman</span></div>
+        </div>
+      </div>
+
+      <!-- F · Dukens again: "se sa k fè, n òganize yon gwo atelye" (23.4 – 28.2) -->
+      <div id="f" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:#000">
+        <div id="f-cam" class="cam">
+          <div id="f-spot" style="position:absolute;left:-300px;top:-200px;width:1680px;height:1500px;background:radial-gradient(closest-side, rgba(255,236,220,.18), rgba(0,0,0,0));opacity:0"></div>
+          <svg id="f-beam" viewBox="0 0 1080 1920" style="position:absolute;inset:0;width:1080px;height:1920px;opacity:0"><polygon points="540,1500 236,250 852,250" fill="rgba(255,240,225,.05)"/></svg>
+          <div id="f-scr" style="position:absolute;left:228px;top:240px;width:624px;height:351px;border-radius:16px;overflow:hidden;background:#111;border:8px solid #2b2b30;box-shadow:0 0 140px rgba(226,85,63,.28)"><video id="f-sv" class="clip" data-start="23.4" data-duration="4.85" data-track-index="6" muted playsinline src="assets/video/stickman-1.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video><div style="position:absolute;left:14px;top:14px;padding:6px 16px;border-radius:999px;background:#e2553f;color:#fff;font-weight:800;font-size:22px">LIV · Leson 1</div></div>
+          <svg id="f-pres" viewBox="0 0 200 420" style="position:absolute;left:40px;top:430px;width:200px;height:420px"><circle cx="100" cy="60" r="38" fill="#e8e4df"/><path d="M48 420 L56 170 Q100 120 144 170 L152 420 Z" fill="#e8e4df"/><g id="f-arm"><path d="M130 175 L196 120" stroke="#e8e4df" stroke-width="22" stroke-linecap="round"/></g></svg>
+          <div id="f-stage" style="position:absolute;left:0;right:0;top:850px;height:4px;background:linear-gradient(90deg,transparent,#3a3a40,transparent)"></div>
+          <svg id="f-room" viewBox="0 0 1080 1920" style="position:absolute;inset:0;width:1080px;height:1920px">__CLASS__</svg>
+          <div id="f-ban" class="c" style="top:130px"><span class="chip y h" style="font-size:42px;padding:12px 34px">ATELYE AI · an pèsòn</span></div>
+        </div>
+        <div id="f-fl" class="flash"></div>
+      </div>
+
+      <!-- G · date, place, hours (28.15 – 34.3) -->
+      <div id="g" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:200px;top:-500px;background:#fff1c9"></div>
+        <div id="g-cam" class="cam">
+          <div id="g-cal" class="card" style="left:110px;top:220px;width:500px;height:560px;border-radius:52px">
+            <div style="height:140px;background:var(--red);color:#fff;display:grid;place-items:center" class="h"><span style="font-size:70px">DESANM</span></div>
+            <div class="h num" style="text-align:center;font-size:300px;margin-top:10px">5</div>
+            <div class="h" style="text-align:center;font-size:56px;color:var(--mute);margin-top:-4px">SAMDI</div>
+          </div>
+          <div id="g-clock" class="tile" style="left:660px;top:260px;width:320px;height:320px;border-radius:50%">
+            <svg width="260" height="260" viewBox="-130 -130 260 260"><circle r="118" fill="none" stroke="#0f0f0f" stroke-width="10"/><g id="g-hh"><line x1="0" y1="0" x2="0" y2="-60" stroke="#0f0f0f" stroke-width="14" stroke-linecap="round"/></g><g id="g-mh"><line x1="0" y1="0" x2="0" y2="-92" stroke="#e2553f" stroke-width="10" stroke-linecap="round"/></g><circle r="10" fill="#0f0f0f"/></svg>
+          </div>
+          <div id="g-hrs" style="position:absolute;left:640px;top:620px;width:360px;text-align:center" class="h"><span style="font-size:64px">10è → 4è</span></div>
+          <div id="g-map" class="card" style="left:110px;top:840px;width:860px;height:380px;background:#eef3e8;border-color:#dfe7d6">
+            <svg width="860" height="380" viewBox="0 0 860 380"><path d="M-10 260 C 200 220 300 300 520 250 S 800 180 880 210" stroke="#fff" stroke-width="34" fill="none"/><path d="M300 -10 C 320 120 280 220 340 400" stroke="#fff" stroke-width="26" fill="none"/><path d="M620 -10 L 600 400" stroke="#fff" stroke-width="20" fill="none"/><rect x="380" y="70" width="170" height="110" rx="14" fill="#d7e3cc"/><rect x="80" y="40" width="150" height="120" rx="14" fill="#d7e3cc"/><rect x="660" y="260" width="160" height="90" rx="14" fill="#d7e3cc"/></svg>
+            <div id="g-pin" style="position:absolute;left:400px;top:40px"><svg width="110" height="150" viewBox="0 0 24 32"><path d="M12 31s10-11 10-19A10 10 0 002 12c0 8 10 19 10 19z" fill="#ff3b30"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg></div>
+            <div id="g-place" class="chip ink" style="position:absolute;left:250px;top:230px;font-size:44px">Lise Anacaona, Leyogàn</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- H · "tout kalite videyo ak IA": a wall of AI videos sliding (34.25 – 38.85) -->
+      <div id="hh" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:var(--ink)">
+        <div id="h-cam" class="cam">
+          <div id="h-r1" style="position:absolute;left:-200px;top:180px;display:flex;gap:24px">__ROW1__</div>
+          <div id="h-r2" style="position:absolute;left:-900px;top:560px;display:flex;gap:24px">__ROW2__</div>
+          <div id="h-r3" style="position:absolute;left:-200px;top:940px;display:flex;gap:24px">__ROW1__</div>
+          <div id="h-t" class="c" style="top:60px"><span class="chip y h" style="font-size:56px;padding:18px 40px;border-radius:26px">Tout kalite videyo ak IA</span></div>
+          <div id="h-p" class="c" style="top:800px;display:none"><span class="chip" style="font-size:50px;background:#fff">Enfòmasyon + pratik</span></div>
+        </div>
+      </div>
+
+      <!-- I · feyton, stickman, motion design (38.8 – 43.5) -->
+      <div id="ii" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:-300px;top:900px;background:#fff1c9"></div>
+        <div id="i-cam" class="cam">
+          <div id="i1" class="vid" style="left:90px;top:170px;width:900px;height:380px"><video id="i1v" class="clip" data-start="38.8" data-duration="4.75" data-track-index="7" muted playsinline src="assets/video/c-feyton.mp4"></video><div class="chip y h" style="position:absolute;left:24px;top:24px;font-size:44px">Feyton</div></div>
+          <div id="i2" class="vid" style="left:90px;top:580px;width:900px;height:380px"><video id="i2v" class="clip" data-start="40.0" data-duration="3.55" data-media-start="2.5" data-track-index="8" muted playsinline src="assets/video/stickman-2.mp4"></video><div class="chip y h" style="position:absolute;left:24px;top:24px;font-size:44px">Stickman</div></div>
+          <div id="i3" class="vid" style="left:90px;top:990px;width:900px;height:380px"><video id="i3v" class="clip" data-start="41.5" data-duration="2.05" data-track-index="9" muted playsinline src="assets/video/c-motion.mp4"></video><div class="chip y h" style="position:absolute;left:24px;top:24px;font-size:44px">Motion design</div></div>
+        </div>
+      </div>
+
+      <!-- J1 · master Facebook Ads, a skill that matters (43.45 – 48.15) -->
+      <div id="j1" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:var(--fb)">
+        <div id="j1-cam" class="cam">
+          <div id="j1-f" style="position:absolute;left:340px;top:260px;width:400px;height:400px;border-radius:100px;background:#fff;display:grid;place-items:center;box-shadow:0 40px 90px rgba(0,0,0,.25)"><span style="font-family:Arial, sans-serif;font-weight:900;font-size:330px;color:var(--fb);line-height:1;margin-top:60px">f</span></div>
+          <div id="j1-t" class="c h" style="top:740px;font-size:120px;color:#fff">Facebook Ads</div>
+          <div id="j1-bar" style="position:absolute;left:140px;top:920px;width:800px;height:70px;border-radius:35px;background:rgba(255,255,255,.25);overflow:hidden"><div id="j1-fill" style="width:100%;height:100%;background:var(--accent);border-radius:35px;transform-origin:0 50%"></div></div>
+          <div id="j1-s" class="c" style="top:1030px"><span class="chip y h" style="font-size:56px;padding:20px 44px">Konpetans kle</span></div>
+        </div>
+      </div>
+
+      <!-- J2 · his video as a Facebook ad reaching hundreds of thousands, even a million (48.1 – 57.95) -->
+      <div id="j2" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:-300px;top:900px;background:#dce9ff"></div>
+        <div id="j2-cam" class="cam">
+          <svg id="j2-net" viewBox="0 0 1080 1920" style="position:absolute;inset:0;width:1080px;height:1920px">__NET__</svg>
+          <div id="j2-ad" class="card" style="left:230px;top:180px;width:620px;height:1060px;border-radius:44px">
+            <div style="display:flex;align-items:center;gap:16px;padding:22px 26px 12px"><img src="assets/img/logo.png" style="width:66px;height:66px;border-radius:50%;background:var(--soft);object-fit:contain" alt=""><div><b style="font-size:28px">Atelye AI</b><div style="font-size:22px;color:var(--mute)">Sponsorize</div></div></div>
+            <div style="padding:0 26px 14px;font-size:26px;line-height:1.3">Aprann kreye videyo ak IA. Samdi 5 desanm, Leyogàn.</div>
+            <div style="position:relative;height:740px;background:#000;overflow:hidden"><video id="j2-v" class="clip" data-start="48.1" data-duration="9.9" data-track-index="10" muted playsinline src="assets/video/face2.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video></div>
+            <div style="display:flex;align-items:center;padding:18px 26px;background:var(--soft)"><b style="font-size:28px">Rezève plas ou</b><div id="j2-cta" style="margin-left:auto;padding:12px 26px;border-radius:14px;background:var(--fb);color:#fff;font-weight:800;font-size:26px">Enskri</div></div>
+            <div style="padding:14px 26px;font-size:26px;color:var(--mute)"><b id="j2-like" class="num" style="color:var(--ink)">0</b> reyaksyon</div>
+          </div>
+          <div id="j2-reach" class="stat" style="left:40px;top:1130px;min-width:520px;padding:26px 36px"><small>Moun piblisite a rive jwenn</small><span id="j2-n" class="num h" style="font-size:96px">0</span></div>
+          <div id="j2-mil" class="stamp" style="left:220px;top:620px;border-color:var(--fb);color:var(--fb)">1 MILYON</div>
+          <div id="j2-bud" class="chip y" style="position:absolute;left:640px;top:1180px;font-size:40px">Ti bidjè</div>
+          <div id="j2-r1" style="position:absolute;left:820px;top:1000px;font-size:80px">👍</div>
+          <div id="j2-r2" style="position:absolute;left:880px;top:1000px;font-size:72px">❤️</div>
+          <div id="j2-r3" style="position:absolute;left:760px;top:1000px;font-size:68px">😮</div>
+        </div>
+      </div>
+
+      <!-- K1 · what a digital product is: phone, computer, cloud (57.9 – 66.4) -->
+      <div id="k1" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:200px;top:-500px;background:#efe2ff"></div>
+        <div id="k1-cam" class="cam">
+          <div id="k1-t" class="c h" style="top:170px;font-size:104px">Pwodwi <span class="mark">dijital</span></div>
+          <div id="k1-s" class="c sub" style="top:310px;font-size:46px">Li egziste sèlman an vityèl</div>
+          <!-- phone with an app -->
+          <div id="k1-ph" style="position:absolute;left:70px;top:460px;width:300px;height:600px;border-radius:50px;background:#111;padding:12px;box-shadow:0 30px 70px rgba(0,0,0,.25)">
+            <div style="width:100%;height:100%;border-radius:40px;background:#fff;overflow:hidden;padding:22px 18px">
+              <div style="height:120px;border-radius:22px;background:linear-gradient(135deg,#6d4bff,#d97757);color:#fff;font-weight:900;font-size:34px;padding:18px">Aplikasyon w</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px"><div style="height:90px;border-radius:18px;background:#ffe9a8"></div><div style="height:90px;border-radius:18px;background:#d8f1ff"></div><div style="height:90px;border-radius:18px;background:#d5f7e2"></div><div style="height:90px;border-radius:18px;background:#ffe1e1"></div></div>
+              <div style="height:60px;border-radius:30px;background:var(--ink);margin-top:22px"></div>
+            </div>
+          </div>
+          <!-- laptop with an online course: a silhouette follows the lesson -->
+          <div id="k1-lap" style="position:absolute;left:390px;top:520px;width:620px">
+            <div style="width:620px;height:390px;border-radius:24px 24px 0 0;background:#111;padding:14px">
+              <div style="position:relative;width:100%;height:100%;border-radius:12px;background:#fff;overflow:hidden">
+                <div style="position:absolute;left:0;right:0;top:0;height:46px;background:var(--soft);display:flex;align-items:center;padding:0 16px;font-weight:800;font-size:22px">Kou an liy · Leson 3</div>
+                <div style="position:absolute;left:16px;top:60px;width:360px;height:220px;border-radius:12px;background:var(--ink);display:grid;place-items:center"><div style="width:0;height:0;border-left:44px solid #fff;border-top:27px solid transparent;border-bottom:27px solid transparent;margin-left:10px"></div></div>
+                <div style="position:absolute;left:16px;top:296px;width:360px;height:14px;border-radius:7px;background:#e5e5e5"><div id="k1-prog" style="width:100%;height:100%;border-radius:7px;background:var(--accent);transform-origin:0 50%"></div></div>
+                <div style="position:absolute;left:396px;top:60px;width:170px"><div style="height:24px;border-radius:6px;background:#e5e5e5;margin-bottom:14px"></div><div style="height:24px;border-radius:6px;background:#2f9e44;margin-bottom:14px"></div><div style="height:24px;border-radius:6px;background:#2f9e44;margin-bottom:14px"></div><div style="height:24px;border-radius:6px;background:#e5e5e5"></div></div>
+              </div>
+            </div>
+            <div style="width:700px;height:26px;margin-left:-40px;border-radius:0 0 30px 30px;background:#cfcfcf"></div>
+          </div>
+          <svg id="k1-man" viewBox="0 0 300 300" style="position:absolute;left:600px;top:820px;width:300px;height:300px"><circle cx="150" cy="70" r="46" fill="#0f0f0f"/><path d="M60 300 C60 180 100 140 150 140 C200 140 240 180 240 300 Z" fill="#0f0f0f"/></svg>
+          <!-- cloud -->
+          <div id="k1-cl" style="position:absolute;left:330px;top:1130px;width:420px;height:220px"><svg viewBox="0 0 420 220" width="420" height="220"><path d="M110 200 C40 200 20 140 70 115 C60 60 130 40 165 75 C190 20 290 25 300 95 C370 90 400 150 360 190 C350 200 340 200 330 200 Z" fill="#fff" stroke="#0f0f0f" stroke-width="10" stroke-linejoin="round"/><path d="M210 170 V105 M180 132 L210 102 L240 132" stroke="#e2553f" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- K2 · made once, sold tens of thousands of times (66.35 – 75.3) -->
+      <div id="k2" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:var(--ink)">
+        <div id="k2-cam" class="cam">
+          <div id="k2-crowd" style="position:absolute;left:40px;top:880px;width:1000px;display:flex;flex-wrap:wrap;gap:14px 10px;justify-content:center">__CROWD__</div>
+          <div id="k2-prod" style="position:absolute;left:90px;top:250px;width:340px;height:440px;border-radius:12px 30px 30px 12px;background:#fff;box-shadow:-12px 0 0 #ddd inset,0 30px 80px rgba(0,0,0,.5);padding:36px 30px 30px 44px;color:#111">
+            <div style="font-size:22px;font-weight:800;letter-spacing:.14em;color:var(--claude)">KOU · EBOOK · APP</div>
+            <div class="h" style="font-size:66px;margin-top:22px">Pwodwi<br>ou</div>
+            <div style="position:absolute;left:44px;right:30px;bottom:36px;height:10px;border-radius:5px;background:var(--accent)"></div>
+          </div>
+          <div id="k2-once" class="chip y h" style="position:absolute;left:60px;top:180px;font-size:52px">Fè l 1 fwa</div>
+          <div id="k2-x" class="c h num" style="top:720px;font-size:150px;color:#fff">×<span id="k2-n">1</span></div>
+          <div id="k2-t1" class="toast" style="left:470px;top:250px;width:560px"><div class="ib">__BELL__</div><div><b>Nouvo vant</b>Kou an liy</div></div>
+          <div id="k2-t2" class="toast" style="left:470px;top:400px;width:560px"><div class="ib">__BELL__</div><div><b>Nouvo vant</b>Ebook</div></div>
+          <div id="k2-t3" class="toast" style="left:470px;top:550px;width:560px"><div class="ib">__BELL__</div><div><b>Nouvo vant</b>Aplikasyon</div></div>
+          <div id="k2-no" class="c" style="top:1265px"><span class="chip y h" style="font-size:52px;padding:20px 44px">San ou pa refè l</span></div>
+        </div>
+      </div>
+
+      <!-- L · tools and apps ready, free (75.25 – 82.6) -->
+      <div id="l" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:200px;top:-500px;background:#fff1c9"></div>
+        <div id="l-cam" class="cam">
+          <div id="l-t" class="c h" style="top:170px;font-size:84px">Skill ak resous <span class="mark">pare</span></div>
+          <div id="l-ap" class="c" style="top:200px;display:none"><span class="chip ink" style="font-size:40px">+ aplikasyon ak skill Atelye AI</span></div>
+          <div id="l1" class="win" style="left:90px;top:330px"><div class="tb" style=""><i></i><i></i><i></i><span style="margin-left:6px;font-size:20px">🧩</span>studio-videyo.skill</div><div class="bd" style="background:#faf9f5"><div style="position:absolute;left:16px;top:16px;width:120px;height:150px;border-radius:14px;background:#fff;border:2px solid #e8e2d6;box-shadow:0 8px 20px rgba(0,0,0,.08);display:grid;place-items:center"><img src="assets/img/logos/claude.svg" style="width:60px"><span style="position:absolute;bottom:10px;font-size:13px;font-weight:900;color:#d97757">.SKILL</span></div><div style="position:absolute;left:152px;top:20px;right:14px;font-size:16px;line-height:1.5"><b style="font-size:20px">Skill videyo</b><br>✓ Ekri script la<br>✓ Mete vwa ak mizik<br>✓ Monte videyo a</div><div style="position:absolute;left:16px;right:16px;bottom:14px;padding:9px 12px;border-radius:12px;background:#e8f6ec;color:#1f7a3f;font-size:15px;font-weight:800">● Skill aktive nan Claude</div></div></div>
+          <div id="l2" class="win" style="left:540px;top:330px"><div class="tb" style=""><i></i><i></i><i></i><span style="margin-left:6px;font-size:20px">🧩</span>facebook-ads.skill</div><div class="bd" style="background:#faf9f5"><div style="position:absolute;left:16px;top:16px;width:120px;height:150px;border-radius:14px;background:#fff;border:2px solid #e8e2d6;box-shadow:0 8px 20px rgba(0,0,0,.08);display:grid;place-items:center"><img src="assets/img/logos/meta.svg" style="width:60px"><span style="position:absolute;bottom:10px;font-size:13px;font-weight:900;color:#d97757">.SKILL</span></div><div style="position:absolute;left:152px;top:20px;right:14px;font-size:16px;line-height:1.5"><b style="font-size:20px">Skill piblisite</b><br>✓ Chwazi odyans lan<br>✓ Ekri anons lan<br>✓ Fikse bidjè a</div><div style="position:absolute;left:16px;right:16px;bottom:14px;padding:9px 12px;border-radius:12px;background:#e8f6ec;color:#1f7a3f;font-size:15px;font-weight:800">● Skill aktive nan Claude</div></div></div>
+          <div id="l3" class="win" style="left:90px;top:670px"><div class="tb" style=""><i></i><i></i><i></i><span style="margin-left:6px;font-size:20px">📁</span>Resous / Gid</div><div class="bd"><div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid #f0f0f0"><span style="position:relative;width:34px;height:42px;border-radius:5px;background:#f4f4f4;border:1.5px solid #ddd;flex:none"><span style="position:absolute;left:-6px;bottom:4px;padding:1px 4px;border-radius:4px;background:#e5484d;color:#fff;font-size:10px;font-weight:900">PDF</span></span><span style="flex:1"><b style="font-size:17px">Gid Facebook Ads</b><br><span style="font-size:13px;color:#888">24 paj</span></span></div><div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid #f0f0f0"><span style="position:relative;width:34px;height:42px;border-radius:5px;background:#f4f4f4;border:1.5px solid #ddd;flex:none"><span style="position:absolute;left:-6px;bottom:4px;padding:1px 4px;border-radius:4px;background:#e5484d;color:#fff;font-size:10px;font-weight:900">PDF</span></span><span style="flex:1"><b style="font-size:17px">Kreye pwodwi dijital</b><br><span style="font-size:13px;color:#888">18 paj</span></span></div><div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid #f0f0f0"><span style="position:relative;width:34px;height:42px;border-radius:5px;background:#f4f4f4;border:1.5px solid #ddd;flex:none"><span style="position:absolute;left:-6px;bottom:4px;padding:1px 4px;border-radius:4px;background:#2f6fed;color:#fff;font-size:10px;font-weight:900">DOC</span></span><span style="flex:1"><b style="font-size:17px">Modèl script videyo</b><br><span style="font-size:13px;color:#888">5 modèl</span></span></div><div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid #f0f0f0"><span style="position:relative;width:34px;height:42px;border-radius:5px;background:#f4f4f4;border:1.5px solid #ddd;flex:none"><span style="position:absolute;left:-6px;bottom:4px;padding:1px 4px;border-radius:4px;background:#e5484d;color:#fff;font-size:10px;font-weight:900">PDF</span></span><span style="flex:1"><b style="font-size:17px">Kat debi: etap pa etap</b><br><span style="font-size:13px;color:#888">6 paj</span></span></div></div></div>
+          <div id="l4" class="win" style="left:540px;top:670px"><div class="tb"><i></i><i></i><i></i><img src="assets/img/logo.png" style="width:24px;height:24px;margin-left:6px">Aplikasyon Atelye AI</div><div class="bd" style="background:#f4f4f4"><div style="position:absolute;left:14px;top:10px;width:200px;height:240px;border-radius:16px;overflow:hidden;border:4px solid #111"><img src="assets/img/app-kou.png" style="width:100%;object-fit:cover;object-position:top"></div><div style="position:absolute;left:228px;top:16px;right:12px;font-size:16px;line-height:1.55"><b style="font-size:19px">Fèt pou ou</b><br>✓ Kou yo an videyo<br>✓ Leson pa leson<br>✓ Swiv pwogrè w<br>✓ Sèvi l sou telefòn</div></div></div>
+          <div id="l5" class="win" style="left:90px;top:1010px"><div class="tb" style="color:#fff;border-color:#2a2a2a;background:#111"><i></i><i></i><i></i><span style="margin-left:6px;font-size:20px">🎬</span>Modèl videyo</div><div class="bd" style="background:#0b0b0c;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px"><div style="position:relative;border-radius:10px;overflow:hidden"><img src="assets/img/n4.jpg" style="width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:6px;bottom:6px;padding:2px 8px;border-radius:8px;background:#fff;font-size:12px;font-weight:800">Feyton</span></div><div style="position:relative;border-radius:10px;overflow:hidden"><img src="assets/img/stickman-3.jpg" style="width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:6px;bottom:6px;padding:2px 8px;border-radius:8px;background:#fff;font-size:12px;font-weight:800">Stickman</span></div><div style="position:relative;border-radius:10px;overflow:hidden"><img src="assets/img/n7.jpg" style="width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:6px;bottom:6px;padding:2px 8px;border-radius:8px;background:#fff;font-size:12px;font-weight:800">Motion</span></div></div></div>
+          <div id="l6" class="win" style="left:540px;top:1010px"><div class="tb" style=""><i></i><i></i><i></i><span style="margin-left:6px;font-size:20px">🎵</span>Mizik ak efè son</div><div class="bd"><div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #f0f0f0"><span style="width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:12px">▶</span><b style="font-size:16px;width:150px">Mizik feyton</b><span style="display:flex;gap:2px;align-items:center"><i style="display:inline-block;width:4px;height:8px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:14px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:20px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:12px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:18px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:24px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:10px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:16px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:22px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:12px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:8px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:14px;border-radius:2px;background:#d97757"></i></span></div><div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #f0f0f0"><span style="width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:12px">▶</span><b style="font-size:16px;width:150px">Whoosh</b><span style="display:flex;gap:2px;align-items:center"><i style="display:inline-block;width:4px;height:4px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:8px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:16px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:24px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:20px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:12px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:6px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:3px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i></span></div><div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #f0f0f0"><span style="width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:12px">▶</span><b style="font-size:16px;width:150px">Pop / klik</b><span style="display:flex;gap:2px;align-items:center"><i style="display:inline-block;width:4px;height:22px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:10px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:4px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:2px;border-radius:2px;background:#d97757"></i></span></div><div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #f0f0f0"><span style="width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:12px">▶</span><b style="font-size:16px;width:150px">Mizik piblisite</b><span style="display:flex;gap:2px;align-items:center"><i style="display:inline-block;width:4px;height:12px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:18px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:10px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:22px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:14px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:20px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:8px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:16px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:24px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:12px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:18px;border-radius:2px;background:#d97757"></i><i style="display:inline-block;width:4px;height:10px;border-radius:2px;background:#d97757"></i></span></div></div></div>
+          <div id="l-g" class="stamp" style="left:260px;top:560px;border-color:#2f9e44;color:#2f9e44">GRATIS</div>
+        </div>
+      </div>
+
+      <!-- M · no debit card? we get you one, free (82.55 – 87.35) -->
+      <div id="m" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:-300px;top:900px;background:#fff1c9"></div>
+        <div id="m-cam" class="cam">
+          <div id="m-q" class="c h" style="top:200px;font-size:96px">Pa gen <span class="mark">kat debi</span>?</div>
+          <div id="m-card" style="position:absolute;left:170px;top:420px;width:740px;height:460px;border-radius:44px;background:linear-gradient(135deg,#1b1b22,#3a3a48);color:#fff;box-shadow:0 40px 90px rgba(0,0,0,.3);padding:50px">
+            <div style="width:110px;height:84px;border-radius:16px;background:var(--accent)"></div>
+            <div class="num" style="font-size:52px;font-weight:700;letter-spacing:.12em;margin-top:70px">•••• •••• •••• 2026</div>
+            <div style="display:flex;justify-content:space-between;margin-top:44px;font-size:32px;font-weight:700"><span>OU MENM</span><span style="color:var(--accent)">DEBI</span></div>
+          </div>
+          <div id="m-g" class="stamp" style="left:270px;top:800px;border-color:#2f9e44;color:#2f9e44">GRATIS</div>
+        </div>
+      </div>
+
+      <!-- N · 7 days of Claude Pro, not one gourde (87.3 – 95.5) -->
+      <div id="n" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:var(--claude)">
+        <div id="n-rays" style="position:absolute;left:-460px;top:-460px;width:2000px;height:2000px;background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,.12) 0deg 9deg, transparent 9deg 22deg)"></div>
+        <div id="n-cam" class="cam">
+          <div id="n-gift" class="c" style="top:200px"><span class="chip" style="font-size:44px;background:#fff">Kado</span></div>
+          <div id="n-logo" class="tile" style="left:380px;top:330px;width:320px;height:320px;border:none"><img id="n-sp" src="assets/img/claude-o.svg" style="width:200px" alt=""></div>
+          <div id="n-7" class="c h" style="top:720px;font-size:230px;color:#fff">7 JOU</div>
+          <div id="n-pro" class="c h" style="top:960px;font-size:90px;color:#fff">Claude Pro</div>
+          <div id="n-0" class="c" style="top:1110px"><span class="chip ink h" style="font-size:66px;padding:22px 52px;border-radius:30px">0 goud</span></div>
+        </div>
+      </div>
+
+      <!-- O · WhatsApp group after the workshop (95.45 – 102.3) -->
+      <div id="o" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div class="glow" style="left:-300px;top:900px;background:#d5f7e2"></div>
+        <div id="o-cam" class="cam">
+          <div id="o-t" class="c h" style="top:150px;font-size:84px">Apre atelye a,<br><span class="mark">n ap toujou la</span></div>
+          <div id="o-ph" class="card" style="left:140px;top:400px;width:800px;height:900px;background:#efe7dd;border-radius:54px">
+            <div style="height:170px;background:#075e54;color:#fff;display:flex;align-items:center;gap:22px;padding:0 34px"><div style="width:96px;height:96px;border-radius:50%;background:#fff;display:grid;place-items:center;overflow:hidden"><img src="assets/img/logo.png" style="width:80px" alt=""></div><div><div style="font-size:40px;font-weight:800">Atelye AI · Kominote</div><div id="o-mem" style="font-size:28px;opacity:.85">Manm: 1</div></div></div>
+            <div id="o-m1" class="wa-m me" style="right:30px;top:210px">Mwen bloke sou piblisite a</div>
+            <div id="o-m2" class="wa-m" style="left:30px;top:350px"><b>Atelye AI</b>N ap ede w. Voye yon kapti ban nou.</div>
+            <div id="o-m3" class="wa-m me" style="right:30px;top:540px">Li mache! Mèsi anpil</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- P · Dukens to close: limited seats, WhatsApp (102.25 – 112.6) -->
+      <div id="p" class="scene" data-layout-allow-overflow data-layout-allow-overlap style="background:#000">
+        <div id="p-cam" class="cam"><video id="p-v" class="clip" data-start="102.25" data-duration="10.4" data-track-index="11" muted playsinline src="assets/video/face2.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video></div>
+        <div id="p-lim" class="stamp" style="left:150px;top:220px">PLAS LIMITE</div>
+        <div id="p-wa" class="lower" style="top:1090px;background:var(--wa);color:#fff"><img src="assets/img/si-whatsapp.svg" style="width:110px;filter:brightness(0) invert(1)" alt=""><div><div style="font-size:34px;font-weight:700;opacity:.9">Ekri nou sou WhatsApp</div><div class="h num" style="font-size:84px">+509 3864 9724</div></div></div>
+        <div id="p-arrow" class="c h" style="top:1260px;font-size:120px;color:#fff;text-shadow:0 8px 30px rgba(0,0,0,.5)">↓</div>
+        <div id="p-fl" class="flash"></div>
+      </div>
+
+      <!-- Q · end card (112.55 – 114.5) -->
+      <div id="q" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
+        <div id="q-cam" class="cam">
+          <img id="q-logo" src="assets/img/logo.png" style="position:absolute;left:400px;top:280px;width:280px;height:280px;border-radius:60px;object-fit:contain;border:2px solid var(--line);background:#fff" alt="">
+          <div id="q-t1" class="c h" style="top:640px;font-size:100px">Samdi 5 desanm</div>
+          <div id="q-t2" class="c h" style="top:770px;font-size:80px"><span class="mark">Lise Anacaona</span>, Leyogàn</div>
+          <div id="q-t3" class="c" style="top:950px"><span class="chip" style="font-size:46px;background:var(--wa);color:#fff">WhatsApp · 3864 9724</span></div>
+        </div>
+      </div>
+
+      <div id="capbox"><div id="cap"></div></div>
+      <audio id="mix" class="clip" data-start="0" data-duration="114.5" data-track-index="20" data-volume="1" src="assets/audio/mix.wav"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const Q = (s) => document.querySelector(s);
+      const S = [["#a", 0, 5.2], ["#b", 5.1, 7.65], ["#cc", 7.55, 11.75], ["#d", 11.65, 17.15], ["#e", 17.05, 23.5], ["#f", 23.4, 28.25],
+                 ["#g", 28.15, 34.35], ["#hh", 34.25, 38.9], ["#ii", 38.8, 43.55], ["#j1", 43.45, 48.2], ["#j2", 48.1, 58.0], ["#k1", 57.9, 66.45],
+                 ["#k2", 66.35, 75.35], ["#l", 75.25, 82.65], ["#m", 82.55, 87.4], ["#n", 87.3, 95.55], ["#o", 95.45, 102.35], ["#p", 102.25, 112.65], ["#q", 112.55, 114.6]];
+      S.forEach(([s, a, b]) => { tl.set(s, { visibility: "visible" }, a); tl.set(s, { visibility: "hidden" }, b); });
+      S.forEach(([s], i) => tl.set(s, { zIndex: i + 1 }, 0));
+
+      const rise = (sel, t, y = 90, d = 0.5) => tl.fromTo(sel, { y, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: "power3.out" }, t);
+      const pop = (sel, t, d = 0.42) => tl.fromTo(sel, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: d, ease: "back.out(2.2)" }, t);
+      const slam = (sel, t, from = 1.8) => tl.fromTo(sel, { scale: from, opacity: 0, filter: "blur(12px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, t);
+      const stamp = (sel, t, r = -8) => tl.fromTo(sel, { scale: 3, opacity: 0, rotation: r - 14 }, { scale: 1, opacity: 1, rotation: r, duration: 0.24, ease: "expo.in" }, t);
+      const side = (sel, t, x = 400, d = 0.45) => tl.fromTo(sel, { x, opacity: 0 }, { x: 0, opacity: 1, duration: d, ease: "expo.out" }, t);
+      const leave = (sel, t, d = 0.25) => tl.to(sel, { opacity: 0, scale: 0.85, duration: d, ease: "power2.in" }, t);
+      const punch = (sel, t, s = 1.06) => tl.fromTo(sel, { scale: 1 }, { scale: s, duration: 0.09, ease: "power2.out", yoyo: true, repeat: 1 }, t);
+      const shake = (sel, t, a = 14, n = 5) => tl.fromTo(sel, { x: 0 }, { x: a, duration: 0.04, ease: "none", yoyo: true, repeat: n }, t);
+      const flash = (sel, t, o = 0.6) => { tl.set(sel, { opacity: o }, t); tl.to(sel, { opacity: 0, duration: 0.25, ease: "power2.out" }, t + 0.001); };
+      const burst = (sel, t) => document.querySelectorAll(sel + " line").forEach((el) => tl.fromTo(el, { attr: { x1: 0, y1: 0, x2: 0, y2: 0 }, opacity: 1 }, { attr: { x1: +el.dataset.x * 0.55, y1: +el.dataset.y * 0.55, x2: +el.dataset.x, y2: +el.dataset.y }, opacity: 0, duration: 0.6, ease: "expo.out" }, t));
+      const sp = (v) => Math.round(v).toLocaleString("fr-FR").replace(/[  ]/g, " ");
+      const count = (sel, t, d, from, to, fmt = sp, ease = "power2.out") => { const o = { v: from }; tl.fromTo(o, { v: from }, { v: to, duration: d, ease, onUpdate: () => (Q(sel).textContent = fmt(o.v)) }, t); };
+      const tap = (f, t, x, y) => { tl.set(f, { x: x + 160, y: y + 220, opacity: 0, scale: 1 }, t - 0.45); tl.to(f, { x, y, opacity: 1, duration: 0.35, ease: "power3.out" }, t - 0.43); tl.to(f, { scale: 0.8, duration: 0.08 }, t); tl.to(f, { scale: 1.15, opacity: 0, duration: 0.3 }, t + 0.09); };
+      const zoom = (cam, t, s, d = 0.5, extra = {}) => tl.to(cam, { scale: s, duration: d, ease: "expo.out", ...extra }, t);
+      const drift = (cam, a, b, s1 = 1.06) => tl.fromTo(cam, { scale: 1 }, { scale: s1, duration: b - a, ease: "none" }, a);
+      // transitions between scenes: a quick iris, a whip, a slide up
+      const iris = (sel, t, at = "50% 45%") => tl.fromTo(sel, { clipPath: `circle(0% at ${at})` }, { clipPath: `circle(150% at ${at})`, duration: 0.42, ease: "power3.inOut" }, t);
+      const whip = (sel, t, dir = 1) => tl.fromTo(sel, { x: 1080 * dir, filter: "blur(24px)" }, { x: 0, filter: "blur(0px)", duration: 0.38, ease: "expo.out" }, t);
+      const up = (sel, t) => tl.fromTo(sel, { y: 1920 }, { y: 0, duration: 0.45, ease: "expo.out" }, t);
+
+      /* A · his face, the three videos land as he names them */
+      tl.fromTo("#a-cam", { scale: 1.18 }, { scale: 1.0, duration: 0.7, ease: "expo.out" }, 0);
+      [["#a1", 0.25, -7], ["#a2", 0.85, 6], ["#a3", 1.6, -4]].forEach(([s, t, r]) => { tl.fromTo(s, { scale: 2.2, opacity: 0, rotation: r * 3, filter: "blur(16px)" }, { scale: 1, opacity: 1, rotation: r, filter: "blur(0px)", duration: 0.32, ease: "expo.out" }, t); punch("#a-cam", t + 0.05, 1.04); });
+      flash("#a-fl", 0.25, 0.35);
+      tl.to("#a-cam", { scale: 1.12, duration: 2.6, ease: "none" }, 1.9);
+      tl.to(["#a1", "#a2", "#a3"], { y: -40, duration: 2.6, ease: "none", stagger: 0.1 }, 1.9);
+      stamp("#a-ia", 3.05, -3); shake("#a-cam", 3.3, 10, 3);
+      tl.to(["#a1", "#a2", "#a3", "#a-ia"], { scale: 0.6, opacity: 0, duration: 0.25, ease: "power2.in", stagger: 0.04 }, 4.85);
+
+      /* B · YouTube explosion */
+      iris("#b", 5.1, "50% 30%");
+      tl.fromTo("#b-rays", { rotation: 0 }, { rotation: 40, duration: 2.6, ease: "none" }, 5.1);
+      tl.fromTo("#b-yt", { scale: 0, rotation: -25 }, { scale: 1, rotation: 0, duration: 0.5, ease: "back.out(2.6)" }, 5.2); burst("#b-burst", 5.35);
+      slam("#b-t", 5.75, 2.0); shake("#b-cam", 6.0, 12, 3);
+      [["#b-v1", 6.05], ["#b-v2", 6.25], ["#b-v3", 6.45], ["#b-v4", 6.65]].forEach(([s, t]) => { pop(s, t, 0.35); tl.to(s, { y: -90, duration: 1.0, ease: "power1.out" }, t + 0.3); });
+      zoom("#b-cam", 6.9, 1.12, 0.6);
+
+      /* C · channel proof */
+      whip("#cc", 7.55);
+      rise("#c-t", 7.7, 50); rise("#c-card", 7.8, 200, 0.55);
+      tl.fromTo("#c-ring", { scale: 1.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2)" }, 9.0);
+      tl.fromTo("#c-ring", { scale: 1 }, { scale: 1.05, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 3 }, 9.4);
+      zoom("#c-cam", 9.0, 1.12, 0.6, { transformOrigin: "35% 38%" });
+      rise("#c-n", 9.3, 60, 0.3); count("#c-n", 9.35, 1.8, 0, 8216087);
+      zoom("#c-cam", 10.3, 1.0, 0.5, { transformOrigin: "50% 45%" }); pop("#c-vi", 10.4); punch("#c-n", 11.1, 1.1);
+
+      /* D · single video proof */
+      up("#d", 11.65);
+      slam("#d-t", 11.8); rise("#d-card", 11.95, 260, 0.6);
+      zoom("#d-cam", 13.0, 1.1, 0.6, { transformOrigin: "50% 60%" });
+      pop("#d-n", 13.4); count("#d-n", 13.45, 2.2, 0, 4800000, (v) => (v / 1e6).toFixed(1).replace(".", ",") + " M", "power3.out");
+      tl.set(["#d-w1", "#d-w2", "#d-w3", "#d-w4"], { opacity: 0 }, 0);
+      [["#d-w1", 15.3], ["#d-w2", 15.55], ["#d-w3", 15.8], ["#d-w4", 16.05]].forEach(([s, t]) => pop(s, t, 0.3));
+      zoom("#d-cam", 15.2, 1.0, 0.5); punch("#d-n", 16.3, 1.12); shake("#d-cam", 16.35, 10, 3);
+
+      /* E · "Poutan" */
+      iris("#e", 17.05, "50% 20%");
+      slam("#e-t", 17.15, 2.2);
+      tl.to("#e-t", { scale: 0.7, y: -40, duration: 0.4, ease: "power3.inOut" }, 18.0);
+      side("#e-l", 18.4, -500); pop("#e-plus", 19.3); side("#e-r", 20.6, 500);
+      zoom("#e-cam", 20.6, 1.1, 0.6, { transformOrigin: "75% 45%" });
+      tl.set("#e-x", { opacity: 0 }, 0); rise("#e-x", 21.6, 60, 0.4); punch("#e-r", 21.8, 1.06);
+      zoom("#e-cam", 22.4, 1.0, 0.5, { transformOrigin: "50% 45%" });
+
+      /* F · his face, the workshop name lands */
+      flash("#f-fl", 23.4, 0.5);
+      tl.fromTo("#f-spot", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, 23.4); tl.fromTo("#f-beam", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 23.7);
+      tl.fromTo("#f-scr", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 23.6);
+      tl.fromTo("#f-scr", { filter: "brightness(2)" }, { filter: "brightness(1)", duration: 0.3, ease: "steps(3)" }, 23.6);
+      rise("#f-pres", 23.5, 120, 0.6); tl.fromTo("#f-arm", { rotation: 20, svgOrigin: "130 175" }, { rotation: -10, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 6, svgOrigin: "130 175" }, 24.0);
+      tl.fromTo("#f-room .att", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.03 }, 23.55);
+      tl.fromTo("#f-room .lap", { opacity: 0.15 }, { opacity: 1, duration: 0.25, stagger: 0.09 }, 24.5);
+      tl.fromTo("#f-room .hand", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)", stagger: 0.25 }, 26.4);
+      tl.fromTo("#f-room .head", { y: 0 }, { y: -5, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 5, stagger: 0.05 }, 24.6);
+      tl.set("#f-ban", { opacity: 0 }, 0); pop("#f-ban", 26.6);
+      tl.fromTo("#f-cam", { scale: 1.0 }, { scale: 1.1, duration: 4.85, ease: "none" }, 23.4);
+
+      /* G · date */
+      whip("#g", 28.15, -1);
+      tl.fromTo("#g-cal", { rotationX: -90, opacity: 0, transformOrigin: "50% 0%" }, { rotationX: 0, opacity: 1, duration: 0.6, ease: "back.out(1.6)" }, 28.25);
+      punch("#g-cal", 28.9, 1.06);
+      rise("#g-map", 29.4, 200, 0.55); tl.fromTo("#g-pin", { y: -260, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "bounce.out" }, 29.8);
+      pop("#g-place", 30.3); zoom("#g-cam", 30.0, 1.1, 0.7, { transformOrigin: "50% 62%" });
+      pop("#g-clock", 31.1); pop("#g-hrs", 31.4);
+      tl.fromTo("#g-hh", { rotation: 300 }, { rotation: 480, duration: 2.0, ease: "power2.inOut", svgOrigin: "0 0" }, 31.5);
+      tl.fromTo("#g-mh", { rotation: 0 }, { rotation: 2160, duration: 2.0, ease: "power2.inOut", svgOrigin: "0 0" }, 31.5);
+      zoom("#g-cam", 31.2, 1.1, 0.6, { transformOrigin: "75% 22%" });
+
+      /* H · the wall of videos */
+      up("#hh", 34.25);
+      tl.fromTo("#h-r1", { x: 0 }, { x: -900, duration: 4.7, ease: "none" }, 34.25);
+      tl.fromTo("#h-r2", { x: 0 }, { x: 900, duration: 4.7, ease: "none" }, 34.25);
+      tl.fromTo("#h-r3", { x: -500 }, { x: -1400, duration: 4.7, ease: "none" }, 34.25);
+      slam("#h-t", 34.6, 2.0); pop("#h-p", 35.3); drift("#h-cam", 34.25, 38.9, 1.1);
+
+      /* I · the three kinds, one per word */
+      iris("#ii", 38.8);
+      [["#i1", 38.9, -1], ["#i2", 40.0, 1], ["#i3", 41.5, -1]].forEach(([s, t, d]) => { whip(s, t, d); punch("#i-cam", t + 0.1, 1.03); });
+      zoom("#i-cam", 42.6, 1.06, 0.8);
+
+      /* J1 · Facebook Ads */
+      iris("#j1", 43.45, "50% 40%");
+      tl.fromTo("#j1-f", { scale: 0, rotation: 200 }, { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.8)" }, 43.6);
+      slam("#j1-t", 44.4); rise("#j1-bar", 45.0, 40, 0.3);
+      tl.fromTo("#j1-fill", { scaleX: 0 }, { scaleX: 1, duration: 1.6, ease: "power2.out" }, 45.3);
+      stamp("#j1-s", 46.5, -3); shake("#j1-cam", 46.75, 10, 3); drift("#j1-cam", 43.45, 48.2, 1.08);
+
+      /* J2 · his ad spreads */
+      up("#j2", 48.1);
+      tl.fromTo("#j2-ad", { y: 300, rotation: 4 }, { y: 0, rotation: 0, duration: 0.6, ease: "power4.out" }, 48.15);
+      count("#j2-like", 48.8, 8.5, 0, 12480, sp, "power1.in");
+      tl.fromTo("#j2-net circle", { scale: 0, opacity: 0, transformOrigin: "50% 50%" }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(3)", stagger: 0.06 }, 50.4);
+      tl.fromTo("#j2-net line", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.06 }, 50.4);
+      pop("#j2-reach", 50.6); count("#j2-n", 50.7, 3.6, 0, 350000, sp, "power2.in");
+      zoom("#j2-cam", 50.5, 0.9, 1.2, { transformOrigin: "50% 40%" });
+      count("#j2-n", 54.4, 1.0, 350000, 1000000, sp, "power3.out");
+      tl.set("#j2-mil", { opacity: 0 }, 0); stamp("#j2-mil", 54.5, -8); shake("#j2-cam", 54.75, 16, 5);
+      zoom("#j2-cam", 54.5, 1.0, 0.5);
+      tl.set("#j2-bud", { opacity: 0 }, 0); pop("#j2-bud", 56.6); punch("#j2-cta", 56.9, 1.15);
+      [["#j2-r1", 51.2], ["#j2-r2", 52.0], ["#j2-r3", 52.8], ["#j2-r1", 55.2], ["#j2-r2", 55.6]].forEach(([r, t]) => tl.fromTo(r, { y: 0, opacity: 0, scale: 0.4 }, { y: -560, opacity: 1, scale: 1.1, duration: 1.0, ease: "power2.out", immediateRender: false }, t));
+      tl.set(["#j2-r1", "#j2-r2", "#j2-r3"], { opacity: 0 }, 0);
+      tl.to(["#j2-r1", "#j2-r2", "#j2-r3"], { opacity: 0, duration: 0.2 }, 57.6);
+
+      /* K1 · what a digital product is */
+      iris("#k1", 57.9, "50% 15%");
+      slam("#k1-t", 58.05); rise("#k1-s", 60.5, 40, 0.35);
+      tl.set(["#k1-ph", "#k1-lap", "#k1-man", "#k1-cl"], { opacity: 0 }, 0);
+      tl.fromTo("#k1-ph", { y: 400, rotation: -12, opacity: 0 }, { y: 0, rotation: -4, opacity: 1, duration: 0.55, ease: "back.out(1.5)" }, 58.7); punch("#k1-ph", 63.7, 1.08);
+      tl.fromTo("#k1-lap", { y: 400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.5)" }, 59.4); punch("#k1-lap", 64.7, 1.06);
+      tl.fromTo("#k1-man", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 59.8);
+      tl.fromTo("#k1-prog", { scaleX: 0.1 }, { scaleX: 0.9, duration: 6.4, ease: "none" }, 59.8);
+      tl.fromTo("#k1-cl", { y: 200, scale: 0.6, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: "back.out(2)" }, 60.3);
+      punch("#k1-cl", 65.8, 1.1);
+      zoom("#k1-cam", 58.7, 1.08, 7.5, { ease: "none" });
+
+      /* K2 · once → tens of thousands */
+      whip("#k2", 66.35);
+      tl.fromTo("#k2-prod", { scale: 0.3, rotation: -20, opacity: 0 }, { scale: 1, rotation: -3, opacity: 1, duration: 0.6, ease: "back.out(1.8)" }, 66.5);
+      pop("#k2-once", 66.9);
+      tl.set(["#k2-x", "#k2-t1", "#k2-t2", "#k2-t3", "#k2-no"], { opacity: 0 }, 0);
+      pop("#k2-x", 66.9); count("#k2-n", 68.1, 3.0, 1, 50000, sp, "power2.in");
+      tl.fromTo("#k2-crowd svg", { opacity: 0.12 }, { opacity: 1, duration: 0.12, stagger: 0.05 }, 68.2);
+      [["#k2-t1", 67.3], ["#k2-t2", 67.8], ["#k2-t3", 68.6], ["#k2-t1", 70.2], ["#k2-t2", 70.6], ["#k2-t3", 71.0]].forEach(([s, t], i) => tl.fromTo(s, { x: i % 2 ? -400 : 400, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(1.6)", immediateRender: false }, t));
+      zoom("#k2-cam", 68.0, 1.08, 3.2, { ease: "none" });
+      punch("#k2-x", 71.2, 1.15); shake("#k2-cam", 71.25, 12, 3);
+      stamp("#k2-no", 73.2, -3); zoom("#k2-cam", 73.2, 1.0, 0.5);
+
+      /* L · free tools */
+      up("#l", 75.25);
+      slam("#l-t", 75.4);
+      ["#l1", "#l2", "#l3", "#l4", "#l5", "#l6"].forEach((s, i) => tl.fromTo(s, { y: 160, scale: 0.9, opacity: 0, rotation: i % 2 ? 3 : -3 }, { y: 0, scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.5)" }, 75.7 + i * 0.28));
+      tl.set("#l-g", { opacity: 0 }, 0); tl.set("#l-ap", { opacity: 0 }, 0); pop("#l-ap", 78.0); stamp("#l-g", 80.6, -6); shake("#l-cam", 80.85, 14, 4);
+      zoom("#l-cam", 80.5, 1.08, 0.6, { transformOrigin: "50% 60%" });
+
+      /* M · debit card */
+      iris("#m", 82.55);
+      slam("#m-q", 82.7);
+      tl.fromTo("#m-card", { rotationY: 90, scale: 0.6, opacity: 0 }, { rotationY: 0, scale: 1, opacity: 1, duration: 0.7, ease: "expo.out" }, 82.95);
+      tl.to("#m-card", { rotationY: -10, rotationX: 6, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 84.1);
+      tl.set("#m-g", { opacity: 0 }, 0); stamp("#m-g", 86.0, -8); shake("#m-cam", 86.25, 14, 4);
+      drift("#m-cam", 82.55, 87.4, 1.07);
+
+      /* N · Claude Pro gift */
+      whip("#n", 87.3, -1);
+      tl.fromTo("#n-rays", { rotation: 0 }, { rotation: 60, duration: 8.3, ease: "none" }, 87.3);
+      pop("#n-gift", 87.5); tl.fromTo("#n-logo", { scale: 0, rotation: -120 }, { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.8)" }, 88.0);
+      tl.fromTo("#n-sp", { rotation: 0 }, { rotation: 360, duration: 7, ease: "none" }, 88.0);
+      slam("#n-7", 88.6, 2.0); rise("#n-pro", 89.0, 60, 0.35); punch("#n-7", 90.7, 1.12);
+      tl.set("#n-0", { opacity: 0 }, 0); stamp("#n-0", 93.6, -3);
+      zoom("#n-cam", 90.7, 1.08, 0.6); zoom("#n-cam", 93.6, 1.0, 0.5);
+
+      /* O · WhatsApp */
+      up("#o", 95.45);
+      rise("#o-t", 95.6, 50); rise("#o-ph", 96.0, 220, 0.6);
+      tl.set(["#o-m1", "#o-m2", "#o-m3"], { opacity: 0 }, 0);
+      pop("#o-m1", 96.6, 0.35); pop("#o-m2", 97.8, 0.35); pop("#o-m3", 99.4, 0.35);
+      count("#o-mem", 96.6, 4.5, 1, 150, (v) => "Manm: " + Math.round(v));
+      zoom("#o-cam", 98.6, 1.1, 1.2, { ease: "power2.inOut", transformOrigin: "50% 50%" });
+
+      /* P · his face, call to action */
+      flash("#p-fl", 102.25, 0.8);
+      tl.fromTo("#p-cam", { scale: 1.2 }, { scale: 1.0, duration: 0.6, ease: "expo.out" }, 102.25); tl.to("#p-cam", { scale: 1.12, duration: 9.6, ease: "none" }, 102.9);
+      tl.set("#p-lim", { opacity: 0 }, 0); stamp("#p-lim", 102.9, -6); shake("#p-lim", 103.15, 10, 3);
+      tl.set("#p-wa", { opacity: 0 }, 0); tl.fromTo("#p-wa", { y: 400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }, 106.4);
+      punch("#p-wa", 107.6, 1.05);
+      tl.set("#p-arrow", { opacity: 0 }, 0); rise("#p-arrow", 109.4, -60, 0.35); tl.to("#p-arrow", { y: 30, duration: 0.35, ease: "sine.inOut", yoyo: true, repeat: 5 }, 109.8);
+      tl.to(["#p-lim"], { opacity: 0, duration: 0.3 }, 108.0);
+
+      /* Q · end card */
+      iris("#q", 112.55);
+      pop("#q-logo", 112.65, 0.55); rise("#q-t1", 112.9, 50, 0.4); rise("#q-t2", 113.1, 50, 0.4); pop("#q-t3", 113.35, 0.4);
+
+      /* subtitles */
+      const CAPS = __CAPS__, HL = new Set(__HL__.map((w) => w.toLowerCase()));
+      const capEl = Q("#cap"); let last = -2;
+      const esc = (s) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+      const capAt = (t) => {
+        let i = -1; for (let k = 0; k < CAPS.length; k++) if (t >= CAPS[k][0] - 0.05 && t < CAPS[k][1] + 0.12) { i = k; break; }
+        if (i !== last) {
+          last = i;
+          capEl.innerHTML = i < 0 ? "" : CAPS[i][2].split(" ").map((w) => { const b = w.replace(/[^\p{L}\p{N}!]/gu, "").toLowerCase(); return HL.has(b) ? `<span class="k">${esc(w)}</span>` : esc(w); }).join(" ");
+        }
+        capEl.style.opacity = i < 0 ? 0 : 1;
+        if (i >= 0) { const k = Math.min(1, (t - CAPS[i][0] + 0.05) / 0.16); capEl.style.transform = `translateY(${((1 - k) * 14).toFixed(1)}px) scale(${(0.92 + 0.08 * (1 - Math.pow(1 - k, 3))).toFixed(3)})`; }
+      };
+      const clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: 114.5, duration: 114.5, ease: "none", onUpdate: () => capAt(clock.t) }, 0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
