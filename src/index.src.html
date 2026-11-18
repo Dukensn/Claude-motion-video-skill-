@@ -205,27 +205,25 @@
       <div id="j2" class="scene" data-layout-allow-overflow data-layout-allow-overlap>
         <div class="glow" style="left:-300px;top:900px;background:#dce9ff"></div>
         <div id="j2-cam" class="cam">
-          <div id="j2-world" style="position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:560px 900px">
+          <div id="j2-world" style="position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:540px 960px">
             <svg viewBox="0 0 1080 1920" style="position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible">
-              <defs>
-                <linearGradient id="silg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5a66"/><stop offset="1" stop-color="#2c2c34"/></linearGradient>
-                <g id="pp"><ellipse cx="0" cy="-58" rx="21" ry="25" fill="url(#silg)"/><path d="M-46 40 C-46 -8 -30 -26 0 -28 C30 -26 46 -8 46 40 Z" fill="url(#silg)"/></g>
-              </defs>
-              <g id="j2-crowd">__CROWDP__</g>
-              <g id="j2-hero" transform="translate(340 520)">
-                <ellipse cx="200" cy="120" rx="58" ry="70" fill="url(#silg)"/>
-                <path d="M172 178 L228 178 L232 236 L168 236 Z" fill="#3a3a44"/>
-                <path d="M30 640 C30 390 80 268 200 254 C320 268 370 390 370 640 Z" fill="url(#silg)"/>
-                <path d="M308 300 Q350 430 270 476" fill="none" stroke="#474752" stroke-width="46" stroke-linecap="round"/>
-                <rect x="175" y="296" width="98" height="172" rx="16" fill="#0d0d0f" stroke="#6b6b78" stroke-width="3"/>
-                <rect x="182" y="310" width="84" height="144" rx="8" fill="#fff"/>
-                <rect x="182" y="310" width="84" height="20" rx="4" fill="#1877f2"/>
-                <image href="assets/img/ad-thumb.jpg" x="186" y="334" width="76" height="95" preserveAspectRatio="xMidYMid slice"/>
-                <rect x="190" y="434" width="68" height="12" rx="4" fill="#1877f2"/>
-                <path d="M262 470 Q290 470 286 440 L272 420" fill="none" stroke="#6b4a3a" stroke-width="16" stroke-linecap="round"/>
-                <rect x="164" y="372" width="18" height="14" rx="7" fill="#6b4a3a"/><rect x="164" y="398" width="18" height="14" rx="7" fill="#6b4a3a"/><rect x="164" y="424" width="18" height="14" rx="7" fill="#6b4a3a"/>
-              </g>
+              <defs><g id="pi"><circle cx="0" cy="-7" r="6"/><path d="M-10 9 Q-10 -1 0 -1 Q10 -1 10 9 Z"/></g></defs>
+              <g id="j2-rings">__RINGP__</g>
             </svg>
+            <div id="j2-ph" style="position:absolute;left:455px;top:790px;width:170px;height:340px;border-radius:30px;background:#0d0d0f;border:3px solid #55555f;padding:8px;box-shadow:0 0 60px rgba(24,119,242,.35)">
+              <div style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:#fff">
+                <div style="height:26px;background:#1877f2"></div>
+                <img src="assets/img/ad-thumb.jpg" style="display:block;width:100%;height:200px;object-fit:cover" alt="">
+                <div style="margin:10px 12px;height:16px;border-radius:5px;background:#1877f2"></div>
+                <div style="margin:0 12px;height:8px;border-radius:4px;background:#ddd"></div>
+              </div>
+            </div>
+          </div>
+          <div id="j2-ads" class="card" style="left:110px;top:140px;width:860px;height:300px;padding:26px 30px">
+            <div style="display:flex;align-items:center;gap:14px"><img src="assets/img/logos/meta.svg" style="width:44px" alt=""><b style="font-size:30px">Ads Manager</b><div style="margin-left:auto;width:72px;height:40px;border-radius:20px;background:#1877f2;position:relative"><div style="position:absolute;right:4px;top:4px;width:32px;height:32px;border-radius:50%;background:#fff"></div></div></div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:18px;font-size:24px;color:#777"><span style="width:110px">Kanpay</span><b style="color:#111;font-size:26px">Atelye AI · 5 desanm</b></div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:12px;font-size:24px;color:#777"><span style="width:110px">Bidjè</span><span style="padding:6px 16px;border-radius:10px;border:2px solid #e2553f;color:#e2553f;font-weight:800">ti kòb</span></div>
+            <svg viewBox="0 0 800 80" style="width:800px;height:80px;margin-top:12px"><path d="M0 76 L800 76" stroke="#eee" stroke-width="2"/><path id="j2-line" d="M0 72 C 160 68 260 56 380 44 S 620 18 800 6" fill="none" stroke="#e2553f" stroke-width="6" stroke-linecap="round" stroke-dasharray="860" stroke-dashoffset="860"/></svg>
           </div>
           <div id="j2-post" class="card" style="left:160px;top:170px;width:760px;height:1100px;border-radius:44px">
             <div style="display:flex;align-items:center;gap:16px;padding:24px 28px 12px"><img src="assets/img/logo.png" style="width:72px;height:72px;border-radius:50%;background:var(--soft);object-fit:contain" alt=""><div><b style="font-size:32px">Atelye AI</b><div style="font-size:24px;color:#777">Sponsorize · 🌐</div></div><div style="margin-left:auto;font-size:40px;color:#999">···</div></div>
@@ -235,7 +233,7 @@
             <div style="padding:14px 28px;font-size:26px;color:#777">👍❤️ <b id="j2-like" class="num" style="color:#111">0</b> · <span id="j2-com" class="num">0</span> kòmantè</div>
           </div>
           <div id="j2-reach" class="stat" style="left:40px;top:1150px;min-width:560px;padding:24px 34px"><small>Moun piblisite a rive jwenn</small><span id="j2-n" class="num h" style="font-size:92px">0</span></div>
-          <div id="j2-mil" class="stamp" style="left:220px;top:520px;border-color:var(--fb);color:var(--fb)">1 MILYON</div>
+          <div id="j2-mil" class="stamp" style="left:220px;top:880px;border-color:var(--fb);color:var(--fb)">1 MILYON</div>
           <div id="j2-bud" class="chip y" style="position:absolute;left:660px;top:1200px;font-size:40px">Ti bidjè</div>
         </div>
       </div>
@@ -485,16 +483,18 @@
       tl.fromTo("#j1-fill", { scaleX: 0 }, { scaleX: 1, duration: 1.6, ease: "power2.out" }, 45.3);
       stamp("#j1-s", 46.5, -3); shake("#j1-cam", 46.75, 10, 3); drift("#j1-cam", 43.45, 48.2, 1.08);
 
-      /* J2 · the Facebook post drops into a phone in someone's hand, then the camera pulls back on a crowd */
+      /* J2 · the Facebook post drops into a phone; rings of people light up around it (Atelye Dijital style) */
       tl.fromTo("#j2-post", { y: 300, rotation: 4, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 48.15);
       count("#j2-like", 48.6, 1.6, 0, 2480); count("#j2-com", 48.7, 1.5, 0, 312);
-      tl.set("#j2-world", { scale: 7.2 }, 0);
-      tl.to("#j2-post", { scale: 0.8, x: 24, y: 182, duration: 0.55, ease: "power3.inOut" }, 49.6); tl.to("#j2-post", { opacity: 0, duration: 0.25 }, 50.1);
+      tl.set("#j2-world", { scale: 3.3 }, 0);
+      tl.to("#j2-post", { scale: 0.74, y: 200, duration: 0.55, ease: "power3.inOut" }, 49.6); tl.to("#j2-post", { opacity: 0, duration: 0.25 }, 50.1);
       tl.fromTo("#j2-world", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 49.95);
-      tl.fromTo("#j2-world", { scale: 7.2 }, { scale: 1.0, duration: 3.0, ease: "power2.inOut" }, 50.2);
-      tl.to("#j2-world", { scale: 0.82, duration: 4.6, ease: "none" }, 53.2);
-      tl.fromTo("#j2-crowd .cph", { opacity: 0.1 }, { opacity: 1, duration: 0.12, stagger: { each: 0.045, from: "center" } }, 51.6);
-      tl.set(["#j2-reach", "#j2-mil", "#j2-bud"], { opacity: 0 }, 0);
+      tl.fromTo("#j2-world", { scale: 3.3 }, { scale: 1.0, duration: 1.6, ease: "power3.inOut" }, 50.25);
+      tl.to("#j2-world", { scale: 1.06, duration: 5.9, ease: "none" }, 51.9);
+      [0, 1, 2, 3, 4].forEach((r) => tl.fromTo(`#j2-rings .r${r}`, { opacity: 0, scale: 0.4, transformOrigin: "540px 960px" }, { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 51.2 + r * 0.35));
+      tl.fromTo("#j2-rings .p", { fill: "#6b6b75" }, { fill: "#e2553f", duration: 0.12, stagger: { each: 0.025, from: "start" } }, 52.4);
+      tl.set(["#j2-ads", "#j2-reach", "#j2-mil", "#j2-bud"], { opacity: 0 }, 0);
+      rise("#j2-ads", 51.0, -120); tl.to("#j2-line", { strokeDashoffset: 0, duration: 3.0, ease: "power2.out" }, 51.3);
       pop("#j2-reach", 51.4); count("#j2-n", 51.5, 2.9, 0, 350000, sp, "power2.in"); count("#j2-n", 54.4, 1.0, 350000, 1000000, sp, "power3.out");
       stamp("#j2-mil", 54.5, -8); shake("#j2-cam", 54.75, 12, 4);
       pop("#j2-bud", 56.6);

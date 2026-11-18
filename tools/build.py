@@ -48,6 +48,15 @@ for row, y in enumerate(range(260, 1800, 140)):
         crowdp += (f'<g transform="translate({x:.0f} {y + _r.uniform(-12, 12):.0f}) scale({k:.2f})"><use href="#pp"/>'
                    f'<rect class="cph" x="10" y="-6" width="18" height="30" rx="4" fill="{col}" opacity=".1"/></g>')
 s = s.replace("__CROWDP__", crowdp)
+import math as _m
+ringp = ""
+for r, (rad, n) in enumerate([(200, 14), (270, 20), (340, 26), (410, 32), (480, 38)]):
+    ringp += f'<g class="r{r}">'
+    for i in range(n):
+        a = 2 * _m.pi * i / n + r * 0.2
+        ringp += f'<use class="p" href="#pi" x="{540 + rad * _m.cos(a):.0f}" y="{960 + rad * _m.sin(a):.0f}" fill="#6b6b75"/>'
+    ringp += f'<circle cx="540" cy="960" r="{rad}" fill="none" stroke="#6b6b75" stroke-width="1.5" stroke-dasharray="3 9" opacity=".6"/></g>'
+s = s.replace("__RINGP__", ringp)
 s = (s.replace("__BURST__", burst).replace("__ROW1__", row1).replace("__ROW2__", row2).replace("__NET__", net)
       .replace("__CROWD__", person * 36).replace("__BELL__", bell)
       .replace("__CAPS__", json.dumps(c["caps"], ensure_ascii=False)).replace("__HL__", json.dumps(c["hl"], ensure_ascii=False)))
